@@ -1,6 +1,7 @@
 ## VueTV - aplikacja zaliczeniowa
 
-Projekt Interfejsu: ***linkacz do figmy czy cos tam***
+## Interfejs
+[Projekt Interfejsu (figma)](https://www.figma.com/file/ToCZtfqYqHsnE4Ot6ljAUn/VueTV?type=design&node-id=0%3A1&mode=design&t=svhmutbHMhWSaJMN-1) 
 
 ## Opis Aplikacji
 VueTV to prosty klon popularnej aplikacji TV-TIME, zaprojektowany do zarządzania i śledzenia ulubionych filmów. Aplikacja umożliwia zalogowanym użytkownikom przeglądanie listy filmów, dodawanie ich do listy "**obejrzanych**" i "**do obejrzenia**". Dodatkowo zlicza czas, jaki użytkownik spędził przy ulubionych filmach, a także podaje czas, jaki potrzebuje przeznaczyć na kolejne z listy "**do obejrzenia**". 
@@ -15,7 +16,7 @@ Aplikacja została zbudowana w oparciu o Vue 3, wykorzystując Composition API d
  * Widok listy obejrzanych filmów
  * Widok listy filmów do obejrzenia
  * Widok wyszukiwarki filmów
- * Widok ustawień
+ * Widok ustawień + popup usunięcia/zmiany hasła
 
 ## Funkcjonalności
  * Rejestracja
