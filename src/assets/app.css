@@ -1,3 +1,16 @@
-html {
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+@import url('https://fonts.googleapis.com/css2?family=Bruno+Ace&display=swap');
+
+html, body {
+    font-family: "Red Hat Display", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+:root {
+    --main-color: #3DCCC7;
+    --lighter-main: #9CEAEF
 }
