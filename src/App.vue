@@ -48,4 +48,5 @@ const showFooter = computed(() => {
 </template>
 
 <style>
+
 </style>

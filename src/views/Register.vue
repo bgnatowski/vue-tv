@@ -35,23 +35,34 @@ const signWithGoogle = () => {
 </script>
 
 <template>
-  <h1>Utwórz konto</h1>
-  <p><input type="text" placeholder="E-mail" v-model="email"/></p>
-  <p>
-    <input type="text" placeholder="Powtórz e-mail" v-model="emailRepeat"/>
-    <p v-if="emailMismatchError">{{ emailMismatchError }}</p>
-  </p>
-  <p><input type="text" placeholder="Nazwa użytkownika" v-model="username"/></p>
-  <p><input type="password" placeholder="Hasło" v-model="password"/></p>
-  <p>
-    <input type="password" placeholder="Powtórz hasło" v-model="passwordRepeat"/>
-    <p v-if="passwordMismatchError">{{ passwordMismatchError }}</p>
-  </p>
-  <p><button @click="register">Dokończ rejestrację</button></p>
-  <p><button @click="signWithGoogle">Sign In with Google</button></p>
-  <p>Masz już konto? <a @click="router.push('/sign-in')">Zaloguj się</a></p>
+  <div class="register-main-container">
+    <h1>Utwórz konto</h1>
+    <p><input type="text" placeholder="E-mail" v-model="email"/></p>
+    <p>
+      <input type="text" placeholder="Powtórz e-mail" v-model="emailRepeat"/>
+      <p v-if="emailMismatchError">{{ emailMismatchError }}</p>
+    </p>
+    <p><input type="text" placeholder="Nazwa użytkownika" v-model="username"/></p>
+    <p><input type="password" placeholder="Hasło" v-model="password"/></p>
+    <p>
+      <input type="password" placeholder="Powtórz hasło" v-model="passwordRepeat"/>
+      <p v-if="passwordMismatchError">{{ passwordMismatchError }}</p>
+    </p>
+    <p><button @click="register">Dokończ rejestrację</button></p>
+    <p><button @click="signWithGoogle">Sign In with Google</button></p>
+    <p>Masz już konto? <a @click="router.push('/sign-in')">Zaloguj się</a></p>
+  </div>
+
 </template>
-
 <style scoped>
-
+.register-main-container {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #000;
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+}
 </style>
