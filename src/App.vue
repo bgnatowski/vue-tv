@@ -1,11 +1,13 @@
 <script setup>
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {signOutUser} from "@/services/AuthenticationService.js";
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
+import Footer from "@/views/Footer.vue";
 
 const isLoggedIn = ref(false);
 const router = useRouter()
+const route = useRoute()
 
 let auth;
 onMounted(() => {
@@ -23,32 +25,27 @@ const handleSingOut = () => {
   signOutUser(router);
 };
 
+const showFooter = computed(() => {
+  return !route.meta.hideFooter;
+});
+
 </script>
 
 <template>
-  <nav style="border-color: #2c3e50; border-style: dashed; padding: 1px;">
-    <p>dev navigation</p>
-    <router-link to="/"> Home</router-link>
-    <router-link to="/feed"> Feed</router-link>
-    <router-link to="/register"> Register</router-link>
-    <router-link to="/sign-in"> Login</router-link>
-    <router-link to="/settings"> Settings</router-link>
-    <router-link to="/watched"> Watched</router-link>
-    <router-link to="/to_watch"> To watch</router-link>
-    <button @click="handleSingOut" v-if="isLoggedIn">Sign out</button>
-  </nav>
-
   <router-view></router-view>
+  <!--  <nav style="border-color: #2c3e50; border-style: dashed; padding: 1px;">-->
+  <!--    <p>dev navigation</p>-->
+  <!--    <router-link to="/"> Home</router-link>-->
+  <!--    <router-link to="/feed"> Feed</router-link>-->
+  <!--    <router-link to="/register"> Register</router-link>-->
+  <!--    <router-link to="/sign-in"> Login</router-link>-->
+  <!--    <router-link to="/settings"> Settings</router-link>-->
+  <!--    <router-link to="/watched"> Watched</router-link>-->
+  <!--    <router-link to="/to_watch"> To watch</router-link>-->
+  <!--    <button @click="handleSingOut" v-if="isLoggedIn">Sign out</button>-->
+  <!--  </nav>-->
+  <Footer v-if="showFooter"></Footer>
 </template>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
 </style>
