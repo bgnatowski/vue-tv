@@ -9,3 +9,8 @@ html, body {
 *, *::before, *::after {
     box-sizing: inherit;
 }
+
+:root {
+    --main-color: #3DCCC7;
+    --lighter-main: #9CEAEF
+}

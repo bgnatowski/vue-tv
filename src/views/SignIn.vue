@@ -17,36 +17,25 @@ const signIn = async () => {
     errMsg.value = error;
   }
 };
-
-const signWithGoogle = () => {
-  authenticateWithGoogle(router);
-}
 </script>
 
 <template>
   <div class="main-container">
-    <div class="login-container">
-      <div class="img-container">
-        <img class="image-container-upper"
-             src="https://cdn.builder.io/api/v1/image/assets/TEMP/4db38c53bc6c09336ca4a00c67529ee1676d9f5c2e8d4c63cb2218c12f23d406?apiKey=7836e9d46c0a409dbac8e5fb7888aa0f&"/>
-      </div>
-      <form>
-        <h1>Zaloguj się</h1>
-        <label for="email">E-mail</label>
-        <input type="email" id="email" placeholder="E-mail" v-model="email"/>
-        <label for="password">Hasło</label>
-        <input type="password" id="password" v-model="password"/>
-        <p v-if="errMsg"> {{ errMsg }}</p>
-        <button type="submit" class="login-button" @click="signIn">Zaloguj się</button>
-        <SignInGoogleButton></SignInGoogleButton>
+    <div class="form-container">
+      <h1>Zaloguj się</h1>
+      <label for="email">E-mail</label>
+      <input type="email" id="email" placeholder="E-mail" v-model="email"/>
+      <label for="password">Hasło</label>
+      <input type="password" id="password" placeholder="Hasło" v-model="password"/>
+      <p v-if="errMsg"> {{ errMsg }}</p>
+      <button type="submit" class="login-button" @click="signIn">Zaloguj się</button>
+      <SignInGoogleButton class="google-button"></SignInGoogleButton>
+      <div class="form-no-account">
         <p class="signup-text">Nie masz jeszcze konta?</p>
         <a @click="router.push('/register')" class="signup-link">Utwórz je</a>
-      </form>
-      <div class="image-container">
-        <img class="image-container-lower"
-             src="https://cdn.builder.io/api/v1/image/assets/TEMP/41320b0655af8834da7c942c23029b9f150520dde4203eab9c8723a8be9d8912?apiKey=7836e9d46c0a409dbac8e5fb7888aa0f&"/>
       </div>
     </div>
+    <Footer/>
   </div>
 </template>
 
@@ -54,67 +43,92 @@ const signWithGoogle = () => {
 .main-container {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  flex-grow: 1;
-  width: 100%;
-}
-
-.login-container {
-  width: 50%;
-  height: 100%;
-  background-color: hotpink;
+  background-image: url('@/resources/background-login.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
-.image-container-lower {
-  background-color: pink;
-  width: 25%;
-  height: 100%;
-  margin: 0 0 0 0;
+.form-container {
+  width: 80vw;
+  max-width: 600px;
+  padding: 5vw;
+  margin: 2vw auto;
+  background-color: #fff;
+  border-radius: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+h1 {
+  text-align: center;
+}
+input{
+  border-radius: 36px;
+  border: 1px solid ;
+  background-color: #fff;
+  padding: 1em 2em;
+  color: #000;
 }
 
-.image-container-upper {
-  background-color: pink;
-  width: 25%;
-  height: 100%;
+label {
+  padding: 1em 1em .5em 1em;
+  font-family: "Red Hat Display", sans-serif;
+  font-weight: 600;
 }
 
-.image-container img {
-
+.google-button {
+  border-radius: 36px;
+  padding: 0.5em 1em;
+  font-size: 1em;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  box-sizing: border-box;
+  margin: 0 auto 0 auto;
 }
 
 .login-button {
   border-radius: 36px;
-  background-color: #3dccc7;
-  padding: 0.2em 0.5em;
+  background-color: var(--main-color);
+  padding: .7em 1em;
   border: none;
   color: #fff;
-  font-size: calc((.2em + .5vmin) + (.2em + .5vmax));
+  font-size: 1.2em;
   font-weight: 600;
   cursor: pointer;
   text-align: center;
   display: inline-block;
-  width: fit-content;
+  width: 40%;
   box-sizing: border-box;
-  overflow: hidden;
-  margin: 2px auto 2px auto;
-  width: auto;
+  margin: 1em auto .5em auto;
+  transition: background-color 0.3s;
 }
 
 .login-button:hover {
-  background-color: rgba(46, 187, 182, 0.93);
+  background-color: var(--lighter-main);
   -webkit-box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
   box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
 }
 
 .signup-link {
-  color: #3dccc7;
+  color: var(--main-color);
   cursor: pointer;
 }
 
 .signup-link:hover {
-  color: rgba(46, 187, 182, 0.93);;
+  color: var(--lighter-main)
 }
 
+.form-no-account {
+  display: flow;
+  flex-direction: row;
+  margin-top: 0.5em;
+}
 </style>
