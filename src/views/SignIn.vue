@@ -26,33 +26,26 @@ const signWithGoogle = () => {
 <template>
   <div class="main-container">
     <div class="login-container">
-      <div class="login-form-container">
-        <div class="login-header">
-          <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/4db38c53bc6c09336ca4a00c67529ee1676d9f5c2e8d4c63cb2218c12f23d406?apiKey=7836e9d46c0a409dbac8e5fb7888aa0f&" alt="Company logo" class="company-logo" />
-          <div class="login-form">
-            <h1 class="login-title">Zaloguj się</h1>
-            <!--  todo email lub nazwa uzytkownika jako logowanie? idk -->
-            <form>
-              <label for="email" class="form-label" >E-mail</label>
-              <input type="email" id="email" class="form-input" placeholder="E-mail" v-model="email"/>
-              <label for="password" class="form-label">Hasło</label>
-              <input type="password" id="password" class="form-input" v-model="password"/>
-              <p v-if="errMsg"> {{ errMsg }}</p>
-              <button type="submit" class="login-button" @click="signIn">
-                <span class="button-text">Zaloguj się</span>
-              </button>
-            </form>
-            <SignInGoogleButton></SignInGoogleButton>
-          </div>
-        </div>
-        <div class="signup-prompt">
-          <p class="signup-text">Nie masz jeszcze konta?</p>
-          <a @click="router.push('/register')" class="signup-link">Utwórz je</a>
-        </div>
+      <div class="img-container">
+        <img class="image-container-upper"
+             src="https://cdn.builder.io/api/v1/image/assets/TEMP/4db38c53bc6c09336ca4a00c67529ee1676d9f5c2e8d4c63cb2218c12f23d406?apiKey=7836e9d46c0a409dbac8e5fb7888aa0f&"/>
       </div>
-    </div>
-    <div class="image-container">
-      <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/41320b0655af8834da7c942c23029b9f150520dde4203eab9c8723a8be9d8912?apiKey=7836e9d46c0a409dbac8e5fb7888aa0f&" alt="Decorative background" class="background-image" />
+      <form>
+        <h1>Zaloguj się</h1>
+        <label for="email">E-mail</label>
+        <input type="email" id="email" placeholder="E-mail" v-model="email"/>
+        <label for="password">Hasło</label>
+        <input type="password" id="password" v-model="password"/>
+        <p v-if="errMsg"> {{ errMsg }}</p>
+        <button type="submit" class="login-button" @click="signIn">Zaloguj się</button>
+        <SignInGoogleButton></SignInGoogleButton>
+        <p class="signup-text">Nie masz jeszcze konta?</p>
+        <a @click="router.push('/register')" class="signup-link">Utwórz je</a>
+      </form>
+      <div class="image-container">
+        <img class="image-container-lower"
+             src="https://cdn.builder.io/api/v1/image/assets/TEMP/41320b0655af8834da7c942c23029b9f150520dde4203eab9c8723a8be9d8912?apiKey=7836e9d46c0a409dbac8e5fb7888aa0f&"/>
+      </div>
     </div>
   </div>
 </template>
@@ -62,97 +55,66 @@ const signWithGoogle = () => {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #000;
-  min-height: 100vh;
+  flex-grow: 1;
   width: 100%;
-  box-sizing: border-box;
 }
 
 .login-container {
+  width: 50%;
+  height: 100%;
+  background-color: hotpink;
   display: flex;
-  gap: 20px;
+  flex-direction: row;
 }
 
-.login-form-container {
-  display: flex;
-  flex-direction: column;
-  line-height: normal;
-  width: 71%;
+.image-container-lower {
+  background-color: pink;
+  width: 25%;
+  height: 100%;
+  margin: 0 0 0 0;
 }
 
-.login-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 20px;
-  font-size: 28px;
-  color: #000;
-  font-weight: 500;
+.image-container-upper {
+  background-color: pink;
+  width: 25%;
+  height: 100%;
 }
 
-.login-form {
-  align-self: end;
-  display: flex;
-  flex-direction: column;
-}
+.image-container img {
 
-.login-title {
-  align-self: center;
-}
-
-.form-input {
-  border: 1px solid rgba(0, 0, 0, 1);
-  border-radius: 19px;
-  height: 79px;
-  margin-top: 11px;
 }
 
 .login-button {
-  align-self: center;
-  background-color: #3dccc7;
   border-radius: 36px;
+  background-color: #3dccc7;
+  padding: 0.2em 0.5em;
+  border: none;
   color: #fff;
+  font-size: calc((.2em + .5vmin) + (.2em + .5vmax));
   font-weight: 600;
-  justify-content: center;
-  margin-top: 37px;
-  max-width: 100%;
-  padding: 22px 25px;
-  width: 200px;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  width: fit-content;
+  box-sizing: border-box;
+  overflow: hidden;
+  margin: 2px auto 2px auto;
+  width: auto;
 }
 
-.signup-prompt {
-  align-self: end;
-  display: flex;
-  font-size: 24px;
-  font-weight: 300;
-  gap: 20px;
-  margin: 40px 121px 0 0;
-  max-width: 100%;
-  width: 450px;
-}
-
-.signup-text {
-  color: #000;
-  flex-grow: 1;
-  flex-basis: auto;
+.login-button:hover {
+  background-color: rgba(46, 187, 182, 0.93);
+  -webkit-box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
 }
 
 .signup-link {
   color: #3dccc7;
+  cursor: pointer;
 }
 
-.image-container {
-  display: flex;
-  width: 20%;
-  margin: 0 0 0 auto;
-  object-position: bottom;
-}
-
-.background-image {
-  width: 100%;
-  flex-grow: 1;
-  object-position: center;
-  margin: auto;
+.signup-link:hover {
+  color: rgba(46, 187, 182, 0.93);;
 }
 
 </style>
