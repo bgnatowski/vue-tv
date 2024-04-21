@@ -3,6 +3,7 @@ import {ref} from "vue";
 import {useRouter} from "vue-router";
 import {authenticate, authenticateWithGoogle} from "@/services/AuthenticationService.js";
 import SignInGoogleButton from "@/views/SignInGoogleButton.vue";
+import Logo from "@/views/Logo.vue";
 
 const email = ref("");
 const password = ref("");
@@ -21,13 +22,16 @@ const signIn = async () => {
 
 <template>
   <div class="main-container">
+    <Logo></Logo>
     <div class="form-container">
       <h1>Zaloguj się</h1>
-      <label for="email">E-mail</label>
-      <input type="email" id="email" placeholder="E-mail" v-model="email"/>
-      <label for="password">Hasło</label>
-      <input type="password" id="password" placeholder="Hasło" v-model="password"/>
-      <p v-if="errMsg"> {{ errMsg }}</p>
+      <div class="form">
+        <label for="email">E-mail</label>
+        <input type="email" placeholder="E-mail" v-model="email"/>
+        <label for="password">Hasło</label>
+        <input type="password" placeholder="Hasło" v-model="password"/>
+        <p v-if="errMsg"> {{ errMsg }}</p>
+      </div>
       <button type="submit" class="login-button" @click="signIn">Zaloguj się</button>
       <SignInGoogleButton class="google-button"></SignInGoogleButton>
       <div class="form-no-account">
@@ -52,35 +56,20 @@ const signIn = async () => {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  padding: 2vw;
 }
 
 .form-container {
-  width: 80vw;
-  max-width: 600px;
+  width: 100%;
+  max-width: calc((5em + 5vmin) + (10em + 5vmax));
   padding: 5vw;
   margin: 2vw auto;
   background-color: #fff;
   border-radius: 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 4px 2px 2px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-h1 {
-  text-align: center;
-}
-input{
-  border-radius: 36px;
-  border: 1px solid ;
-  background-color: #fff;
-  padding: 1em 2em;
-  color: #000;
-}
-
-label {
-  padding: 1em 1em .5em 1em;
-  font-family: "Red Hat Display", sans-serif;
-  font-weight: 600;
 }
 
 .google-button {
@@ -131,4 +120,37 @@ label {
   flex-direction: row;
   margin-top: 0.5em;
 }
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  width: 100%;
+}
+
+.form p {
+  color: red;
+  font-weight: 200;
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+}
+
+input {
+  border-radius: 36px;
+  border: 1px solid;
+  background-color: #fff;
+  padding: .8em 1em .8em 1em;
+  color: #000;
+  font-size: 1em;
+}
+
+label {
+  padding: 1em 1em .5em 1em;
+  font-family: "Red Hat Display", sans-serif;
+  font-weight: 600;
+}
+
 </style>

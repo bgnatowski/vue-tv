@@ -1,6 +1,7 @@
 <script setup>
 import {useRouter} from "vue-router";
 import SignInGoogleButton from "@/views/SignInGoogleButton.vue";
+import Logo from "@/views/Logo.vue";
 
 const router = useRouter()
 
@@ -10,7 +11,7 @@ const router = useRouter()
   <div class="home-page">
     <div class="home-bar">
       <div class="home-bar-content">
-        <h1 class="home-bar-logo">VueTV</h1>
+        <Logo></Logo>
         <p class="home-bar-description">
           To, co chcesz wiedzieć o swoich filmach - na wyciągnięcie ręki
         </p>
@@ -60,16 +61,6 @@ const router = useRouter()
   align-items: center;
   text-align: center;
   color: #fff;
-  width: 100%;
-}
-
-.home-bar-logo {
-  color: #3dccc7;
-  font-family: "Bruno Ace", sans-serif;
-  font-size: calc((.4em + 2vmin) + (.4em + 2vmax));
-  font-weight: 600;
-  padding: 10px;
-  margin: 10vh 10vh 10px 10vh;
   width: 100%;
 }
 
