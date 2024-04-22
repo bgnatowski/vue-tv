@@ -2,6 +2,7 @@
 import {useRouter} from "vue-router";
 import {signOutUser} from "@/services/AuthenticationService.js";
 const router = useRouter()
+import Header from "@/components/Header.vue";
 
 const handleSingOut = () => {
   signOutUser(router);
@@ -10,13 +11,14 @@ const handleSingOut = () => {
 
 <template>
   <div class="feed-container">
-    <header class="user-header">
+    <!-- <header class="user-header">
       <h1>Strona użytkownika</h1>
       <div class="user-actions">
         <button class="settings-btn" @click="router.push('/settings')">Ustawienia</button>
         <button class="logout-btn" @click="handleSingOut">Wyloguj się</button>
       </div>
-    </header>
+    </header> -->
+    <Header></Header>
     <main class="user-content">
       <h2>Witaj użytkowniku!</h2>
       <div class="cards-container">

@@ -1,16 +1,15 @@
 <template>
   <header class="header">
-    <h1 class="logo">VueTV</h1>
     <nav class="nav">
+      <h1 class="logo">VueTV</h1>
       <form class="search-form">
-        <label for="search-input" class="visually-hidden">Szukaj</label>
-        <input id="search-input" type="text" class="search-input" placeholder="Szukaj" />
+        <input type="text" id="search" class="search-input" placeholder="Szukaj" />
       </form>
-      <button class="nav-button" aria-label="Notifications">
-        <img src="@/resources/contrast-icon.png" alt="" class="nav-icon" />
+      <button class="icon-button" aria-label="Settings">
+        <img src="@/resources/night-mode.png" alt="Settings icon" class="icon" />
       </button>
-      <button class="nav-button" aria-label="User profile">
-        <img src="@/resources/person-icon.png" alt="" class="nav-icon" />
+      <button class="icon-button" aria-label="User profile">
+        <img src="@/resources/user.png" alt="User profile icon" class="icon" />
       </button>
     </nav>
   </header>
@@ -20,79 +19,54 @@
 .header {
   background-color: #fff;
   box-shadow: 0 4px 13px rgba(0, 0, 0, 0.25);
-  display: flex;
   gap: 20px;
-  padding: 25px 35px;
-}
-
-@media (max-width: 991px) {
-  .header {
-    flex-wrap: wrap;
-    padding: 0 20px;
-  }
+  padding: 15px 25px;
 }
 
 .logo {
   color: #3dccc7;
   flex-grow: 1;
-  font: 400 48px Bruno Ace, sans-serif;
+  font: 400 40px Bruno Ace, sans-serif;
   margin: auto 0;
-}
-
-@media (max-width: 991px) {
-  .logo {
-    font-size: 40px;
-  }
+  text-align: left;
+  margin-right: auto;
 }
 
 .nav {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   color: #848484;
-  display: flex;
   font-size: 28px;
   font-weight: 600;
   gap: 20px;
-  justify-content: space-between;
+  height: 5vh;
 }
 
-@media (max-width: 991px) {
-  .nav {
-    flex-wrap: wrap;
-    max-width: 100%;
-  }
-}
 
 .search-form {
-  align-self: stretch;
-  box-shadow: 0 4px 13px 0 rgba(0, 0, 0, 0.15);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-@media (max-width: 991px) {
-  .search-form {
-    max-width: 100%;
-  }
+  flex-grow: 1;
+  margin: 0 20px;
+  padding: 8px 15px;
+  border-radius: 36px;
+  text-align: left;
+  border: none;
+  
 }
 
 .search-input {
-  align-items: start;
-  background-color: #fff;
+  width: 35vw;
+  box-shadow: 0 4px 13px 0 rgba(0, 0, 0, 0.15);
   border-radius: 36px;
+  border-color: #fff;
   font-family: Red Hat Display, sans-serif;
-  justify-content: center;
-  padding: 22px 60px 22px 154px;
+  padding: 22px 60px 22px 60px;
+  border: transparent;
+  height: 1vh;
 }
 
-@media (max-width: 991px) {
-  .search-input {
-    max-width: 100%;
-    padding: 0 20px 0 30px;
-  }
-}
 
-.nav-button {
+.icon-button {
   align-self: stretch;
   background: none;
   border: none;
@@ -101,21 +75,38 @@
   padding: 0;
 }
 
-.nav-icon {
+
+.icon {
   aspect-ratio: 1;
   object-fit: contain;
-  width: 44px;
+  width: 34px;
 }
 
-.visually-hidden {
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
+
+@media (max-width: 767px) {
+  .search-input {
+    max-width: 50%;
+    padding: 10px 30px 10px 30px;
+    margin-top: 1px;
+    /* max-height: 10%; */
+  }
+  .search-form {
+    max-width: 20%;
+    max-height: 10%;
+  }
+  .nav {
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+  .logo {
+    font-size: 20px;
+  }
+  .header {
+    flex-wrap: wrap;
+    padding: 0 20px;
+  }
+  .icon {
+  width: 20px;
+}
 }
 </style>
