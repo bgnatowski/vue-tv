@@ -24,8 +24,7 @@
   color: #000;
   font-weight: 300;
   text-align: center;
-  padding-left: 20px;
-  padding-right: 20px;
+  width: 100%;
 }
 
 .footer-content {
@@ -43,6 +42,7 @@
   font-weight: 600;
   font-size: 1em;
   margin: auto 0;
+  padding-left: 2em;
 }
 
 .footer-credits {
@@ -54,6 +54,7 @@
 .footer-year {
   font-size: 1em;
   margin: auto 0;
+  padding-right: 2em;
 }
 
 </style>

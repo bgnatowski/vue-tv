@@ -3,7 +3,6 @@ import {computed, onMounted, ref} from "vue";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {signOutUser} from "@/services/AuthenticationService.js";
 import {useRoute, useRouter} from "vue-router";
-import Footer from "@/views/Footer.vue";
 
 const isLoggedIn = ref(false);
 const router = useRouter()
@@ -44,7 +43,7 @@ const showFooter = computed(() => {
   <!--    <router-link to="/to_watch"> To watch</router-link>-->
   <!--    <button @click="handleSingOut" v-if="isLoggedIn">Sign out</button>-->
   <!--  </nav>-->
-  <Footer v-if="showFooter"></Footer>
+<!--  <Footer v-if="showFooter"></Footer>-->
 </template>
 
 <style>

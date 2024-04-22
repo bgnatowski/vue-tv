@@ -1,9 +1,10 @@
 <script setup>
 import {ref} from "vue";
 import {useRouter} from "vue-router";
-import {authenticate, authenticateWithGoogle} from "@/services/AuthenticationService.js";
-import SignInGoogleButton from "@/views/SignInGoogleButton.vue";
-import Logo from "@/views/Logo.vue";
+import {authenticate} from "@/services/AuthenticationService.js";
+import Logo from "@/components/Logo.vue";
+import SignInGoogleButton from "@/components/SignInGoogleButton.vue";
+import Footer from "@/components/Footer.vue";
 
 const email = ref("");
 const password = ref("");
@@ -39,8 +40,8 @@ const signIn = async () => {
         <a @click="router.push('/register')" class="signup-link">Utwórz je</a>
       </div>
     </div>
-    <Footer/>
   </div>
+  <Footer></Footer>
 </template>
 
 <style scoped>
