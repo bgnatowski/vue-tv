@@ -1,7 +1,7 @@
 <script setup>
 import {useRouter} from "vue-router";
-import SignInGoogleButton from "@/views/SignInGoogleButton.vue";
-import Logo from "@/views/Logo.vue";
+import Logo from "@/components/Logo.vue";
+import SignInGoogleButton from "@/components/SignInGoogleButton.vue";
 
 const router = useRouter()
 
