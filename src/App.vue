@@ -66,6 +66,7 @@ const showFooter = computed(() => {
   z-index: 1; 
   height: 100vh;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); 
+  max-width: 15rem;
 }
 
 .column2 {
