@@ -1,17 +1,23 @@
 <template>
     <div class="sidebar">
-        <button class="sidebar-button">
-            <img src="@/resources/home.png" alt="Strona główna"> 
-            <span class="button-text">Strona główna</span>
-        </button>
-        <button class="sidebar-button">
-            <img src="@/resources/video.png" alt="Filmy obejrzane">
-            <span class="button-text">Filmy obejrzane</span>
-        </button>
-        <button class="sidebar-button">
-            <img src="@/resources/watching-a-movie.png" alt="Filmy do obejrzenia">
-            <span class="button-text">Filmy do obejrzenia</span>
-        </button>
+        <router-link to="/feed" class="router-link-custom"> 
+            <button class="sidebar-button">
+                <img src="@/resources/home.png" alt="Strona główna"> 
+                <span class="button-text">Strona główna</span>
+            </button>
+        </router-link>
+        <router-link to="/watched" class="router-link-custom">
+            <button class="sidebar-button">
+                <img src="@/resources/video.png" alt="Filmy obejrzane">
+                <span class="button-text">Filmy obejrzane</span>
+            </button>
+        </router-link>
+        <router-link to="/to_watch" class="router-link-custom"> 
+            <button class="sidebar-button">
+                <img src="@/resources/watching-a-movie.png" alt="Filmy do obejrzenia">
+                <span class="button-text">Filmy do obejrzenia</span>
+            </button>
+        </router-link>
         <button class="sidebar-button">
             <img src="@/resources/friends.png" alt="Znajomi">
             <span class="button-text">Znajomi</span>
@@ -22,6 +28,21 @@
         </button>
     </div>
 </template>
+
+<style>
+/* ... existing styles ... */
+
+.router-link-custom {
+    text-decoration: none;
+}
+
+.router-link-custom:hover {
+    text-decoration: none;
+}
+
+/* ... existing styles ... */
+</style>
+
 
 <style>
 img {
@@ -72,6 +93,13 @@ img {
     width: 25px; 
     background-color: white;
     margin-right: 5vw;
+}
+.router-link-custom {
+    text-decoration: none;
+}
+
+.router-link-custom:hover {
+    text-decoration: none;
 }
 }
 </style>

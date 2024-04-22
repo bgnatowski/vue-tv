@@ -43,12 +43,12 @@ const showFooter = computed(() => {
         <!--  <nav style="border-color: #2c3e50; border-style: dashed; padding: 1px;">-->
         <!--    <p>dev navigation</p>-->
         <!--    <router-link to="/"> Home</router-link>-->
-        <!--    <router-link to="/feed"> Feed</router-link>-->
+           <!-- <router-link to="/feed"> Feed</router-link> -->
         <!--    <router-link to="/register"> Register</router-link>-->
         <!--    <router-link to="/sign-in"> Login</router-link>-->
         <!--    <router-link to="/settings"> Settings</router-link>-->
-        <!--    <router-link to="/watched"> Watched</router-link>-->
-        <!--    <router-link to="/to_watch"> To watch</router-link>-->
+           <!-- <router-link to="/watched"> Watched</router-link> -->
+           <!-- <router-link to="/to_watch"> To watch</router-link> -->
         <!--    <button @click="handleSingOut" v-if="isLoggedIn">Sign out</button>-->
         <!--  </nav>-->
         <!--  <Footer v-if="showFooter"></Footer>-->
