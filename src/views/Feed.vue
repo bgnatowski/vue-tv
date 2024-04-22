@@ -3,6 +3,7 @@ import {useRouter} from "vue-router";
 import {signOutUser} from "@/services/AuthenticationService.js";
 const router = useRouter()
 import Popup from "@/components/Popup.vue";
+import MovieTile from "@/components/MovieTile.vue"
 
 
 const handleSingOut = () => {
@@ -20,27 +21,20 @@ const handleSingOut = () => {
       </div>
     </header> -->
     <!-- <Popup/> -->
+    <MovieTile/>
+    <MovieTile/>
+    <MovieTile/>
+    <MovieTile/>
     <main class="user-content">
-      <h2>Witaj użytkowniku!</h2>
-      <div class="cards-container">
-        <div class="card watched-movies">
-          <h3>Twoja lista obejrzanych filmów</h3>
-          <p>Obejrzano: 2</p>
-        </div>
-        <div class="card to-watch-movies">
-          <h3>Twoja lista filmów do obejrzenia</h3>
-          <p>Do obejrzenia: 2</p>
-        </div>
-      </div>
-      <div class="watched-stats">
-        <p>Do tej pory obejrzałeś:</p>
-        <p>8 dni 12 godzin i 15 minut filmów!</p>
-      </div>
+      <h2>---Koniec---</h2>
     </main>
   </div>
 </template>
 
 <style scoped>
+h2 {
+  color: grey;
+}
 .feed-container {
   text-align: center;
 }
@@ -55,29 +49,4 @@ const handleSingOut = () => {
   margin: 0 10px;
 }
 
-.cards-container {
-  display: flex;
-  justify-content: space-around;
-  margin: 20px 0;
-}
-
-.card {
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  width: 200px;
-  height: 150px;
-}
-
-.watched-movies {
-  background-color: #17a2b8;
-}
-
-.to-watch-movies {
-  background-color: #28a745;
-}
-
-.watched-stats {
-  margin-top: 20px;
-}
 </style>

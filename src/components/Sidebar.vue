@@ -32,6 +32,8 @@ img {
     height: 100%; 
     width: 100%; 
     background-color: white;
+    position: sticky;
+    top: 0; 
     margin-right: 5vw;
 }
 .sidebar-button {

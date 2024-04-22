@@ -59,12 +59,15 @@ const showFooter = computed(() => {
 <style>
 .container {
     display: flex;
+    height: 100vh;
 }
 
 .column1 {
   flex: 0 0 20%; 
   z-index: 1; 
-  height: 100vh;
+  height: 100%;
+  position: sticky; 
+  top: 0; 
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); 
   max-width: 15rem;
 }
@@ -72,11 +75,13 @@ const showFooter = computed(() => {
 .column2 {
   flex: 1; 
   z-index: 0; 
+  overflow-y: scroll; 
 }
 
-Header {
+.header {
   z-index: 2; 
-  position: relative; 
+  position: sticky; 
+  top: 0; 
 }
 @media (max-width: 767px) {
   .column1 {
