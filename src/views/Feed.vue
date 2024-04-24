@@ -3,7 +3,7 @@ import {useRouter} from "vue-router";
 import {signOutUser} from "@/services/AuthenticationService.js";
 const router = useRouter()
 import Popup from "@/components/Popup.vue";
-import MovieTile from "@/components/MovieTile.vue"
+import PostTile from "@/components/PostTile.vue"
 
 
 const handleSingOut = () => {
@@ -21,10 +21,10 @@ const handleSingOut = () => {
       </div>
     </header> -->
     <!-- <Popup/> -->
-    <MovieTile/>
-    <MovieTile/>
-    <MovieTile/>
-    <MovieTile/>
+    <PostTile/>
+    <PostTile/>
+    <PostTile/>
+    <PostTile/>
     <main class="user-content">
       <h2>---Koniec---</h2>
     </main>
