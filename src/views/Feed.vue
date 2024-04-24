@@ -13,6 +13,7 @@ const handleSingOut = () => {
 
 <template>
   <div class="feed-container">
+    <h2>Polecenia znajomych:</h2>
     <!-- <header class="user-header">
       <h1>Strona użytkownika</h1>
       <div class="user-actions">
@@ -26,19 +27,14 @@ const handleSingOut = () => {
     <PostTile/>
     <PostTile/>
     <main class="user-content">
-      <h2>---Koniec---</h2>
     </main>
   </div>
 </template>
 
 <style scoped>
 h2 {
-  color: grey;
+  margin: 1rem;
 }
-.feed-container {
-  text-align: center;
-}
-
 .user-header {
   display: flex;
   justify-content: space-between;

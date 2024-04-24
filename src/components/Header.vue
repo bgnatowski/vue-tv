@@ -8,9 +8,11 @@
       <button class="icon-button" aria-label="Settings">
         <img src="@/resources/night-mode.png" alt="Settings icon" class="icon" />
       </button>
-      <button class="icon-button" aria-label="User profile">
-        <img src="@/resources/user.png" alt="User profile icon" class="icon" />
-      </button>
+      <router-link to="/profile"> 
+        <button class="icon-button" aria-label="User profile">
+          <img src="@/resources/user.png" alt="User profile icon" class="icon" />
+        </button>
+      </router-link>
     </nav>
   </header>
 </template>

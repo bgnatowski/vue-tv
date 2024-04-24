@@ -1,17 +1,17 @@
 <template>
     <div class="post">
-    <div class="user-info">
-        <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
-        <p class="user-name">uzytkownik prowatcher123 polecił film:</p>
-    </div>
     <div class="movie-card">
       <img class="movie-poster" src="https://static.posters.cz/image/1300/plakaty/diuna-czesc-1-i122815.jpg" alt="Movie poster for Diuna" />
       <div class="movie-details">
         <div class="movie-header">
           <h2 class="movie-title">Diuna</h2>
-          <div class="buttons">
-            <button class="watched-button">Dodaj do "Filmy obejrzane"</button>
-            <button class="towatch-button">Dodaj do "Filmy do obejrzenia"</button>
+          <div class="dropdown">
+              <button class="dropdown-btn"><img src="@/resources/dots.png" alt="" class="icon" /></button>
+              <div class="dropdown-content">
+                  <a href="#">Option 1</a>
+                  <a href="#">Option 2</a>
+                  <a href="#">Option 3</a>
+              </div>
           </div>
         </div>
         <div class="movie-info">
@@ -34,23 +34,11 @@
     box-shadow: 0px 4px 13px 3px rgba(0, 0, 0, 0.25);
     background-color: #fff;
     margin: 10px;
-    padding: .5rem 1rem .5rem 1rem;
+    padding: .5rem;
     display: flex;
     flex-direction: column;
   }
 
-  .user-profile-pic{
-    border-radius: 50%;
-  }
-
-  .user-info {
-    display: flex;
-    padding: .2rem;
-    margin: 0;
-    /* padding-top: 0; */
-    /* justify-content: left; */
-    align-items: center;
-  }
   .movie-card {
     height: 10rem;
     display: flex;
@@ -63,6 +51,42 @@
     height: 10rem;
     border-radius: 17px;
   }
+  .dropdown-btn {
+      background-color: transparent;
+      border-color: transparent;
+      padding-right: 0;
+  }
+  .dropdown {
+      position: relative;
+      display: inline-block;
+  }
+.icon {
+  margin-right: 0;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0; 
+    white-space: nowrap; 
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    width: 100%; 
+    box-sizing: border-box; 
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
 
   .movie-details {
     display: flex;
@@ -122,26 +146,6 @@
     text-align: center;
   }
 
-  .watched-button,
-  .towatch-button {
-    font-family: Red Hat Display, sans-serif;
-    border-radius: 36px;
-    justify-content: center;
-    padding: 11px 20px;
-    border: none;
-    cursor: pointer;
-    color: white;
-    font-size: 15px;
-  }
-
-  .watched-button {
-    background-color: #3dccc7;
-  }
-
-  .towatch-button {
-    background-color: #3dccc7;
-    margin-top: 9px;
-  }
   .text{
     text-align: justify;
   }
@@ -157,6 +161,7 @@
       padding-right: 0;
       gap: 5px;
       height: 15rem;
+      margin-top: 1rem;
     }
 
     .movie-poster {
@@ -167,24 +172,17 @@
 
     .movie-details,
     .movie-header,
-    .movie-info,
-    .watched-button,
-    .towatch-button {
+    .movie-info {
       font-size: 10px;
       width: 100%; 
       margin-bottom: 0px; 
     }
 
-    .watched-button,
-    .towatch-button {
-      padding: 2px 5px;
-      margin: 2px;
-      
-    }
     .post-text{
         margin-top: 1.5rem;
         padding-top: 1rem;
     }
   }
 </style>
+
   
