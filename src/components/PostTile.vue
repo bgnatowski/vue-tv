@@ -1,7 +1,9 @@
 <template>
   <div class="post">
     <div class="user-info">
-      <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
+      <div class="user-image">
+        <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
+      </div>
       <p class="user-name">uzytkownik prowatcher123 polecił film:</p>
     </div>
     <div class="movie-card">
@@ -35,7 +37,7 @@
 <style scoped>
 .post {
   border-radius: 25px;
-  box-shadow: 0px 4px 13px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
   background-color: #fff;
   margin: 10px;
   padding: .5rem 1rem .5rem 1rem;
@@ -50,6 +52,21 @@
   /* padding-top: 0; */
   /* justify-content: left; */
   align-items: center;
+}
+
+.user-image {
+  display: flex;
+  height: 35px;
+  width: 35px;
+  align-content: center;
+  justify-content: center;
+  margin-right: 1em;
+}
+
+.icon-div img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .movie-card {
@@ -85,7 +102,6 @@
 .movie-title {
   font-family: Red Hat Display, sans-serif;
   margin: 0;
-  margin-top: 0;
   padding-top: 0;
 }
 
@@ -175,13 +191,8 @@
   .towatch-button {
     font-size: 10px;
     width: 100%;
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
-
-  .icon {
-    width: 15px;
-  }
-
   .watched-button,
   .towatch-button {
     padding: 2px 5px;

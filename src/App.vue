@@ -42,7 +42,7 @@ watch(
   <Navbar v-if="isLoggedIn" :isSidebarVisible="isSidebarVisible" @toggle-sidebar="toggleSidebar"></Navbar>
   <main class="container">
     <transition name="sidebar">
-      <Sidebar v-if="isSidebarVisible && isLoggedIn" styl="ver2"></Sidebar>
+      <Sidebar v-if="isSidebarVisible && isLoggedIn"></Sidebar>
     </transition>
     <router-view></router-view>
   </main>
