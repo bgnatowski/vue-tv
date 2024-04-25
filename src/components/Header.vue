@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <nav class="nav">
-      <h1 class="logo">VueTV</h1>
+      <h1 class="logo bruno-ace-bold">VueTV</h1>
       <form class="search-form">
         <input type="text" id="search" class="search-input" placeholder="Szukaj" />
       </form>

@@ -28,7 +28,7 @@ const sideBarIconRotate = ref(false)
     <nav>
       <div class="branding">
         <router-link :to="paths.HOME_ROUTE" style="text-decoration: none" class="logo-text">
-          <h1 class="logo-text">VueTV</h1>
+          <h1 class="bruno-ace-bold">VueTV</h1>
         </router-link>
       </div>
       <div class="search">
@@ -129,7 +129,7 @@ li {
 .search {
   align-content: center;
   justify-content: center;
-  width: 50%;
+  width: 30%;
   margin: auto 5% auto 5%;
   transition: .5s ease all;
 }
