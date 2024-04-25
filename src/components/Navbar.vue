@@ -27,8 +27,8 @@ const sideBarIconRotate = ref(false)
   <header>
     <nav>
       <div class="branding">
-        <router-link :to="paths.HOME_ROUTE" style="text-decoration: none">
-          <h1 class="logo-text">VueTV</h1>
+        <router-link :to="paths.HOME_ROUTE" style="text-decoration: none" class="logo-text">
+          <h1 class="bruno-ace-regular">VueTV</h1>
         </router-link>
       </div>
       <div class="search">
@@ -72,11 +72,12 @@ nav {
   transition: .5s ease all;
   align-content: space-between;
   justify-content: space-between;
+  width: 100%;
 }
 
 ul {
   list-style-type: none;
-  margin-right: 1em;
+  margin-right: 2em;
 }
 
 ul, .link {
@@ -115,12 +116,11 @@ li {
 .branding {
   display: flex;
   align-items: center;
-  margin-left: 1em;
+  margin-left: 2em;
   text-decoration: none;
 }
 
 .logo-text {
-  font-family: "Bruno Ace", sans-serif;
   color: var(--main-color);
   transition: .5s ease all;
   text-decoration: none;
@@ -130,7 +130,7 @@ li {
 .search {
   align-content: center;
   justify-content: center;
-  width: 50%;
+  width: 30%;
   margin: auto 5% auto 5%;
   transition: .5s ease all;
 }
@@ -147,13 +147,6 @@ li {
   width: 100%;
 }
 
-@media (min-width: 1140px) {
-  nav {
-    /*max-width: 1144px;*/
-  }
-}
-
-
 .icon-active {
   transform: rotate(180deg);
 }
@@ -161,4 +154,20 @@ li {
 .icon-rotate {
   transform: rotate(360deg);
 }
+
+@media (max-width: 979px) {
+  .logo-text {
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 500px) {
+  .search {
+    width: auto;
+    min-width: 70px;
+  }
+
+}
+
+
 </style>
