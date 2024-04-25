@@ -40,7 +40,7 @@ watch(
 
 <template>
   <Navbar v-if="isLoggedIn" :isSidebarVisible="isSidebarVisible" @toggle-sidebar="toggleSidebar"></Navbar>
-  <main class="app">
+  <main class="container">
     <transition name="sidebar">
       <Sidebar v-if="isSidebarVisible && isLoggedIn" styl="ver2"></Sidebar>
     </transition>
@@ -50,34 +50,6 @@ watch(
 </template>
 
 <style>
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Red Hat Display", sans-serif;
-}
-
-:root {
-  --main-color: #3DCCC7;
-  --lighter-main: #9CEAEF
-}
-
-.app {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-image: url("@/resources/background.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-attachment: fixed;
-  position: relative;
-  min-height: 100vh;
-}
 
 /* transition */
 .sidebar-leave-active {

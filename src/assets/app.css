@@ -1,1 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Bruno+Ace&display=swap');
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Red Hat Display", sans-serif;
+}
+
+:root {
+    --main-color: #3DCCC7;
+    --lighter-main: #9CEAEF
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-image: url("@/resources/background.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    position: relative;
+    min-height: 100vh;
+}
+
+.bruno-ace-regular {
+    font-family: "Bruno Ace", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}

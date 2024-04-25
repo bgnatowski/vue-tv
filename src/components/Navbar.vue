@@ -27,7 +27,7 @@ const sideBarIconRotate = ref(false)
   <header>
     <nav>
       <div class="branding">
-        <router-link :to="paths.HOME_ROUTE" style="text-decoration: none">
+        <router-link :to="paths.HOME_ROUTE" style="text-decoration: none" class="logo-text">
           <h1 class="logo-text">VueTV</h1>
         </router-link>
       </div>
@@ -120,7 +120,6 @@ li {
 }
 
 .logo-text {
-  font-family: "Bruno Ace", sans-serif;
   color: var(--main-color);
   transition: .5s ease all;
   text-decoration: none;
