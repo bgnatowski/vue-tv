@@ -161,13 +161,14 @@ li {
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 360px) {
   .search {
     width: auto;
     min-width: 70px;
   }
-
+  .logo-text {
+    font-size: .5em;
+  }
 }
-
 
 </style>
