@@ -1,16 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Bruno+Ace&display=swap');
 
-html, body {
-    font-family: "Red Hat Display", sans-serif;
+* {
     margin: 0;
     padding: 0;
-}
-
-*, *::before, *::after {
-    box-sizing: inherit;
+    box-sizing: border-box;
+    font-family: "Red Hat Display", sans-serif;
 }
 
 :root {
     --main-color: #3DCCC7;
     --lighter-main: #9CEAEF
+}
+
+#app{
 }

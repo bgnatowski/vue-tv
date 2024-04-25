@@ -1,51 +1,69 @@
 <script setup>
-import {computed, onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
-import {signOutUser} from "@/services/AuthenticationService.js";
-import {useRoute, useRouter} from "vue-router";
+import {useRoute} from "vue-router";
+import Footer from "@/components/Footer.vue";
+import Header from "@/components/Header.vue";
+import Sidebar from "@/components/Sidebar.vue"
 
+const route = useRoute();
 const isLoggedIn = ref(false);
-const router = useRouter()
-const route = useRoute()
+const showFooter = ref(true);
 
 let auth;
 onMounted(() => {
   auth = getAuth()
   onAuthStateChanged(auth, (user) => {
-    if (user) {
-      isLoggedIn.value = true;
-    } else {
-      isLoggedIn.value = false;
-    }
+    isLoggedIn.value = !!user;
   })
 });
 
-const handleSingOut = () => {
-  signOutUser(router);
-};
-
-const showFooter = computed(() => {
-  return !route.meta.hideFooter;
-});
+// ustawienie footera
+watch(
+    () => route.path,
+    (newPath) => {
+      showFooter.value = newPath !== '/';
+    },
+    {immediate: true}
+);
 
 </script>
 
 <template>
-  <router-view></router-view>
-  <!--  <nav style="border-color: #2c3e50; border-style: dashed; padding: 1px;">-->
-  <!--    <p>dev navigation</p>-->
-  <!--    <router-link to="/"> Home</router-link>-->
-  <!--    <router-link to="/feed"> Feed</router-link>-->
-  <!--    <router-link to="/register"> Register</router-link>-->
-  <!--    <router-link to="/sign-in"> Login</router-link>-->
-  <!--    <router-link to="/settings"> Settings</router-link>-->
-  <!--    <router-link to="/watched"> Watched</router-link>-->
-  <!--    <router-link to="/to_watch"> To watch</router-link>-->
-  <!--    <button @click="handleSingOut" v-if="isLoggedIn">Sign out</button>-->
-  <!--  </nav>-->
-<!--  <Footer v-if="showFooter"></Footer>-->
+  <header>
+    <Header v-if="isLoggedIn"></Header>
+  </header>
+  <main class="container">
+    <!--    ver1 lub ver2 - zmien w celu sprawdzenia ktory kolor lepszy dla sidebara -->
+    <Sidebar v-if="isLoggedIn" styl="ver2"/>
+    <router-view></router-view>
+  </main>
+  <footer>
+    <Footer v-if="showFooter"></Footer>
+  </footer>
 </template>
 
 <style>
+header {
+  background-color: #fff;
+  box-shadow: 0 4px 13px rgba(0, 0, 0, 0.25);
+  position: fixed;
+  width: 100%;
+}
 
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image: url("@/resources/background.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  min-height: 100vh;
+  width: 100%;
+  padding-top: 5em; /* odstep od gory hardcoded narazie xd*/
+}
 </style>

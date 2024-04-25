@@ -3,58 +3,46 @@
 
 <template>
   <div class="footer">
-    <h1 class="footer-logo">VueTV</h1>
-    <div class="footer-content">
-      <p class="footer-credits">
-        Piotr Grochala | Bartosz Gnatowski | Kamil Rachwał
-      </p>
-      <p class="footer-groups">ZIISS2-1211 | Grupa D</p>
+    <h3>VueTV</h3>
+    <div class="content">
+      <p>Piotr Grochala | Bartosz Gnatowski | Kamil Rachwał</p>
+      <p>ZIISS2-1211 | Grupa D</p>
     </div>
-    <p class="footer-year">2024</p>
+    <h3>2024</h3>
   </div>
 </template>
 
 <style scoped>
 .footer {
-  background-color: #fff;
-  box-shadow: 0 0 13px rgba(0, 0, 0, 0.25);
-  display: flex;
-  gap: 2em;
-  font-size: calc((.2em + .2vmin) + (.25em + .25vmax));
-  color: #000;
-  font-weight: 300;
-  text-align: center;
-  width: 100%;
-}
-
-.footer-content {
-  text-align: inherit;
-  padding: inherit;
   display: flex;
   flex-direction: row;
-  column-gap: 2em;
-  margin: auto;
+  justify-content: space-around;
+  align-items: center;
+  font-size: calc((.2em + .2vmin) + (.2em + .2vmax));
+  color: #000;
+  box-shadow: 0 0 13px rgba(0, 0, 0, 0.25);
+  background-color: #fff;
+  text-align: center;
 }
 
-.footer-logo {
-  color: #3dccc7;
+h3 {
+  color: var(--main-color);
   font-family: "Bruno Ace", sans-serif;
-  font-weight: 600;
-  font-size: 1em;
-  margin: auto 0;
-  padding-left: 2em;
+  font-weight: 400;
+  padding: .2rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
 }
 
-.footer-credits {
-  font-size: 1em;
+.content{
   flex-grow: 1;
-  flex-basis: auto;
+  padding: .1rem;
 }
 
-.footer-year {
-  font-size: 1em;
-  margin: auto 0;
-  padding-right: 2em;
+p {
+  font-family: "Bruno Ace", sans-serif;
+  font-size: calc((.2em + .2vmin) + (.2em + .2vmax));
+  padding: .1rem;
 }
 
 </style>
