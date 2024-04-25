@@ -14,11 +14,7 @@ import PostTile from "@/components/PostTile.vue";</script>
 </template>
 
 <style scoped>
-.feed-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.user-content{
   text-align: center;
 }
 

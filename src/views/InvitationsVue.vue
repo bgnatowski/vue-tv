@@ -1,3 +1,15 @@
-<script></script>
-<template></template>
-<style></style>
+<script>
+
+</script>
+
+<template>
+  <div class="feed-container">
+
+
+  </div>
+
+</template>
+
+<style>
+
+</style>

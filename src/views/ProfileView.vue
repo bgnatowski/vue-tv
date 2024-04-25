@@ -3,22 +3,24 @@ import UserPostTile from "@/components/UserPostTile.vue"
 import UserMovesTile from "@/components/UserMoviesTile.vue"</script>
 
 <template>
-  <div class="profile-page">
-    <div class="movies-column">
-      <div class="profile-picture">
-        <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
-        <p class="user-name">prowatcher123</p>
-        <UserMovesTile tileType="Filmy obejrzane"/>
-        <UserMovesTile tileType="Filmy do obejrzenia"/>
+  <div class="feed-container">
+    <div class="profile-page">
+      <div class="movies-column">
+        <div class="profile-picture">
+          <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
+          <p class="user-name">prowatcher123</p>
+          <UserMovesTile tileType="Filmy obejrzane"/>
+          <UserMovesTile tileType="Filmy do obejrzenia"/>
+        </div>
       </div>
-    </div>
-    <div class="posts-column">
-      <h2>Posty uytkownika:</h2>
-      <UserPostTile/>
-      <UserPostTile/>
-      <UserPostTile/>
-      <UserPostTile/>
-      <UserPostTile/>
+      <div class="posts-column">
+        <h2>Posty uytkownika:</h2>
+        <UserPostTile/>
+        <UserPostTile/>
+        <UserPostTile/>
+        <UserPostTile/>
+        <UserPostTile/>
+      </div>
     </div>
   </div>
 </template>

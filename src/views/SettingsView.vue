@@ -29,39 +29,40 @@ const closeDeleteAccountPopup = () => {
 </script>
 
 <template>
-  <div class="settings-container">
-    <div class="user-info">
-      <img class="user-avatar" src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="Avatar użytkownika">
-      <h2>{{ username }}</h2>
-    </div>
-    <div class="settings-actions">
-      <button @click="showChangePasswordPopup = true">Zmień hasło</button>
-      <button @click="showDeleteAccountPopup = true">Usuń konto</button>
-    </div>
-
-    <!-- Popup Zmiany Hasła -->
-    <div v-if="showChangePasswordPopup" class="popup-overlay" @click.self="closeChangePasswordPopup">
-      <div class="popup">
-        <button class="close-btn" @click="closeChangePasswordPopup">X</button>
-        <h3>Zmień hasło</h3>
-        <input type="password" placeholder="Obecne hasło">
-        <input type="password" placeholder="Nowe hasło">
-        <input type="password" placeholder="Wpisz ponownie nowe hasło">
-        <button @click="confirmChangePassword">Potwierdź</button>
+  <section class="feed-container">
+      <div class="user-info">
+        <img class="user-avatar" src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="Avatar użytkownika">
+        <h2>{{ username }}</h2>
       </div>
-    </div>
-
-    <!-- Popup Usunięcia Konta -->
-    <div v-if="showDeleteAccountPopup" class="popup-overlay" @click.self="closeDeleteAccountPopup">
-      <div class="popup">
-        <button class="close-btn" @click="closeDeleteAccountPopup">X</button>
-        <h3>Usuń konto</h3>
-        <input type="password" placeholder="Wpisz swoje obecne hasło">
-        <button @click="confirmDeleteAccount">Potwierdź</button>
-        <p>Będziemy tęsknić :(</p>
+      <div class="settings-actions">
+        <button @click="showChangePasswordPopup = true">Zmień hasło</button>
+        <button @click="showDeleteAccountPopup = true">Usuń konto</button>
       </div>
-    </div>
-  </div>
+
+      <!-- Popup Zmiany Hasła -->
+      <div v-if="showChangePasswordPopup" class="popup-overlay" @click.self="closeChangePasswordPopup">
+        <div class="popup">
+          <button class="close-btn" @click="closeChangePasswordPopup">X</button>
+          <h3>Zmień hasło</h3>
+          <input type="password" placeholder="Obecne hasło">
+          <input type="password" placeholder="Nowe hasło">
+          <input type="password" placeholder="Wpisz ponownie nowe hasło">
+          <button @click="confirmChangePassword">Potwierdź</button>
+        </div>
+      </div>
+
+      <!-- Popup Usunięcia Konta -->
+      <div v-if="showDeleteAccountPopup" class="popup-overlay" @click.self="closeDeleteAccountPopup">
+        <div class="popup">
+          <button class="close-btn" @click="closeDeleteAccountPopup">X</button>
+          <h3>Usuń konto</h3>
+          <input type="password" placeholder="Wpisz swoje obecne hasło">
+          <button @click="confirmDeleteAccount">Potwierdź</button>
+          <p>Będziemy tęsknić :(</p>
+        </div>
+      </div>
+    </section>
+  </section>
 </template>
 
 <style scoped>
@@ -70,13 +71,8 @@ const closeDeleteAccountPopup = () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-radius: 3em;
-  margin: 0 auto;
-  border: none;
-  background-color: rgba(255, 255, 255, 0.5);
-  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
-  width: 85%;
-  min-width: min-content;
+  text-align: center;
+  width: 100%;
 }
 
 .popup-overlay {
@@ -105,6 +101,8 @@ const closeDeleteAccountPopup = () => {
   padding: .2rem;
   align-items: center;
   flex-direction: column;
+  width: 100px;
+  height: 100px;
 }
 
 .user-info img {

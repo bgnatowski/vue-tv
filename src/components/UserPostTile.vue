@@ -6,7 +6,7 @@
         <div class="movie-header">
           <h2 class="movie-title">Diuna</h2>
           <div class="dropdown">
-              <button class="dropdown-btn"><img src="@/resources/dots.png" alt="" class="icon" /></button>
+              <div class="dropdown-btn"><img src="@/resources/dots.png" alt="" class="icon" /></div>
               <div class="dropdown-content">
                   <a href="#">Option 1</a>
                   <a href="#">Option 2</a>
@@ -54,7 +54,14 @@
   .dropdown-btn {
       background-color: transparent;
       border-color: transparent;
-      padding-right: 0;
+      margin-right: 1em;
+      height: 50px;
+      width: 20px;
+  }
+
+  .dropdown-btn img {
+    height: 100%;
+    object-fit: contain;
   }
   .dropdown {
       position: relative;
