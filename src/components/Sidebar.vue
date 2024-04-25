@@ -105,7 +105,7 @@ import paths from "@/router/routerPaths.js";</script>
 .sidebar-button:active {
   border: none;
   box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
-  background-color: rgb(161, 241, 246);
+  background-color: var(--clicked-button);
 }
 
 .button-text {
