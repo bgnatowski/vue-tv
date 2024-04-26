@@ -1,51 +1,49 @@
 <script setup>
-import UserPostTile from "@/components/UserPostTile.vue"
-import UserMovesTile from "@/components/UserMoviesTile.vue"</script>
+import UserMovesTile from "@/components/UserMoviesTile.vue"
+import UserPostTile from "@/components/UserPostTile.vue";
+
+</script>
 
 <template>
-  <div class="feed-container">
-    <div class="profile-page">
+  <section class="feed-container">
       <div class="movies-column">
         <div class="profile-picture">
           <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
           <p class="user-name">prowatcher123</p>
-          <UserMovesTile tileType="Filmy obejrzane"/>
-          <UserMovesTile tileType="Filmy do obejrzenia"/>
         </div>
+        <UserMovesTile tileType="Filmy obejrzane"/>
+        <UserMovesTile tileType="Filmy do obejrzenia"/>
       </div>
       <div class="posts-column">
-        <h2>Posty uytkownika:</h2>
-        <UserPostTile/>
-        <UserPostTile/>
-        <UserPostTile/>
-        <UserPostTile/>
-        <UserPostTile/>
+        <h2>Posty użytkownika:</h2>
+        <UserPostTile></UserPostTile>
+        <UserPostTile></UserPostTile>
+        <UserPostTile></UserPostTile>
+        <UserPostTile></UserPostTile>
+        <UserPostTile></UserPostTile>
+        <UserPostTile></UserPostTile>
+        <UserPostTile></UserPostTile>
       </div>
-    </div>
-  </div>
+  </section>
 </template>
 
 <style scoped>
-.profile-page {
-  display: flex;
+.feed-container{
+  flex-direction: row;
+  gap: 1em;
+  margin: 0;
 }
 
 .movies-column {
-  flex: 0 0 40%;
-  width: 100%;
-}
-
-.posts-column {
-  flex: 0 0 60%;
-  width: 100%;
-  overflow-y: auto;
-  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  width: 40%;
+  margin: 1em 0;
 }
 
 .profile-picture {
-  margin-top: 3rem;
   text-align: center;
-
 }
 
 .user-profile-pic {
@@ -59,10 +57,18 @@ import UserMovesTile from "@/components/UserMoviesTile.vue"</script>
   margin-top: 1rem;
 }
 
-@media (max-width: 767px) {
-  .profile-page {
-    flex-direction: column;
-  }
+/*@media(max-width: 970px){*/
+/*  .movies-column {*/
+/*    width: 20%;*/
+/*  }*/
+/*  .posts-column {*/
+/*    width: 80%;*/
+/*  }*/
+/*}*/
 
-}
+/*@media (max-width: 767px) {*/
+/*  .profile-page {*/
+/*    flex-direction: column;*/
+/*  }*/
+/*}*/
 </style>

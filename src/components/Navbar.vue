@@ -139,12 +139,17 @@ li {
   outline: none;
   border-radius: 3em;
   border-color: transparent;
-  padding: .5rem;
+  padding: .6rem;
   font-size: 1em;
   color: #747775;
   background-color: rgba(255, 255, 255, 0.5);
   box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
   width: 100%;
+}
+
+.search input:hover {
+  transition: .5s ease all;
+  padding: .7rem;
 }
 
 .icon-active {

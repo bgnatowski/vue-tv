@@ -62,14 +62,6 @@ const router = createRouter({
             }
         },
         {
-            path: paths.SETTINGS_ROUTE,
-            component: () => import("../views/SettingsView.vue"),
-            name: "Settings",
-            meta: {
-                requiresAuth: true,
-            }
-        },
-        {
             path: paths.FRIENDS_ROUTE,
             component: () => import("../views/FriendsView.vue"),
             name: "Friends",
@@ -84,7 +76,15 @@ const router = createRouter({
             meta: {
                 requiresAuth: true,
             }
-        }
+        },
+        {
+            path: paths.SETTINGS_ROUTE,
+            component: () => import("../views/SettingsView.vue"),
+            name: "Settings",
+            meta: {
+                requiresAuth: true,
+            }
+        },
 
 
     ],

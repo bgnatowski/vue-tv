@@ -10,6 +10,7 @@
 :root {
     --main-color: #3DCCC7;
     --lighter-main: #9CEAEF;
+    --lighter-main-transparent: rgba(156, 234, 239, 0.5);
     --clicked-button: rgb(161, 241, 246);
 }
 
@@ -35,8 +36,30 @@
     flex-direction: column;
     align-self: flex-start;
     background: transparent;
-    width: auto;
-    margin: .5rem .5rem;
+    margin: 0 1em;
+    width: 100%;
+}
+
+.post {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    border-radius: 2em;
+    box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
+    background-color: rgba(255, 255, 255, 0.5);
+    margin: .5em 0;
+    padding: .5rem 1rem .5rem 1rem;
+    width: 100%;
+}
+
+.posts-column {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 1em;
+    max-height: 1500px;
+    overflow-y: auto;
 }
 
 .bruno-ace-regular {

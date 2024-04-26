@@ -24,8 +24,10 @@ import Friends from "@/components/Friends.vue"
   text-align: center;
   width: 100%;
 }
-h1{
+
+h1 {
   margin-left: 1rem;
 }
 
 </style>
+

@@ -1,8 +1,5 @@
 <script setup>
 import {ref} from 'vue';
-import {useRouter} from 'vue-router';
-
-const router = useRouter();
 
 const showChangePasswordPopup = ref(false);
 const showDeleteAccountPopup = ref(false);
@@ -30,13 +27,14 @@ const closeDeleteAccountPopup = () => {
 
 <template>
   <section class="feed-container">
+    <div class="settings-container">
       <div class="user-info">
         <img class="user-avatar" src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="Avatar użytkownika">
         <h2>{{ username }}</h2>
       </div>
       <div class="settings-actions">
-        <button @click="showChangePasswordPopup = true">Zmień hasło</button>
-        <button @click="showDeleteAccountPopup = true">Usuń konto</button>
+        <button @click="showChangePasswordPopup">Zmień hasło</button>
+        <button @click="showDeleteAccountPopup">Usuń konto</button>
       </div>
 
       <!-- Popup Zmiany Hasła -->
@@ -61,7 +59,7 @@ const closeDeleteAccountPopup = () => {
           <p>Będziemy tęsknić :(</p>
         </div>
       </div>
-    </section>
+    </div>
   </section>
 </template>
 
@@ -69,10 +67,13 @@ const closeDeleteAccountPopup = () => {
 .settings-container {
   display: flex;
   flex-direction: column;
+  align-content: center;
   justify-content: center;
-  align-items: center;
-  text-align: center;
-  width: 100%;
+  border-radius: 2em;
+  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
+  background-color: rgba(255, 255, 255, 0.25);
+  margin: .5em 0;
+  padding: .5rem 1rem .5rem 1rem;
 }
 
 .popup-overlay {
@@ -98,11 +99,13 @@ const closeDeleteAccountPopup = () => {
 
 .user-info {
   display: flex;
-  padding: .2rem;
+  padding: 2rem;
   align-items: center;
+  justify-content: center;
   flex-direction: column;
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
+  margin: auto;
 }
 
 .user-info img {

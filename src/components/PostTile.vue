@@ -1,66 +1,93 @@
+<script setup>
+
+import {ref} from "vue";
+
+const isShowDropdown = ref(false)
+const isWatched = ref(false)
+
+function showDropdown() {
+  isShowDropdown.value = true;
+}
+
+function hideDropdown() {
+  isShowDropdown.value = false;
+}
+
+</script>
+
 <template>
-  <div class="post">
-    <div class="user-info">
-      <div class="user-image">
-        <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
-      </div>
-      <p class="user-name">uzytkownik prowatcher123 polecił film:</p>
-    </div>
-    <div class="movie-card">
-      <div class="movie-poster">
-        <img src="https://static.posters.cz/image/1300/plakaty/diuna-czesc-1-i122815.jpg"
-             alt="Movie poster for Diuna"/>
-      </div>
-      <div class="movie-details">
-        <div class="movie-text">
-          <div class="movie-header">
-            <h2 class="movie-title">Diuna</h2>
+  <section class="post">
+    <div class="post-card">
+      <div class="upper-bar">
+        <div class="user-info">
+          <div class="user-image">
+            <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
           </div>
-          <div class="movie-info">
-            <div class="movie-metadata">
-              <p class="movie-genre">Gatunek: Sci-Fi</p>
-              <p class="movie-duration">Długość: 2h 04 min</p>
+          <p class="user-name">uzytkownik prowatcher123 polecił film:</p>
+        </div>
+        <div class="dropdown" @mouseover="showDropdown" @mouseleave="hideDropdown">
+          <div class="dropdown-options-icon">
+            <img src="@/resources/dots-icon.png" alt="Movie Options"/>
+          </div>
+          <div v-if="isShowDropdown" class="dropdown-content">
+            <a href="#">Opis filmu</a>
+            <a href="#" v-if="!isWatched">Dodaj do zobaczenia</a>
+          </div>
+        </div>
+      </div>
+      <div class="movie-card">
+        <div class="movie-poster">
+          <img src="https://static.posters.cz/image/1300/plakaty/diuna-czesc-1-i122815.jpg"
+               alt="Movie poster for Diuna"/>
+        </div>
+        <div class="movie-details">
+          <div class="movie-text">
+            <div class="movie-header">
+              <h2 class="movie-title">Diuna</h2>
+            </div>
+            <div class="movie-info">
+              <div class="movie-metadata">
+                <p class="movie-genre">Gatunek: Sci-Fi</p>
+                <p class="movie-duration">Długość: 2h 04 min</p>
+              </div>
             </div>
           </div>
         </div>
-        <div class="buttons">
-          <button class="watched-button">Dodaj do "Filmy obejrzane"</button>
-          <button class="towatch-button">Dodaj do "Filmy do obejrzenia"</button>
-        </div>
+      </div>
+      <div class="post-text">
+        <p>Film świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman
+          dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił
+          samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem
+          dramatycznym. Coś wielkiego.</p>
       </div>
     </div>
-    <div class="post-text">
-      <p>Film świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman
-        dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił
-        samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem
-        dramatycznym. Coś wielkiego.</p>
-    </div>
-  </div>
+  </section>
 </template>
 
 <style scoped>
-.post {
+.post-card {
   display: flex;
   flex-direction: column;
   align-content: center;
   justify-content: center;
-  border-radius: 2em;
-  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
-  background-color: #fff;
-  margin: .5em;
-  padding: .5rem 1rem .5rem 1rem;
 }
-
 .user-info {
   display: flex;
   padding: .2rem;
   justify-content: flex-start;
-  align-content: center;
+  align-content: flex-start;
+
 }
 
 .user-info p {
   justify-content: center;
   align-content: center;
+}
+
+.upper-bar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .user-image {
@@ -69,13 +96,7 @@
   width: 35px;
   align-content: center;
   justify-content: center;
-  margin-right: 1em;
-}
-
-.icon-div img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  margin: auto 1em auto 0;
 }
 
 .movie-card {
@@ -137,43 +158,74 @@
   margin-top: 5px;
 }
 
-.buttons {
-  display: flex;
-  flex-direction: column;
-  color: #fff;
-  font-weight: 600;
-  text-align: center;
-  gap: 5px;
-}
-
-.watched-button,
-.towatch-button {
-  border-radius: 3em;
-  justify-content: center;
-  padding: 1rem 1rem;
-  border: none;
-  cursor: pointer;
-  color: white;
-  font-size: .8em;
-  background-color: var(--main-color);
-}
-
-.watched-button:hover,
-.towatch-button:hover {
-  background-color: var(--lighter-main);
-  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
-}
-
-.watched-button:active,
-.towatch-button:active {
-  background-color: var(--clicked-button);
-  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
-}
-
 .post-text p {
   margin: 2px;
   padding: 2px;
   text-align: justify;
+}
+
+.dropdown {
+  display: flex;
+  align-content: flex-end;
+  justify-content: flex-end;
+  padding: .2em;
+  gap: 5px;
+  transition: .5s ease all;
+}
+
+.dropdown-options-icon {
+  height: 40px;
+  width: 40px;
+  border-radius: 2em;
+  padding: .5em;
+  transition: .5s ease all;
+  cursor: pointer;
+}
+
+.dropdown-options-icon:hover {
+  background-color: var(--lighter-main);
+  border: none;
+  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
+}
+
+.dropdown-options-icon:active {
+  background-color: var(--clicked-button);
+}
+
+.dropdown-options-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.dropdown-content {
+  transition: .5s ease all;
+  position: absolute;
+  background-color: #f9f9f9;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  white-space: nowrap;
+  border-radius: 1.2em;
+  padding: .5em;
+}
+
+.dropdown-content a {
+  display: flex;
+  flex-direction: column;
+  color: #000;
+  padding: 1em 2em;
+  text-decoration: none;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 1.2em;
+}
+
+.dropdown-content a:hover {
+  background-color: var(--lighter-main);
+}
+
+.dropdown .dropdown-content {
+  display: block;
 }
 
 @media (max-width: 979px) {
@@ -194,9 +246,11 @@
   .movie-details,
   .movie-header,
   .movie-info,
-  .watched-button,
-  .towatch-button,
-  .post-text {
+  .post-text
+  .dropdown
+  .dropdown-options-icon
+  .dropdown-content
+  .dropdown-content a{
     font-size: .9em;
     width: 100%;
   }
@@ -227,16 +281,13 @@
   .movie-details,
   .movie-header,
   .movie-info,
-  .watched-button,
-  .towatch-button,
   .post-text {
     font-size: .9em;
     width: 100%;
   }
 
-  .watched-button,
-  .towatch-button {
-    padding: 6px;
+  .dropdown-content a {
+    padding: .5em 1em;
   }
 }
 
@@ -261,19 +312,13 @@
   .movie-details,
   .movie-header,
   .movie-info,
-  .watched-button,
-  .towatch-button,
   .user-info,
-  .post-text{
+  .post-text
+  .dropdown-options-icon
+  .dropdown-content
+  .dropdown-content a {
     font-size: .75em;
     width: 100%;
   }
-
-  .watched-button,
-  .towatch-button {
-    padding: 4px;
-  }
 }
 </style>
-<script setup>
-</script>

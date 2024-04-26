@@ -1,10 +1,9 @@
 <script setup>
-import MovieTile from "@/components/MovieTile.vue"
-</script>
+import MovieTile from "@/components/MovieTile.vue"</script>
 
 <template>
-  <div class="watched-container">
-    <h1>Obejrzane</h1>
+  <section class="feed-container">
+    <h1>Filmy ukonczone</h1>
     <MovieTile/>
     <MovieTile/>
     <MovieTile/>
@@ -12,19 +11,11 @@ import MovieTile from "@/components/MovieTile.vue"
     <main class="user-content">
       <h2>---Koniec---</h2>
     </main>
-  </div>
+  </section>
 </template>
 
 <style scoped>
-.watched-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.user-content {
   text-align: center;
-  width: 100%;
-}
-h1{
-  margin-left: 1rem;
 }
 </style>

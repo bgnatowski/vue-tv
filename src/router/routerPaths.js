@@ -11,7 +11,6 @@ const paths =
     WATCHED_ROUTE: '/watched',
     FRIENDS_ROUTE: '/friends',
     INVITATIONS_ROUTE: '/invitations',
-
 }
 
 export default paths
