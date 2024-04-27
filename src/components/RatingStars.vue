@@ -15,13 +15,13 @@ const isPointer = ref(props.readOnly ? 'default' : 'pointer');
   <div class="rating-container">
     <Rating v-model="value" :readonly="readOnly" :cancel="!readOnly">
       <template #cancelicon>
-        <img class="cancel-icon" src="@/resources/rating/cancel.png" height="24" width="24"/>
+        <img class="cancel-icon" src="@/assets/rating/cancel.png" height="24" width="24"/>
       </template>
       <template #onicon>
-        <img src="@/resources/rating/custom-onicon.png" height="24" width="24"/>
+        <img src="@/assets/rating/custom-onicon.png" height="24" width="24"/>
       </template>
       <template #officon>
-        <img src="@/resources/rating/custom-officon.png" height="24" width="24"/>
+        <img src="@/assets/rating/custom-officon.png" height="24" width="24"/>
       </template>
     </Rating>
     <p v-if="readOnly" class="real-value" v-text="value"></p>

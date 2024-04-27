@@ -38,13 +38,13 @@ const sideBarIconRotate = ref(false)
         <li>
           <div class="link" :class="{'icon-rotate': profileIconRotate}">
             <router-link :to="paths.USER_PROFILE_ROUTE">
-              <img @click="toggleRotate" src="@/resources/user.png" alt="User profile icon"/>
+              <img @click="toggleRotate" src="@/assets/user.png" alt="User profile icon"/>
             </router-link>
           </div>
         </li>
         <li>
           <div class="link" :class="{'icon-active': sideBarIconRotate}">
-            <img @click="onMenuButtonClick" src="@/resources/menu-icon.png" alt="Menu icon">
+            <img @click="onMenuButtonClick" src="@/assets/menu-icon.png" alt="Menu icon">
           </div>
         </li>
       </ul>

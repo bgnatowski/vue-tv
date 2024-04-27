@@ -23,7 +23,7 @@ const router = useRouter()
         </div>
       </div>
       <div class="home-image">
-        <img src="@/resources/home-image.png" alt="VueTV main image"/>
+        <img src="@/assets/home-image.png" alt="VueTV main image"/>
       </div>
     </div>
     <div class="footer">
