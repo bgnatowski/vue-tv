@@ -5,6 +5,7 @@ import {useRoute} from "vue-router";
 import Footer from "@/components/Footer.vue";
 import Sidebar from "@/components/Sidebar.vue"
 import Navbar from "@/components/Navbar.vue";
+import paths from "@/router/routerPaths.js";
 
 const route = useRoute();
 const isLoggedIn = ref(false);
@@ -31,7 +32,7 @@ onMounted(() => {
 watch(
     () => route.path,
     (newPath) => {
-      showFooter.value = newPath !== '/';
+      showFooter.value = newPath !== paths.HOME_ROUTE;
     },
     {immediate: true}
 );
