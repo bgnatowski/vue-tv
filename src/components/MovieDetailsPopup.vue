@@ -1,5 +1,5 @@
 <script setup>
-import {defineProps, defineEmits, ref} from "vue";
+import {ref} from "vue";
 import movie from "@/models/movie";
 import RatingStars from "@/components/RatingStars.vue";
 
@@ -95,15 +95,15 @@ function closePopup() {
 }
 
 .overlay {
-  position: fixed; 
-  top: 0; 
-  left: 0; 
-  width: 100%; 
-  height: 100%; 
-  background-color: rgba(0, 0, 0, 0.7); 
-  display: flex; 
-  justify-content: center; 
-  align-items: center; 
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   z-index: 999;
 }
 
@@ -322,15 +322,17 @@ function closePopup() {
 
 
 @media (max-width: 979px) {
-  .post{
+  .post {
     height: 50rem;
     min-width: 50%;
     overflow-y: scroll;
   }
-  .movie-card{
+
+  .movie-card {
     flex-direction: column;
   }
-  .movie-poster{
+
+  .movie-poster {
     margin: auto;
     min-height: 25rem;
   }
