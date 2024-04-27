@@ -2,6 +2,7 @@
 
 import paths from "@/router/routerPaths.js";
 import {ref} from "vue";
+import router from "@/router/index.js";
 
 const props = defineProps({
   isSidebarVisible: Boolean
@@ -27,25 +28,17 @@ const sideBarIconRotate = ref(false)
   <header>
     <nav class="header-nav">
       <div class="branding">
-        <router-link :to="paths.HOME_ROUTE" style="text-decoration: none">
-          <h1 class="bruno-ace-regular">VueTV</h1>
-        </router-link>
+          <h1 @click="router.push(paths.HOME_ROUTE)" class="bruno-ace-regular">VueTV</h1>
       </div>
       <div class="search">
         <input placeholder="Szukaj"/>
       </div>
       <ul v-show="!mobile" class="navigation">
-        <li>
-          <div class="link" :class="{'rotate360': profileIconRotate}">
-            <router-link :to="paths.USER_PROFILE_ROUTE">
-              <img @click="toggleRotate" src="@/assets/user.png" alt="User profile icon"/>
-            </router-link>
-          </div>
+        <li @click="router.push(paths.USER_PROFILE_ROUTE)" class="link" :class="{'rotate360': profileIconRotate}">
+            <img @click="toggleRotate" src="@/assets/user.png" alt="User profile icon"/>
         </li>
-        <li>
-          <div class="link" :class="{'rotate180': sideBarIconRotate}">
-            <img @click="onMenuButtonClick" src="@/assets/menu-icon.png" alt="Menu icon">
-          </div>
+        <li class="link" :class="{'rotate180': sideBarIconRotate}">
+          <img @click="onMenuButtonClick" src="@/assets/menu-icon.png" alt="Menu icon">
         </li>
       </ul>
     </nav>
@@ -54,7 +47,7 @@ const sideBarIconRotate = ref(false)
 
 <style scoped>
 header {
-  background: rgb(255,255,255, 0.25);
+  background: rgb(255, 255, 255, 0.25);
   top: 0;
   left: 0;
   z-index: 99;
@@ -76,34 +69,25 @@ header {
   gap: 20%;
 }
 
-ul {
+.navigation {
   list-style-type: none;
-  padding: .5em 0.1em;
-}
-
-ul, .link {
-  font-weight: 500;
   color: #ffffff;
   text-decoration: none;
   cursor: pointer;
   display: flex;
-  justify-content: space-between;
-  align-content: center;
-  gap: .5em;
+  height: min-content;
+  align-self: center;
+  gap: 8%;
 }
 
 .link {
+  display: flex;
+  align-self: center;
   transition: .5s ease all;
-  width: 50px;
-  height: 50px;
-  padding: 0.4em;
+  width: 55px;
+  height: 55px;
   border-radius: 2em;
-}
-
-.link:hover {
-  background-color: var(--lighter-main);
-  border: none;
-  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
+  padding: .5em
 }
 
 .link img {
@@ -113,10 +97,18 @@ ul, .link {
   margin: 0;
 }
 
+.link:hover {
+  background-color: var(--lighter-main);
+  border: none;
+  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
+}
+
+
 .branding {
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .branding h1 {
@@ -156,27 +148,59 @@ ul, .link {
   width: 100%;
 }
 
+@media (min-width: 1916px){
+  .link {
+    width: 65px;
+    height: 65px;
+    border-radius: 2em;
+    padding: .5em
+  }
+}
+
+@media (min-width: 3000px){
+  .link {
+    width: 70px;
+    height: 70px;
+    border-radius: 2em;
+    padding: .5em
+  }
+}
+
+
+@media (min-width: 4000px){
+  .link {
+    width: 90px;
+    height: 90px;
+    border-radius: 2em;
+    padding: .5em
+  }
+}
+
 @media (max-width: 979px) {
-  .header-nav{
+  .header-nav {
     gap: 10%
   }
+
   .search input {
     font-size: .8em;
   }
 }
+
 @media (max-width: 500px) {
-  .header-nav{
+  .header-nav {
     gap: 5%;
   }
+
   .search input {
     font-size: .8em;
   }
 }
 
 @media (max-width: 360px) {
-  .header-nav{
+  .header-nav {
     gap: 0;
   }
+
   .search input {
     font-size: .6em;
   }
