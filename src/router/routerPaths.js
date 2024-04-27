@@ -1,6 +1,6 @@
 const paths =
 {
-    HOME_ROUTE: '/vue-tv',
+    HOME_ROUTE: '/vue-tv/',
     REGISTER_ROUTE: '/register',
     LOGIN_ROUTE: '/login',
     LOGOUT_ROUTE: '/logout',

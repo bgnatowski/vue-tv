@@ -7,6 +7,7 @@ const router = createRouter({
     routes: [
         {
             path: paths.HOME_ROUTE,
+            redirect_to: "/",
             component: () => import("../views/HomeView.vue"),
             name: "Home",
             meta: {blackBackground: true}
