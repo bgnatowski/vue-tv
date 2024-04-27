@@ -44,7 +44,7 @@ const isCompletedForm = computed(() => {
       <SignInGoogleButton class="google-button"></SignInGoogleButton>
     </div>
     <p class="signup-text">Nie masz jeszcze konta?
-      <a class="signup-link" @click="router.push('/register')">Utwórz je</a>
+      <a class="signup-link" @click="router.push(paths.REGISTER_ROUTE)">Utwórz je</a>
     </p>
   </section>
 </template>

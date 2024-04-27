@@ -5,6 +5,7 @@ import {useRouter} from "vue-router";
 import {signUp} from "@/services/AuthenticationService.js";
 import SignInGoogleButton from "@/components/SignInGoogleButton.vue";
 import RegisteredPopup from "@/components/LogInOutPopup.vue";
+import paths from "@/router/routerPaths.js";
 
 const email = ref("");
 const emailRepeat = ref("");
@@ -70,7 +71,7 @@ const isCompletedForm = computed(() => {
         <SignInGoogleButton class="google-button"></SignInGoogleButton>
       </div>
       <p class="signup-text">Masz już konto?
-        <a class="signup-link" @click="router.push('/login')">Zaloguj się</a>
+        <a class="signup-link" @click="router.push(paths.LOGIN_ROUTE)">Zaloguj się</a>
       </p>
     </div>
 </template>
