@@ -1,6 +1,7 @@
 <script setup>
 import {useRouter} from "vue-router";
 import SignInGoogleButton from "@/components/SignInGoogleButton.vue";
+import paths from "@/router/routerPaths.js";
 
 const router = useRouter()
 
@@ -17,8 +18,8 @@ const router = useRouter()
           </p>
         </div>
         <div class="bar-buttons">
-          <button @click="router.push('/register')" class="join-now-btn">Dołącz teraz</button>
-          <button @click="router.push('/login')" class="login-btn">Zaloguj się</button>
+          <button @click="router.push(paths.REGISTER_ROUTE)" class="join-now-btn">Dołącz teraz</button>
+          <button @click="router.push(paths.LOGIN_ROUTE)" class="login-btn">Zaloguj się</button>
           <SignInGoogleButton class="google-button"></SignInGoogleButton>
         </div>
       </div>
