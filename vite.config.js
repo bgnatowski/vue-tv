@@ -4,11 +4,11 @@ import vue from "@vitejs/plugin-vue";
 import webfontDownload from 'vite-plugin-webfont-dl';
 
 export default defineConfig({
-  base: '/vue-tv>/',
   plugins: [
     vue(),
     webfontDownload(),
   ],
+  base: '/vue-tv/',
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
