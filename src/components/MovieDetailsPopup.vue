@@ -39,6 +39,7 @@ function closePopup() {
         </div>
         <div class="movie-details">
           <h1 class="movie-title">Diuna</h1>
+          <RatingStars read-only="true"></RatingStars>
           <RatingStars></RatingStars>
           <div>
             <table class="tg">
