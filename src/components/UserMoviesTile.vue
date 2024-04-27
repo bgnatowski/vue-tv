@@ -10,7 +10,7 @@ const props = defineProps({
 <template>
   <div class="post">
     <h2>{{ props.tileType }}</h2>
-    <div class="movies">
+    <div class="movies" v-dragscroll.x>
       <div class="movie-poster">
         <img  src="https://static.posters.cz/image/1300/plakaty/diuna-czesc-1-i122815.jpg"
               alt="Movie poster for Diuna"/>
@@ -28,6 +28,9 @@ const props = defineProps({
 </template>
 
 <style scoped>
+.post {
+  margin-left: 1em;
+}
 .post h2 {
   margin-top: 0;
   margin-bottom: 1rem;
@@ -36,18 +39,26 @@ const props = defineProps({
 
 .movies {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  overflow: hidden;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.movies::-webkit-scrollbar {
+  display: none;
 }
 
 .movie-poster {
-  width: 100px;
-  height: 160px;
+  height: 200px;
   margin: .2em;
 }
 
 .movie-poster img {
   height: 100%;
-  object-fit: contain;
+  object-fit: fill;
   border-radius: 12px;
 }
 

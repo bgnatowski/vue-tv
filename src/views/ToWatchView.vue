@@ -1,11 +1,14 @@
 <script setup>
 import MovieTile from "@/components/MovieTile.vue"
+import InfoTile from "@/components/InfoTile.vue";
+import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 
 </script>
 
 <template>
   <section class="feed-container">
-    <h1>Filmy do zobaczenia</h1>
+    <InfoTile></InfoTile>
+    <MovieDetailsPopup></MovieDetailsPopup>
     <MovieTile/>
     <MovieTile/>
     <MovieTile/>

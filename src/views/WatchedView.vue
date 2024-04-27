@@ -1,9 +1,10 @@
 <script setup>
-import MovieTile from "@/components/MovieTile.vue"</script>
+import MovieTile from "@/components/MovieTile.vue"
+import InfoTile from "@/components/InfoTile.vue";</script>
 
 <template>
   <section class="feed-container">
-    <h1>Filmy ukonczone</h1>
+    <InfoTile watched/>
     <MovieTile/>
     <MovieTile/>
     <MovieTile/>

@@ -1,51 +1,42 @@
-<script>
+<script setup>
 
 import movie from "@/models/movie.js";
+import {ref} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 
-export default {
-  components: {MovieDetailsPopup},
-  computed: {
-    movie() {
-      return movie
-    }
-  },
-  data() {
-    return {
-      isPublic: false,
-      isWatched: false,
-      isInfoPopup: false
-    };
-  },
-  methods: {
-    publicMovie() {
-      this.isPublic = !this.isPublic
-    },
-    showInfo() {
-      this.isInfoPopup = !this.isInfoPopup
-    }
-  }
+const isPublic = ref(false);
+const isWatched = ref(false);
+const isInfoPopup = ref(true);
+
+function publicMovie() {
+  isPublic.value = !isPublic.value;
+}
+
+function showInfo() {
+  isInfoPopup.value = true;  // Zawsze ustaw na true gdy klikniesz, aby pokazać popup
+}
+
+function hideInfo() {
+  isInfoPopup.value = false; // Ustaw na false, aby ukryć popup
 }
 
 </script>
 
 <template>
   <section class="post">
-<!--    <MovieDetailsPopup v-if="isInfoPopup"></MovieDetailsPopup>-->
     <div class="movie-card">
       <div class="movie-poster">
-        <img src="https://static.posters.cz/image/1300/plakaty/diuna-czesc-1-i122815.jpg"
-             alt="Movie poster for Diuna"/>
+        <img :src="movie.posterUrl" alt="Movie poster for Diuna"/>
       </div>
       <div class="movie-details">
         <div class="movie-text">
           <div class="movie-header">
-            <h2 class="movie-title"> {{movie.title}} </h2>
+            <h2 class="movie-title"> {{ movie.title }} </h2>
           </div>
           <div class="movie-info">
             <div class="movie-metadata">
-              <p class="movie-genre">Gatunek: {{movie.genre}}</p>
-              <p class="movie-duration">Długość: {{movie.duration}}</p>
+              <p class="movie-genre">Gatunek: {{ movie.genre }}</p>
+              <p class="movie-duration">Długość: {{ movie.duration }}</p>
             </div>
           </div>
         </div>

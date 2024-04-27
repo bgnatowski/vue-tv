@@ -50,10 +50,11 @@ watch(
 </template>
 
 <style>
-/* transition */
+/* transition sidebar */
 .sidebar-leave-active {
   transition: .5s ease all; /* Smooth transition for both enter and leave */
 }
+
 .sidebar-leave {
   transform: translateX(0); /* Start position for leave animation (fully on-screen) */
 }

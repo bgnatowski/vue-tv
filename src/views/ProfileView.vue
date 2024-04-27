@@ -1,34 +1,31 @@
 <script setup>
 import UserMovesTile from "@/components/UserMoviesTile.vue"
-import UserPostTile from "@/components/UserPostTile.vue";
-
-</script>
+import PostTile from "@/components/PostTile.vue";</script>
 
 <template>
   <section class="feed-container">
-      <div class="movies-column">
-        <div class="profile-picture">
-          <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
-          <p class="user-name">prowatcher123</p>
-        </div>
-        <UserMovesTile tileType="Filmy obejrzane"/>
-        <UserMovesTile tileType="Filmy do obejrzenia"/>
+    <div class="movies-column" v-dragscroll>
+      <div class="profile-picture">
+        <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
+        <p class="user-name">prowatcher123</p>
       </div>
-      <div class="posts-column">
-        <h2>Posty użytkownika:</h2>
-        <UserPostTile></UserPostTile>
-        <UserPostTile></UserPostTile>
-        <UserPostTile></UserPostTile>
-        <UserPostTile></UserPostTile>
-        <UserPostTile></UserPostTile>
-        <UserPostTile></UserPostTile>
-        <UserPostTile></UserPostTile>
-      </div>
+      <UserMovesTile tileType="Filmy obejrzane"/>
+      <UserMovesTile tileType="Filmy do obejrzenia"/>
+    </div>
+    <div class="posts-column">
+      <h2>Posty użytkownika:</h2>
+      <PostTile profile></PostTile>
+      <PostTile profile></PostTile>
+      <PostTile profile></PostTile>
+      <PostTile profile></PostTile>
+      <PostTile profile></PostTile>
+      <PostTile profile></PostTile>
+    </div>
   </section>
 </template>
 
 <style scoped>
-.feed-container{
+.feed-container {
   flex-direction: row;
   gap: 1em;
   margin: 0;
