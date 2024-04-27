@@ -43,37 +43,37 @@ const isCompletedForm = computed(() => {
 </script>
 
 <template>
-    <RegisteredPopup v-if="isRegistered"/>
-    <div v-else class="panel-container">
-      <form>
-        <h1>Zarejestruj się</h1>
+  <RegisteredPopup v-if="isRegistered"/>
+  <div v-else class="panel-container">
+    <form>
+      <h1>Zarejestruj się</h1>
 
-        <label id="username" for="username">Nazwa użytkownika</label>
-        <input type="text" placeholder="Nazwa użytkownika" v-model="username"/>
+      <label id="username" for="username">Nazwa użytkownika</label>
+      <input type="text" placeholder="Nazwa użytkownika" v-model="username"/>
 
-        <label id="email" for="email">E-mail</label>
-        <input type="text" placeholder="E-mail" v-model="email"/>
-        <label id="emailRepeat" for="emailRepeat">Powtórz e-mail</label>
-        <input type="text" placeholder="Powtórz e-mail" v-model="emailRepeat"/>
+      <label id="email" for="email">E-mail</label>
+      <input type="text" placeholder="E-mail" v-model="email"/>
+      <label id="emailRepeat" for="emailRepeat">Powtórz e-mail</label>
+      <input type="text" placeholder="Powtórz e-mail" v-model="emailRepeat"/>
 
-        <label id="password" for="password">Hasło</label>
-        <input type="password" placeholder="Hasło" v-model="password"/>
-        <label id="passwordRepeat" for="passwordRepeat">Powtórz hasło</label>
-        <input type="password" placeholder="Powtórz hasło" v-model="passwordRepeat"/>
+      <label id="password" for="password">Hasło</label>
+      <input type="password" placeholder="Hasło" v-model="password"/>
+      <label id="passwordRepeat" for="passwordRepeat">Powtórz hasło</label>
+      <input type="password" placeholder="Powtórz hasło" v-model="passwordRepeat"/>
 
-        <p v-if="passwordMismatchError">{{ passwordMismatchError }}</p>
-        <p v-if="emailMismatchError">{{ emailMismatchError }}</p>
-        <p v-if="errMsg">{{ errMsg }}</p>
-      </form>
-      <div class="buttons">
-        <button @click="register" :disabled="isCompletedForm" type="submit" class="register-button">Zarejestruj się
-        </button>
-        <SignInGoogleButton class="google-button"></SignInGoogleButton>
-      </div>
-      <p class="signup-text">Masz już konto?
-        <a class="signup-link" @click="router.push(paths.LOGIN_ROUTE)">Zaloguj się</a>
-      </p>
+      <p v-if="passwordMismatchError">{{ passwordMismatchError }}</p>
+      <p v-if="emailMismatchError">{{ emailMismatchError }}</p>
+      <p v-if="errMsg">{{ errMsg }}</p>
+    </form>
+    <div class="buttons">
+      <button @click="register" :disabled="isCompletedForm" type="submit" class="register-button">Zarejestruj się
+      </button>
+      <SignInGoogleButton class="google-button"></SignInGoogleButton>
     </div>
+    <p class="signup-text">Masz już konto?
+      <a class="signup-link" @click="router.push(paths.LOGIN_ROUTE)">Zaloguj się</a>
+    </p>
+  </div>
 </template>
 
 <style scoped>

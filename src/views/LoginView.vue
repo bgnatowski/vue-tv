@@ -14,7 +14,7 @@ const router = useRouter();
 const login = async () => {
   try {
     await authenticate(email.value, password.value);
-    await router.push(paths.HOME_ROUTE)
+    await router.push(paths.MAIN_ROUTE)
   } catch (error) {
     errMsg.value = error;
   }
