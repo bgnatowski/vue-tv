@@ -1,16 +1,16 @@
 const paths =
 {
     HOME_ROUTE: '/vue-tv/',
-    REGISTER_ROUTE: '/register',
-    LOGIN_ROUTE: '/login',
-    LOGOUT_ROUTE: '/logout',
-    MAIN_ROUTE: '/main',
-    USER_PROFILE_ROUTE: '/user',
-    SETTINGS_ROUTE: '/settings',
-    TO_WATCH_ROUTE: '/to_watch',
-    WATCHED_ROUTE: '/watched',
-    FRIENDS_ROUTE: '/friends',
-    INVITATIONS_ROUTE: '/invitations',
+    REGISTER_ROUTE: '/vue-tv/register',
+    LOGIN_ROUTE: '/vue-tv/login',
+    LOGOUT_ROUTE: '/vue-tv/logout',
+    MAIN_ROUTE: '/vue-tv/main',
+    USER_PROFILE_ROUTE: '/vue-tv/user',
+    SETTINGS_ROUTE: '/vue-tv/settings',
+    TO_WATCH_ROUTE: '/vue-tv/to_watch',
+    WATCHED_ROUTE: '/vue-tv/watched',
+    FRIENDS_ROUTE: '/vue-tv/friends',
+    INVITATIONS_ROUTE: '/vue-tv/invitations',
 }
 
 export default paths
