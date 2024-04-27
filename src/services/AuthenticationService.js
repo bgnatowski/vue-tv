@@ -2,62 +2,50 @@ import {
     createUserWithEmailAndPassword,
     getAuth,
     GoogleAuthProvider,
-    updateProfile,
     signInWithEmailAndPassword,
-    signInWithPopup, signOut
+    signInWithPopup,
+    signOut,
+    updateProfile
 } from "firebase/auth";
-import {createOrUpdateUserProfile} from "@/services/UserService.js";
 
-async function authenticateWithGoogle(router) {
-    const provider = new GoogleAuthProvider();
-    const auth = getAuth();
-    signInWithPopup(auth, provider)
-        .then(async (result) => {
-            const user = result.user;
-            const username = user.email.split('@')[0];
-            await createOrUpdateUserProfile(user, username);
-
-            console.log("Zalogowano z Google!");
-            router.push('/feed');
-        })
-        .catch((error) => {
-            console.error("Błąd logowania z Google", error);
-        });
+async function authenticateWithGoogle() {
+    try {
+        const result = await signInWithPopup(getAuth(), new GoogleAuthProvider())
+        const user = result.user;
+        const username = user.email.split('@')[0];
+        await updateProfile(user, {displayName: username});
+        // await createOrUpdateUserProfile(user, username);
+    } catch (error) {
+        console.error("Błąd logowania z Google", error);
+        throw mapErrorCodeToMessage("Błąd logowania z Google")
+    }
 }
 
-async function authenticate(email, password, router) {
+async function authenticate(email, password) {
     try {
-        const data = await signInWithEmailAndPassword(getAuth(), email, password);
-        console.log("Zalogowano!");
-        router.push('/feed');
-        return '';
+        await signInWithEmailAndPassword(getAuth(), email, password)
+    } catch (error) {
+        console.log(error.code);
+        throw mapErrorCodeToMessage(error.code)
+    }
+}
+
+async function signUp(email, password, username) {
+    try {
+        const userCredential = await createUserWithEmailAndPassword(getAuth(), email, password);
+        const user = userCredential.user;
+        await updateProfile(user, {displayName: username});
+        // await createOrUpdateUserProfile(user, username);
+        await signOutUser()
+        return true
     } catch (error) {
         console.log(error.code);
         throw mapErrorCodeToMessage(error.code);
     }
 }
 
-
-async function signUp(email, password, username, router) {
-    try {
-        const userCredential = await createUserWithEmailAndPassword(getAuth(), email, password);
-        const user = userCredential.user;
-        await updateProfile(user, { displayName: username });
-        await createOrUpdateUserProfile(user, username);
-
-        console.log("Dziękujemy za rejestrację!");
-        router.push('/feed');
-    }
-    catch (error) {
-        console.log(error.code);
-        alert(error.message);
-    }
-}
-
-async function signOutUser(router) {
-    signOut(getAuth()).then(() => {
-        router.push('/')
-    });
+async function signOutUser() {
+    await signOut(getAuth())
 }
 
 
@@ -68,9 +56,13 @@ function mapErrorCodeToMessage(code) {
         case "auth/user-not-found":
             return "Nie znaleziono konta z takim adresem email";
         case "auth/wrong-password":
-            return "Incorrect password";
+            return "Nieprawidłowe hasło";
+        case "auth/email-already-exists":
+            return "Email jest zajęty";
+        case "auth/weak-password":
+            return "Słabe hasło!"
         default:
-            return "Email lub hasło niepoprawne";
+            return code;
     }
 }
 
