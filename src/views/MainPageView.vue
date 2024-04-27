@@ -1,7 +1,6 @@
 <script setup>
 import PostTile from "@/components/PostTile.vue";
 import {onMounted, ref} from "vue";
-import InfoTile from "@/components/InfoTile.vue";
 
 const hasScrollbar = ref(false);
 
