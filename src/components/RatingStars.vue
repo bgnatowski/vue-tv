@@ -35,7 +35,8 @@ const value = ref(5)
   border-radius: 2em;
   justify-content: center;
   align-content: center;
-  width: 35%
+  width: 10rem;
+  padding-top: 3px;
 }
 
 .p-rating {
