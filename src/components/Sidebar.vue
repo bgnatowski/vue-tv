@@ -1,105 +1,149 @@
+<script setup>
+import paths from "@/router/routerPaths.js";</script>
 <template>
-    <div class="sidebar">
-        <router-link to="/feed" class="router-link-custom"> 
-            <button class="sidebar-button">
-                <img src="@/resources/home.png" alt="Strona główna"> 
-                <span class="button-text">Strona główna</span>
-            </button>
-        </router-link>
-        <router-link to="/watched" class="router-link-custom">
-            <button class="sidebar-button">
-                <img src="@/resources/video.png" alt="Filmy obejrzane">
-                <span class="button-text">Filmy obejrzane</span>
-            </button>
-        </router-link>
-        <router-link to="/to_watch" class="router-link-custom"> 
-            <button class="sidebar-button">
-                <img src="@/resources/watching-a-movie.png" alt="Filmy do obejrzenia">
-                <span class="button-text">Filmy do obejrzenia</span>
-            </button>
-        </router-link>
-        <button class="sidebar-button">
-            <img src="@/resources/friends.png" alt="Znajomi">
-            <span class="button-text">Znajomi</span>
-        </button>
-        <button class="sidebar-button">
-            <img src="@/resources/invitation.png" alt="Zaproszenia do znajomych">
-            <span class="button-text">Zaproszenia do znajomych</span>
-        </button>
-    </div>
+  <div class="sidebar">
+    <router-link :to="paths.MAIN_ROUTE" class="router-link-custom">
+      <div class="sidebar-button">
+        <div class="icon-button">
+          <img src="../resources/main.png" alt="Strona główna">
+        </div>
+        <span class="button-text">Strona główna</span>
+      </div>
+    </router-link>
+    <router-link :to="paths.WATCHED_ROUTE" class="router-link-custom">
+      <div class="sidebar-button">
+        <div class="icon-button">
+          <img src="@/resources/video.png" alt="Filmy obejrzane">
+        </div>
+        <span class="button-text">Filmy ukonczone</span>
+      </div>
+    </router-link>
+    <router-link :to="paths.TO_WATCH_ROUTE" class="router-link-custom">
+      <div class="sidebar-button">
+        <div class="icon-button">
+          <img src="@/resources/watching-a-movie.png" alt="Filmy do obejrzenia">
+        </div>
+        <span class="button-text">Filmy do zobaczenia</span>
+      </div>
+    </router-link>
+    <router-link :to="paths.FRIENDS_ROUTE" class="router-link-custom">
+      <div class="sidebar-button">
+        <div class="icon-button">
+          <img src="@/resources/friends.png" alt="Znajomi">
+        </div>
+        <span class="button-text">Znajomi</span>
+      </div>
+    </router-link>
+    <router-link :to="paths.INVITATIONS_ROUTE" class="router-link-custom">
+      <div class="sidebar-button">
+        <div class="icon-button">
+          <img src="@/resources/invitation.png" alt="Zaproszenia do znajomych">
+        </div>
+        <span class="button-text">Zaproszenia do znajomych</span>
+      </div>
+    </router-link>
+    <router-link :to="paths.SETTINGS_ROUTE" class="router-link-custom">
+      <div class="sidebar-button">
+        <div class="icon-button">
+          <img src="@/resources/settings_icon.png" alt="Ustawienia">
+        </div>
+        <span class="button-text">Ustawienia</span>
+      </div>
+    </router-link>
+    <router-link :to="paths.LOGOUT_ROUTE" class="router-link-custom">
+      <div class="sidebar-button">
+        <div class="icon-button">
+          <img src="@/resources/logout_icon.png" alt="Wyloguj">
+        </div>
+        <span class="button-text">WYLOGUJ DEV</span>
+      </div>
+    </router-link>
+  </div>
 </template>
 
-<style>
-/* ... existing styles ... */
+<style scoped>
+.sidebar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  background: transparent;
+  width: auto;
+  margin: .5rem .5rem;
+}
 
 .router-link-custom {
-    text-decoration: none;
+  text-decoration: none;
+
 }
 
 .router-link-custom:hover {
-    text-decoration: none;
+  text-decoration: none;
 }
 
-/* ... existing styles ... */
-</style>
-
-
-<style>
-img {
-    height: 3vh;
-    margin-right: 10px;
-}
-.sidebar {
-    height: 100%; 
-    width: 100%; 
-    background-color: white;
-    position: sticky;
-    top: 0; 
-    margin-right: 5vw;
-}
 .sidebar-button {
-    display: block;
-    width: 90%;
-    padding: 15px;
-    margin: 0;
-    border: none;
-    background-color: transparent;
-    color: black;
-    cursor: pointer;
-    transition: text-decoration 0.3s;
-    display: flex;
-    align-items: center;
-    text-decoration: none; 
+  border-radius: 1em 1em 1em 1em;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  min-width: min-content;
+  white-space: nowrap;
+  background: transparent;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  padding: 20px;
+  transition: .5s ease all;
 }
 
 .sidebar-button:hover {
-    text-decoration: underline; 
+  border: none;
+  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
+  background-color: var(--lighter-main-transparent);
 }
 
-.sidebar-button i {
-    margin-right: 10px;
+.sidebar-button:active {
+  border: none;
+  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
+  background-color: var(--clicked-button);
 }
 
 .button-text {
-    display: inline-block;
+  color: #000;
+  font-weight: 600;
+  transition: .5s ease all;
 }
 
-@media (max-width: 767px) {
-    .button-text {
-        display: none;
-    }
-    .sidebar {
-    height: 100%; 
-    width: 25px; 
-    background-color: white;
-    margin-right: 5vw;
-}
-.router-link-custom {
-    text-decoration: none;
+.icon-button {
+  display: flex;
+  height: 35px;
+  width: 35px;
+  align-content: center;
+  justify-content: center;
+  margin-right: 1em;
 }
 
-.router-link-custom:hover {
-    text-decoration: none;
+.icon-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
+
+@media (max-width: 979px) {
+  .button-text {
+    transition: .5s ease all;
+    display: none;
+  }
+
+  .icon-button {
+    margin: 0
+  }
+
+  .icon-button img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 }
 </style>

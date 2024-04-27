@@ -1,188 +1,267 @@
+<script setup>
+
+import movie from "@/models/movie.js";
+import {ref} from "vue";
+import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
+
+const isPublic = ref(false);
+const isWatched = ref(false);
+const isInfoPopup = ref(true);
+
+function publicMovie() {
+  isPublic.value = !isPublic.value;
+}
+
+function showInfo() {
+  isInfoPopup.value = true;  // Zawsze ustaw na true gdy klikniesz, aby pokazać popup
+}
+
+function hideInfo() {
+  isInfoPopup.value = false; // Ustaw na false, aby ukryć popup
+}
+
+</script>
+
 <template>
+  <section class="post">
     <div class="movie-card">
-      <img class="movie-poster" src="https://static.posters.cz/image/1300/plakaty/diuna-czesc-1-i122815.jpg" alt="Movie poster for Diuna" />
+      <div class="movie-poster">
+        <img :src="movie.posterUrl" alt="Movie poster for Diuna"/>
+      </div>
       <div class="movie-details">
-        <div class="movie-header">
-          <h2 class="movie-title">Diuna</h2>
-          <div class="buttons">
-            <button class="icon-button" aria-label="Wride note">
-              <img src="@/resources/edit.png" alt="Note icon" class="icon" />
-            </button>
-            <button class="icon-button" aria-label="Info">
-              <img src="@/resources/info.png" alt="Info icon" class="icon" />
-            </button>
-            <button class="icon-button" aria-label="Hide">
-              <img src="@/resources/hide.png" alt="Hide icon" class="icon" />
-            </button>
+        <div class="movie-text">
+          <div class="movie-header">
+            <h2 class="movie-title"> {{ movie.title }} </h2>
+          </div>
+          <div class="movie-info">
+            <div class="movie-metadata">
+              <p class="movie-genre">Gatunek: {{ movie.genre }}</p>
+              <p class="movie-duration">Długość: {{ movie.duration }}</p>
+            </div>
           </div>
         </div>
-        <div class="movie-info">
-          <div class="movie-metadata">
-            <p class="movie-genre">Gatunek: Sci-Fi</p>
-            <p class="movie-duration">Długość: 2h 04 min</p>
+        <div class="buttons">
+          <div class="card-action-buttons">
+            <div class="card-action-icon" v-if="isPublic" aria-label="Note">
+              <img src="@/resources/recommend-icon.png" alt="Note icon"/>
+            </div>
+            <div class="card-action-icon" aria-label="Note">
+              <img src="@/resources/edit-icon.png" alt="Note icon"/>
+            </div>
+            <div @click="showInfo" class="card-action-icon" aria-label="Info">
+              <img src="@/resources/info-icon.png" alt="Info icon"/>
+            </div>
+            <div @click="publicMovie" class="card-action-icon" aria-label="Hide">
+              <img src="@/resources/show-icon.png" v-if="isPublic" alt="Show icon"/>
+              <img src="@/resources/hide-icon.png" v-else alt="Hide icon"/>
+            </div>
           </div>
-          <div class="movie-actions">
-            <button class="watched-button">Obejrzany</button>
-            <button class="remove-button">Usuń</button>
+          <div class="movie-action-buttons">
+            <div class="action-switch">
+              <span>Obejrzany</span>
+              <label class="switch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+              </label>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </template>
-  
-  <style scoped>
-  .movie-card {
-    border-radius: 25px;
-    box-shadow: 0px 4px 13px 3px rgba(0, 0, 0, 0.25);
-    background-color: #fff;
-    display: flex;
-    gap: 20px;
-    padding: 8px 8px;
-    margin: 10px;
-    height: 14rem;
-  }
+  </section>
+</template>
 
-  .movie-poster {
-    aspect-ratio: 0.68;
-    object-fit: cover;
-    width: 172px;
-    max-width: 100%;
-    height: 100%;
-    border-radius: 17px;
-  }
+<style scoped>
 
-  .movie-details {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    width: 100%;
-    margin: 1vh 0;
-    margin-bottom: 0;
-  }
+.movie-card {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  gap: 20px;
+}
 
-  .movie-header {
-    display: flex;
-    gap: 20px;
-    font-size: 30px;
-    color: #000;
-    font-weight: 500;
-    justify-content: space-between;
-    align-items: center;
-  }
+.movie-poster {
+  width: 100px;
+  height: 160px;
+  margin: .2em;
+}
 
-  .movie-title {
-    font-family: Red Hat Display, sans-serif;
-    margin: 0;
-  }
+.movie-poster img {
+  height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+}
 
-  .icon-button {
-    align-self: end;
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin: auto 0;
-    padding: 0;
-  }
+.movie-details {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  justify-content: space-between;
+  gap: 20px;
+}
 
-  .icon {
-    aspect-ratio: 1;
-    object-fit: contain;
-    width: 34px;
-  }
+.movie-text {
+  display: flow;
+}
 
-  .movie-info {
-    display: flex;
-    margin-top: 25px;
-    align-items: start;
-    gap: 20px;
-    font-size: 20px;
-    justify-content: space-between;
-  }
+.movie-header {
+  display: flex;
+  gap: 20px;
+  font-size: 1.2em;
+  color: #000;
+  font-weight: 500;
+}
 
-  .movie-metadata {
-    display: flex;
-    flex-direction: column;
-    color: #000;
-    font-weight: 400;
-    text-align: left;
-  }
+.movie-info {
+  display: flex;
+  gap: 20px;
+  font-size: 15px;
+}
 
-  .movie-genre,
-  .movie-duration {
-    font-family: Red Hat Display, sans-serif;
-    margin: 0;
-  }
+.movie-metadata {
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+  justify-content: flex-start;
+  color: #000;
+  font-weight: 400;
+  text-align: left;
+}
 
-  .movie-duration {
-    margin-top: 5px;
-  }
+.movie-duration {
+  margin-top: 5px;
+}
 
-  .movie-actions {
-    display: flex;
-    flex-direction: column;
-    color: #fff;
-    font-weight: 600;
-    text-align: center;
-  }
+.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-content: space-between;
+}
 
-  .watched-button,
-  .remove-button {
-    font-family: Red Hat Display, sans-serif;
-    border-radius: 36px;
-    justify-content: center;
-    padding: 22px 40px;
-    border: none;
-    cursor: pointer;
-    color: white;
-    font-size: 15px;
-  }
+.card-action-buttons {
+  display: flex;
+  align-content: flex-end;
+  justify-content: flex-end;
+  padding: .2em;
+  gap: 5px;
+}
 
-  .watched-button {
-    background-color: #3dccc7;
-  }
+.card-action-icon {
+  height: 40px;
+  width: 40px;
+  border-radius: 2em;
+  padding: .5em;
+  transition: .5s ease all;
+  cursor: pointer;
+}
 
-  .remove-button {
-    background-color: #cc3d3d;
-    margin-top: 9px;
-  }
+.card-action-icon:hover {
+  background-color: var(--lighter-main);
+  border: none;
+  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
+}
 
-  @media (max-width: 767px) {
-    .movie-card {
-      transition: 0.3s;
-      flex-direction: column; 
-      align-items: center; 
-      padding-right: 0;
-      gap: 5px;
-      height: 20rem;
-      padding: 25px;
-    }
+.card-action-icon:active {
+  background-color: var(--clicked-button);
+}
 
-    .movie-poster {
-      aspect-ratio: auto;
-      height: 100%;
-      width: 9rem;
-    }
+.card-action-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 
-    .movie-details,
-    .movie-header,
-    .movie-info,
-    .watched-button,
-    .remove-button {
-      font-size: 10px;
-      width: 100%; 
-      margin-bottom: 0px; 
-    }
+.movie-action-buttons {
+  display: flex;
+  flex-direction: column;
+  font-weight: 400;
+  gap: 5px;
+  transition: .5s ease all;
+}
 
-    .icon {
-      width: 15px;
-    }
+.action-switch {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+}
 
-    .watched-button,
-    .remove-button {
-      padding: 2px 5px;
-      margin: 2px;
-      
-    }
-  }
+.action-switch span {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+
+/*checkbox*/
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: var(--lighter-main);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+
+.post-text p {
+  margin: 2px;
+  padding: 2px;
+  text-align: justify;
+}
 </style>
   

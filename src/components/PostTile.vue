@@ -1,190 +1,278 @@
+<script setup>
+import {ref} from "vue";
+
+const isShowDropdown = ref(false)
+const isShowButton = ref(true)
+
+const props = defineProps({
+      profile: Boolean
+    }
+)
+
+function showDropdown() {
+  isShowDropdown.value = true
+  isShowButton.value = false;
+}
+
+function hideDropdown() {
+  isShowDropdown.value = false;
+  isShowButton.value = true;
+}
+</script>
+
 <template>
-    <div class="post">
-    <div class="user-info">
-        <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
+  <div class="post">
+    <div class="upper-bar" v-if="props.profile">
+      <div class="user-info">
+        <div class="user-image">
+          <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
+        </div>
         <p class="user-name">uzytkownik prowatcher123 polecił film:</p>
+      </div>
     </div>
     <div class="movie-card">
-      <img class="movie-poster" src="https://static.posters.cz/image/1300/plakaty/diuna-czesc-1-i122815.jpg" alt="Movie poster for Diuna" />
+      <div class="movie-poster">
+        <img src="https://static.posters.cz/image/1300/plakaty/diuna-czesc-1-i122815.jpg"
+             alt="Movie poster for Diuna"/>
+      </div>
       <div class="movie-details">
-        <div class="movie-header">
-          <h2 class="movie-title">Diuna</h2>
-          <div class="buttons">
-            <button class="watched-button">Dodaj do "Filmy obejrzane"</button>
-            <button class="towatch-button">Dodaj do "Filmy do obejrzenia"</button>
-          </div>
+        <h1 class="movie-title">Diuna</h1>
+        <div>
+          <table class="tg">
+            <thead>
+            <tr>
+              <th class="tg-0pky">Gatunek:</th>
+              <th class="tg-0lax">Sci-Fi</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tg-0pky">Długość:</td>
+              <td class="tg-0lax">124 min</td>
+            </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="movie-info">
-          <div class="movie-metadata">
-            <p class="movie-genre">Gatunek: Sci-Fi</p>
-            <p class="movie-duration">Długość: 2h 04 min</p>
-          </div>
+        <p v-dragscroll>Film świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman
+          dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił
+          samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem
+          dramatycznym. Coś wielkiego.
+        </p>
+      </div>
+      <div class="dropdown" @mouseover="showDropdown" @mouseleave="hideDropdown">
+        <div class="dropdown-options-icon" v-if="isShowButton">
+          <img src="@/resources/dots-icon.png" alt="Movie Options"/>
+        </div>
+        <div v-if="isShowDropdown" class="dropdown-content">
+          <ul class="dropdown-list">
+            <li class="dropdown-option">Wszystkie informacje</li>
+            <li class="dropdown-option">2 opcja</li>
+          </ul>
         </div>
       </div>
     </div>
-    <div class="post-text">
-        <p class="text">Film świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem dramatycznym. Coś wielkiego.</p>
-    </div>
-</div>
-  </template>
-  
-  <style scoped>
-  .post{
-    border-radius: 25px;
-    box-shadow: 0px 4px 13px 3px rgba(0, 0, 0, 0.25);
-    background-color: #fff;
-    margin: 10px;
-    padding: .5rem 1rem .5rem 1rem;
-    display: flex;
-    flex-direction: column;
-  }
+  </div>
+</template>
 
-  .user-profile-pic{
-    border-radius: 50%;
-  }
+<style scoped>
 
-  .user-info {
-    display: flex;
-    padding: .2rem;
-    margin: 0;
-    /* padding-top: 0; */
-    /* justify-content: left; */
-    align-items: center;
-  }
-  .movie-card {
-    height: 10rem;
-    display: flex;
-    gap: 20px;
-  }
+.user-info {
+  display: flex;
+  padding: .2rem;
+  justify-content: flex-start;
+  align-content: flex-start;
 
-  .movie-poster {
-    aspect-ratio: .7;
-    object-fit: fill;
-    height: 10rem;
-    border-radius: 17px;
-  }
+}
 
-  .movie-details {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    width: 100%;
-  }
+.user-info p {
+  justify-content: center;
+  align-content: center;
+}
 
-  .movie-header {
-    display: flex;
-    /* gap: 20px; */
-    font-size: 20px;
-    color: #000;
-    font-weight: 500;
-    justify-content: space-between;
-    align-items: center;
-  }
+.upper-bar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
 
-  .movie-title {
-    font-family: Red Hat Display, sans-serif;
-    margin: 0;
-    margin-top: 0;
-    padding-top: 0;
-  }
+.user-image {
+  display: flex;
+  height: 35px;
+  width: 35px;
+  align-content: center;
+  justify-content: center;
+  margin: auto 1em auto 0;
+}
 
-  .movie-info {
-    display: flex;
-    align-items: start;
-    gap: 20px;
-    font-size: 15px;
-    justify-content: space-between;
-  }
+.movie-card {
+  display: flex;
+  gap: 20px;
+  height: 100%;
+  position: relative;
+}
 
-  .movie-metadata {
-    display: flex;
-    flex-direction: column;
-    color: #000;
-    font-weight: 400;
-    text-align: left;
-  }
+.movie-poster {
+  width: 200px;
+  max-width: 200px;
+  margin: .2em;
+  aspect-ratio: 0.7;
+}
 
-  .movie-genre,
-  .movie-duration {
-    font-family: Red Hat Display, sans-serif;
-    margin: 0;
-  }
+.movie-poster img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 1.5em;
+}
 
-  .movie-duration {
-    margin-top: 5px;
-  }
+.movie-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 0.5em 0;
+  padding: 0.5em 0;
+  width: 100%;
+  gap: 10px;
+}
 
-  .buttons {
-    display: flex;
-    flex-direction: column;
-    color: #fff;
-    font-weight: 600;
-    text-align: center;
-  }
+.movie-title {
+  color: #000;
+  font-size: 2em;
+}
 
-  .watched-button,
-  .towatch-button {
-    font-family: Red Hat Display, sans-serif;
-    border-radius: 36px;
-    justify-content: center;
-    padding: 11px 20px;
-    border: none;
-    cursor: pointer;
-    color: white;
-    font-size: 15px;
-  }
+.movie-details p {
+  text-align: justify;
+  text-justify: inter-word;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  hyphens: auto;
+}
 
-  .watched-button {
-    background-color: #3dccc7;
-  }
+/*------dropdown----*/
+.dropdown {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transition: .5s ease all;
+}
 
-  .towatch-button {
-    background-color: #3dccc7;
-    margin-top: 9px;
-  }
-  .text{
-    text-align: justify;
-  }
+.dropdown-content {
+  transition: .5s ease all;
+  position: static;
+  background-color: #f9f9f9;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+  border-radius: 1.2em;
+  padding: .5em;
+  font-size: .8em;
+}
 
-  @media (max-width: 767px) {
-    .post {
-        padding-top: 0;
-    }
-    .movie-card {
-      transition: 0.3s;
-      flex-direction: column; 
-      align-items: center; 
-      padding-right: 0;
-      gap: 5px;
-      height: 15rem;
-    }
+.dropdown-list {
+  list-style-type: none;
+  cursor: pointer;
+  flex-direction: column;
+  color: #000;
+  padding: .2em .5em;
+  border-radius: 1.2em;
+}
 
-    .movie-poster {
-      aspect-ratio: auto;
-      height: 100%;
-      width: 9rem;
-    }
+.dropdown-option {
+  font-size: 1.2em;
+  padding: .5em 1em;
+  border-radius: 1.2em;
+}
 
-    .movie-details,
-    .movie-header,
-    .movie-info,
-    .watched-button,
-    .towatch-button {
-      font-size: 10px;
-      width: 100%; 
-      margin-bottom: 0px; 
-    }
+.dropdown-options-icon {
+  height: 50px;
+  width: 50px;
+  border-radius: 2em;
+  padding: .8em;
+  transition: .5s ease all;
+  cursor: pointer;
+}
 
-    .watched-button,
-    .towatch-button {
-      padding: 2px 5px;
-      margin: 2px;
-      
-    }
-    .post-text{
-        margin-top: 1.5rem;
-        padding-top: 1rem;
-    }
-  }
+.dropdown-option:hover {
+  background-color: var(--lighter-main);
+  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
+}
+
+.dropdown-option:active {
+  background-color: var(--clicked-button);
+}
+
+.dropdown-options-icon:hover {
+  background-color: var(--lighter-main);
+  border: none;
+  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
+}
+
+.dropdown-options-icon:active {
+  background-color: var(--clicked-button);
+}
+
+.dropdown-options-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.tg {
+  border: none;
+  border-collapse: collapse;
+}
+
+.tg td {
+  overflow: hidden;
+  word-break: normal;
+}
+
+.tg th {
+  font-weight: normal;
+  overflow: hidden;
+  word-break: normal;
+  padding: 5px 0;
+}
+
+.tg .tg-0pky {
+  border-color: inherit;
+  text-align: left;
+  vertical-align: top;
+}
+
+.tg .tg-0lax {
+  text-align: left;
+  padding: 0 5px;
+}
+
+/*@media (max-width: 767px) {*/
+/*  .movie-card {*/
+/*    transition: 0.3s;*/
+/*    flex-direction: column;*/
+/*    align-items: center;*/
+/*    padding-right: 0;*/
+/*    gap: 5px;*/
+/*    height: 15rem;*/
+/*    margin-top: 1rem;*/
+/*  }*/
+
+/*  .movie-poster {*/
+/*    aspect-ratio: auto;*/
+/*    height: 100%;*/
+/*    width: 9rem;*/
+/*  }*/
+
+/*  .movie-details,*/
+/*  .movie-header,*/
+/*  .movie-info {*/
+/*    font-size: 10px;*/
+/*    width: 100%;*/
+/*    margin-bottom: 0px;*/
+/*  }*/
+
+/*  .movie-text {*/
+/*    margin-top: 1rem;*/
+/*    padding-top: 1rem;*/
+/*  }*/
+/*}*/
 </style>
-  
+
