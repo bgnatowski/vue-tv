@@ -90,14 +90,20 @@ function closePopup() {
 
 .post {
   background-color: white;
+  width: 70%;
 }
 
 .overlay {
-  display: block;
-  position: fixed;
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+  background-color: rgba(0, 0, 0, 0.7); 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
   z-index: 999;
-  width: 50vw;
-  height: 50vh;
 }
 
 /*.show {*/
@@ -311,6 +317,22 @@ function closePopup() {
 .tg .tg-0lax {
   text-align: left;
   padding: 0 5px;
+}
+
+
+@media (max-width: 979px) {
+  .post{
+    height: 50rem;
+    min-width: 50%;
+    overflow-y: scroll;
+  }
+  .movie-card{
+    flex-direction: column;
+  }
+  .movie-poster{
+    margin: auto;
+    min-height: 25rem;
+  }
 }
 
 </style>
