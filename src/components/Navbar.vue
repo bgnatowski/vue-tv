@@ -25,9 +25,9 @@ const sideBarIconRotate = ref(false)
 
 <template>
   <header>
-    <nav>
+    <nav class="header-nav">
       <div class="branding">
-        <router-link :to="paths.HOME_ROUTE" style="text-decoration: none" class="logo-text">
+        <router-link :to="paths.HOME_ROUTE" style="text-decoration: none">
           <h1 class="bruno-ace-regular">VueTV</h1>
         </router-link>
       </div>
@@ -36,14 +36,14 @@ const sideBarIconRotate = ref(false)
       </div>
       <ul v-show="!mobile" class="navigation">
         <li>
-          <div class="link" :class="{'icon-rotate': profileIconRotate}">
+          <div class="link" :class="{'rotate360': profileIconRotate}">
             <router-link :to="paths.USER_PROFILE_ROUTE">
               <img @click="toggleRotate" src="@/assets/user.png" alt="User profile icon"/>
             </router-link>
           </div>
         </li>
         <li>
-          <div class="link" :class="{'icon-active': sideBarIconRotate}">
+          <div class="link" :class="{'rotate180': sideBarIconRotate}">
             <img @click="onMenuButtonClick" src="@/assets/menu-icon.png" alt="Menu icon">
           </div>
         </li>
@@ -60,24 +60,25 @@ header {
   z-index: 99;
   width: 100%;
   position: sticky;
-  transition: .5s ease all;
   border: none;
   box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
 }
 
-nav {
+.header-nav {
   display: flex;
   background: white;
   flex-direction: row;
   transition: .5s ease all;
-  align-content: space-between;
-  justify-content: space-between;
-  width: 100%;
+  align-content: space-around;
+  justify-content: space-around;
+  width: 100vw;
+  padding: 0.4em;
+  gap: 20%;
 }
 
 ul {
   list-style-type: none;
-  margin-right: 2em;
+  padding: .5em 0.1em;
 }
 
 ul, .link {
@@ -86,17 +87,16 @@ ul, .link {
   text-decoration: none;
   cursor: pointer;
   display: flex;
-}
-
-li {
-  padding: .5em 0.1em;
+  justify-content: space-between;
+  align-content: center;
+  gap: .5em;
 }
 
 .link {
   transition: .5s ease all;
   width: 50px;
   height: 50px;
-  padding: 0.5em;
+  padding: 0.4em;
   border-radius: 2em;
 }
 
@@ -116,63 +116,69 @@ li {
 .branding {
   display: flex;
   align-items: center;
-  margin-left: 2em;
-  text-decoration: none;
+  justify-content: center;
 }
 
-.logo-text {
+.branding h1 {
+  font-size: 1.5em;
   color: var(--main-color);
-  transition: .5s ease all;
-  text-decoration: none;
-  font-size: 2em;
+  transition: .5s ease-in;
+}
+
+.branding h1:hover {
+  font-size: 1.6em;
 }
 
 .search {
+  flex-direction: column;
   align-content: center;
   justify-content: center;
-  width: 30%;
-  margin: auto 5% auto 5%;
-  transition: .5s ease all;
+  width: 20%;
+  transition: .4s ease all;
 }
 
 .search input {
   outline: none;
   border-radius: 3em;
   border-color: transparent;
-  padding: .6rem;
-  font-size: 1em;
+  padding: .7em;
   color: #747775;
   background-color: rgba(255, 255, 255, 0.5);
   box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
   width: 100%;
+  height: 80%
 }
 
 .search input:hover {
-  transition: .5s ease all;
-  padding: .7rem;
-}
-
-.icon-active {
-  transform: rotate(180deg);
-}
-
-.icon-rotate {
-  transform: rotate(360deg);
+  transition: .4s ease all;
+  padding: .9em;
+  height: 90%;
+  width: 100%;
 }
 
 @media (max-width: 979px) {
-  .logo-text {
-    font-size: 1em;
+  .header-nav{
+    gap: 10%
+  }
+  .search input {
+    font-size: .8em;
+  }
+}
+@media (max-width: 500px) {
+  .header-nav{
+    gap: 5%;
+  }
+  .search input {
+    font-size: .8em;
   }
 }
 
 @media (max-width: 360px) {
-  .search {
-    width: auto;
-    min-width: 70px;
+  .header-nav{
+    gap: 0;
   }
-  .logo-text {
-    font-size: .5em;
+  .search input {
+    font-size: .6em;
   }
 }
 

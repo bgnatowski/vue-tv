@@ -78,6 +78,9 @@ const signWithGoogle = async () => {
   margin-right: 12px;
   min-width: 2px;
   width: 20px;
+  background-color: white;
+  border-radius: 1rem;
+  border: 2px solid white;
 }
 
 .gsi-material-button .gsi-material-button-content-wrapper {

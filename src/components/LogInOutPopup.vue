@@ -16,14 +16,14 @@ const props = defineProps({
       <h1>Wylogowano!</h1>
       <p class="signup-text">Będziemy tęsknić!</p>
       <div class="buttons">
-        <button @click="router.push(paths.LOGIN_ROUTE)" class="register-button">Zaloguj ponownie</button>
+        <button @click="router.push(paths.LOGIN_ROUTE)" class="popup-action-button">Zaloguj ponownie</button>
       </div>
     </div>
     <div v-else>
       <h1>Dziękujęmy za rejestracje!</h1>
       <p class="signup-text">Możesz się zalogować</p>
       <div class="buttons">
-        <button @click="router.push(paths.LOGIN_ROUTE)" class="register-button">Zaloguj się</button>
+        <button @click="router.push(paths.LOGIN_ROUTE)" class="popup-action-button">Zaloguj się</button>
       </div>
     </div>
   </div>
@@ -59,7 +59,7 @@ const props = defineProps({
   gap: .2em;
 }
 
-.register-button {
+.popup-action-button {
   min-width: 100%;
   white-space: nowrap;
   border-radius: 3em;
@@ -72,7 +72,7 @@ const props = defineProps({
   cursor: pointer;
 }
 
-.register-button:hover:enabled {
+.popup-action-button:hover:enabled {
   background-color: var(--lighter-main);
   border: 2px solid var(--lighter-main);
   -webkit-box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);

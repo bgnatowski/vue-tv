@@ -13,7 +13,11 @@ import PostTile from "@/components/PostTile.vue";</script>
       <UserMovesTile tileType="Filmy do obejrzenia"/>
     </div>
     <div class="posts-column">
-      <h2>Posty użytkownika:</h2>
+      <section class="post">
+        <div class="info-tile">
+          <h1>Posty użytkownika:</h1>
+        </div>
+      </section>
       <PostTile profile></PostTile>
       <PostTile profile></PostTile>
       <PostTile profile></PostTile>
@@ -52,6 +56,15 @@ import PostTile from "@/components/PostTile.vue";</script>
 .user-name {
   font-size: 1.5rem;
   margin-top: 1rem;
+}
+
+.info-tile {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  justify-content: center;
+  text-align: center;
+  gap: 20px;
 }
 
 /*@media(max-width: 970px){*/

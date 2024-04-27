@@ -36,15 +36,17 @@ const router = useRouter()
 </template>
 
 <style scoped>
+@import url(@/assets/auth-common.css);
+
 .panel-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   background-color: #000;
   height: 100vh;
-  width: 100%;
   overflow-x: hidden;
+  border-radius: 0;
+  margin: 0;
+  border: none;
+  box-shadow: none;
+  width: 100%;
 }
 
 .home-page {
@@ -92,6 +94,8 @@ const router = useRouter()
 .bar-buttons {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-content: center;
   gap: .2em;
 }
 
@@ -104,7 +108,6 @@ const router = useRouter()
   font-size: calc((.2em + .5vmin) + (.2em + .5vmax));
   font-weight: 600;
   cursor: pointer;
-  width: auto;
 }
 
 .join-now-btn:hover {
@@ -131,18 +134,6 @@ const router = useRouter()
   color: black;
 }
 
-.google-button {
-  border-radius: 3em;
-  padding: 1em;
-  border: 2px solid var(--main-color);
-  font-size: calc((.2em + .5vmin) + (.2em + .5vmax));
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.google-button:hover {
-  background-color: #cecece;
-}
 
 .home-image {
   width: 60%;
@@ -183,6 +174,13 @@ p {
   font-weight: 400;
 }
 
+.gsi-material-button{
+  padding: 1em 2em;
+  width:100%;
+  align-self: center;
+  font-size: calc((.2em + .5vmin) + (.2em + .5vmax));
+}
+
 @media (max-width: 798px) {
   .panel-container {
     display: flex;
@@ -213,6 +211,5 @@ p {
     height: 100%;
     object-fit: cover;
   }
-
 }
 </style>
