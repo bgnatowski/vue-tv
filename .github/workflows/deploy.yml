@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '20'
 
@@ -28,13 +28,13 @@ jobs:
           FIREBASE_APP_ID: ${{secrets.VITE_FIREBASE_APP_ID}}
           FIREBASE_MEASUREMENT_ID: ${{secrets.VITE_FIREBASE_MEASUREMENT_ID}}
         run: |
-          echo "VITE_FIREBASE_API_KEY=$FIREBASE_API_KEY" >> .end
-          echo "VITE_FIREBASE_AUTH_DOMAIN=$FIREBASE_AUTH_DOMAIN" >> .end
-          echo "VITE_FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID" >> .end
-          echo "VITE_FIREBASE_STORAGE_BUCKET=$FIREBASE_STORAGE_BUCKET" >> .end
-          echo "VITE_FIREBASE_MESSAGING_SENDER_ID=$FIREBASE_MESSAGING_SENDER_ID" >> .end
-          echo "VITE_FIREBASE_APP_ID=$FIREBASE_APP_ID" >> .end
-          echo "VITE_FIREBASE_MEASUREMENT_ID=$FIREBASE_MEASUREMENT_ID" >> .end
+          echo "VITE_FIREBASE_API_KEY=$FIREBASE_API_KEY" > .env
+          echo "VITE_FIREBASE_AUTH_DOMAIN=$FIREBASE_AUTH_DOMAIN" >> .env
+          echo "VITE_FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID" >> .env
+          echo "VITE_FIREBASE_STORAGE_BUCKET=$FIREBASE_STORAGE_BUCKET" >> .env
+          echo "VITE_FIREBASE_MESSAGING_SENDER_ID=$FIREBASE_MESSAGING_SENDER_ID" >> .env
+          echo "VITE_FIREBASE_APP_ID=$FIREBASE_APP_ID" >> .env
+          echo "VITE_FIREBASE_MEASUREMENT_ID=$FIREBASE_MEASUREMENT_ID" >> .env
           npm run build
 
       - name: Deploy
