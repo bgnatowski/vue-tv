@@ -76,7 +76,7 @@ function closePopup() {
         <!--          </div>-->
         <!--        </div>-->
         <div class="close-button" @click="closePopup">
-          <img src="@/resources/close-icon.png" alt="Close icon"/>
+          <img src="@/assets/close-icon.png" alt="Close icon"/>
         </div>
       </div>
     </div>

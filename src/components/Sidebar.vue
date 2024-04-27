@@ -5,7 +5,7 @@ import paths from "@/router/routerPaths.js";</script>
     <router-link :to="paths.MAIN_ROUTE" class="router-link-custom">
       <div class="sidebar-button">
         <div class="icon-button">
-          <img src="../resources/main.png" alt="Strona główna">
+          <img src="../assets/main.png" alt="Strona główna">
         </div>
         <span class="button-text">Strona główna</span>
       </div>
@@ -13,7 +13,7 @@ import paths from "@/router/routerPaths.js";</script>
     <router-link :to="paths.WATCHED_ROUTE" class="router-link-custom">
       <div class="sidebar-button">
         <div class="icon-button">
-          <img src="@/resources/video.png" alt="Filmy obejrzane">
+          <img src="@/assets/video.png" alt="Filmy obejrzane">
         </div>
         <span class="button-text">Filmy ukonczone</span>
       </div>
@@ -21,7 +21,7 @@ import paths from "@/router/routerPaths.js";</script>
     <router-link :to="paths.TO_WATCH_ROUTE" class="router-link-custom">
       <div class="sidebar-button">
         <div class="icon-button">
-          <img src="@/resources/watching-a-movie.png" alt="Filmy do obejrzenia">
+          <img src="@/assets/watching-a-movie.png" alt="Filmy do obejrzenia">
         </div>
         <span class="button-text">Filmy do zobaczenia</span>
       </div>
@@ -29,7 +29,7 @@ import paths from "@/router/routerPaths.js";</script>
     <router-link :to="paths.FRIENDS_ROUTE" class="router-link-custom">
       <div class="sidebar-button">
         <div class="icon-button">
-          <img src="@/resources/friends.png" alt="Znajomi">
+          <img src="@/assets/friends.png" alt="Znajomi">
         </div>
         <span class="button-text">Znajomi</span>
       </div>
@@ -37,7 +37,7 @@ import paths from "@/router/routerPaths.js";</script>
     <router-link :to="paths.INVITATIONS_ROUTE" class="router-link-custom">
       <div class="sidebar-button">
         <div class="icon-button">
-          <img src="@/resources/invitation.png" alt="Zaproszenia do znajomych">
+          <img src="@/assets/invitation.png" alt="Zaproszenia do znajomych">
         </div>
         <span class="button-text">Zaproszenia do znajomych</span>
       </div>
@@ -45,7 +45,7 @@ import paths from "@/router/routerPaths.js";</script>
     <router-link :to="paths.SETTINGS_ROUTE" class="router-link-custom">
       <div class="sidebar-button">
         <div class="icon-button">
-          <img src="@/resources/settings_icon.png" alt="Ustawienia">
+          <img src="@/assets/settings_icon.png" alt="Ustawienia">
         </div>
         <span class="button-text">Ustawienia</span>
       </div>
@@ -53,7 +53,7 @@ import paths from "@/router/routerPaths.js";</script>
     <router-link :to="paths.LOGOUT_ROUTE" class="router-link-custom">
       <div class="sidebar-button">
         <div class="icon-button">
-          <img src="@/resources/logout_icon.png" alt="Wyloguj">
+          <img src="@/assets/logout_icon.png" alt="Wyloguj">
         </div>
         <span class="button-text">WYLOGUJ DEV</span>
       </div>

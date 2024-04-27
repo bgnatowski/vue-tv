@@ -61,7 +61,7 @@ function hideDropdown() {
       </div>
       <div class="dropdown" @mouseover="showDropdown" @mouseleave="hideDropdown">
         <div class="dropdown-options-icon" v-if="isShowButton">
-          <img src="@/resources/dots-icon.png" alt="Movie Options"/>
+          <img src="@/assets/dots-icon.png" alt="Movie Options"/>
         </div>
         <div v-if="isShowDropdown" class="dropdown-content">
           <ul class="dropdown-list">

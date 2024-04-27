@@ -43,17 +43,17 @@ function hideInfo() {
         <div class="buttons">
           <div class="card-action-buttons">
             <div class="card-action-icon" v-if="isPublic" aria-label="Note">
-              <img src="@/resources/recommend-icon.png" alt="Note icon"/>
+              <img src="@/assets/recommend-icon.png" alt="Note icon"/>
             </div>
             <div class="card-action-icon" aria-label="Note">
-              <img src="@/resources/edit-icon.png" alt="Note icon"/>
+              <img src="@/assets/edit-icon.png" alt="Note icon"/>
             </div>
             <div @click="showInfo" class="card-action-icon" aria-label="Info">
-              <img src="@/resources/info-icon.png" alt="Info icon"/>
+              <img src="@/assets/info-icon.png" alt="Info icon"/>
             </div>
             <div @click="publicMovie" class="card-action-icon" aria-label="Hide">
-              <img src="@/resources/show-icon.png" v-if="isPublic" alt="Show icon"/>
-              <img src="@/resources/hide-icon.png" v-else alt="Hide icon"/>
+              <img src="@/assets/show-icon.png" v-if="isPublic" alt="Show icon"/>
+              <img src="@/assets/hide-icon.png" v-else alt="Hide icon"/>
             </div>
           </div>
           <div class="movie-action-buttons">
