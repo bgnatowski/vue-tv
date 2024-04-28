@@ -48,24 +48,9 @@ function minutesToText(minutes) {
 </template>
 
 <style>
-.info-tile {
-  display: flex;
-  flex-direction: column;
-  align-self: center;
-  justify-content: center;
-  text-align: center;
-  gap: 20px;
-}
-
-.info-tile h1 {
-  font-weight: 400;
-  font-size: 2em;
-  font-family: "Bruno Ace SC", sans-serif;
-}
-
 .info-tile p {
   font-weight: 400;
-  font-size: 1.5em;
+  font-size: 1.1em;
 }
 </style>
   

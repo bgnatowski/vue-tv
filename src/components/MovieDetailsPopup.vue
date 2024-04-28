@@ -7,10 +7,10 @@ const isShowDropdown = ref(false)
 const isShowButton = ref(true)
 
 const props = defineProps({
-      show: Boolean = true,
-      movie: Object
-    }
-)
+  movie: Object
+});
+
+const emits = defineEmits(['close']);
 
 function showDropdown() {
   isShowDropdown.value = true
@@ -22,8 +22,6 @@ function hideDropdown() {
   isShowButton.value = true;
 }
 
-const emits = defineEmits(['close']);
-
 // Funkcja do emitowania zdarzenia zamknięcia popupa
 function closePopup() {
   emits('close');
@@ -31,7 +29,7 @@ function closePopup() {
 
 </script>
 <template>
-  <div :class="show ? 'show' : 'hide'" class="overlay">
+  <div class="overlay">
     <div class="post">
       <div class="movie-card">
         <div class="movie-poster">
@@ -39,8 +37,7 @@ function closePopup() {
         </div>
         <div class="movie-details">
           <h1 class="movie-title">Diuna</h1>
-          <RatingStars read-only="true"></RatingStars>
-          <RatingStars></RatingStars>
+          <RatingStars read-only></RatingStars>
           <div>
             <table class="tg">
               <thead>

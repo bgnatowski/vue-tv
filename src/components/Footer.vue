@@ -16,7 +16,7 @@
 .footer {
   z-index: 99;
   position: absolute;
-  width: 100%;
+  width: 100vw;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -26,7 +26,6 @@
   box-shadow: 0 0 13px rgba(0, 0, 0, 0.25);
   background-color: #fff;
   text-align: center;
-
 }
 
 h3 {
@@ -47,6 +46,12 @@ p {
   font-family: "Bruno Ace", sans-serif;
   font-size: calc((.2em + .2vmin) + (.2em + .2vmax));
   padding: .1rem;
+}
+
+@media(max-width: 1000px){
+  .footer{
+    display: none;
+  }
 }
 
 </style>

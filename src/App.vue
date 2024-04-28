@@ -64,4 +64,17 @@ watch(
   transform: translateX(-100%); /* End position for leave animation (off-screen) */
 }
 
+@media (max-width: 1000px){
+  .sidebar-leave {
+    transform: translateY(0); /* Start position for leave animation (fully on-screen) */
+  }
+
+  .sidebar-leave-to {
+    transform: translateY(100%); /* End position for leave animation (off-screen) */
+  }
+  .feed-container{
+    padding-bottom: 60px;
+  }
+}
+
 </style>

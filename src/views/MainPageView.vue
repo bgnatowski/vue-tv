@@ -37,7 +37,6 @@ onMounted(() => {
   flex-direction: row;
   gap: 1em;
 }
-
 .user-content {
   text-align: center;
 }

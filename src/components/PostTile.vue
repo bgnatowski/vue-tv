@@ -81,7 +81,6 @@ function hideDropdown() {
   padding: .2rem;
   justify-content: flex-start;
   align-content: flex-start;
-
 }
 
 .user-info p {
@@ -243,6 +242,16 @@ function hideDropdown() {
   text-align: left;
   padding: 0 5px;
 }
+
+@media (max-width: 728px) {
+  .movie-poster{
+    display: none;
+  }
+  .movie-card {
+    flex-direction: column;
+  }
+}
+
 
 /*@media (max-width: 767px) {*/
 /*  .movie-card {*/

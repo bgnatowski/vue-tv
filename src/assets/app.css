@@ -5,6 +5,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: "Red Hat Display", sans-serif;
+    font-size: calc(15px + 0.390625vw);
 }
 
 :root {
@@ -12,6 +13,8 @@
     --lighter-main: #9CEAEF;
     --lighter-main-transparent: rgba(156, 234, 239, 0.5);
     --clicked-button: rgb(161, 241, 246);
+    --google-button-hover: #4285F4;
+    --google-button-active: rgba(241, 241, 241, 0.78);
 }
 
 .container {
@@ -31,12 +34,11 @@
 }
 
 .feed-container {
-    position: relative;
     display: flex;
     flex-direction: column;
     align-self: flex-start;
     background: transparent;
-    margin: 0 1em;
+    padding: 0 1em;
     width: 100%;
     transition: .5s ease all;
 }
@@ -52,35 +54,51 @@
     margin: .5em 0;
     padding: .5rem 1rem .5rem 1rem;
     width: 100%;
+    height:fit-content;
 }
 
-.posts-column {
+
+.info-tile {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    padding: 1em;
-    max-height: 1500px;
-    overflow-y: auto;
-    scrollbar-width: thin;
+    align-self: center;
+    justify-content: center;
+    text-align: center;
+    gap: 20px;
 }
 
-.posts-column {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding: 1em;
-    max-height: 1500px;
-    overflow-y: auto;
+.info-tile h1 {
+    font-weight: 400;
+    font-size: 1.5em;
+    font-family: "Bruno Ace SC", sans-serif;
 }
 
 .bruno-ace-regular {
     font-family: "Bruno Ace", sans-serif;
     font-weight: 400;
     font-style: normal;
+
 }
 
 .bruno-ace-bold {
     font-family: "Bruno Ace", sans-serif;
     font-weight: 600;
     font-style: normal;
+}
+
+.icon-button {
+    display: flex;
+    height: 35px;
+    width: 35px;
+    align-content: center;
+    justify-content: center;
+    margin: 0;
+}
+
+.rotate180 {
+    transform: rotate(180deg);
+}
+
+.rotate360 {
+    transform: rotate(360deg);
 }

@@ -2,22 +2,20 @@
 
 import movie from "@/models/movie.js";
 import {ref} from "vue";
-import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 
 const isPublic = ref(false);
 const isWatched = ref(false);
-const isInfoPopup = ref(true);
+const isInfoPopup = ref(false);
+
+// definiowanie zdarzeń, które mogą być emitowane
+const emit = defineEmits(['show-details']);
 
 function publicMovie() {
   isPublic.value = !isPublic.value;
 }
 
-function showInfo() {
-  isInfoPopup.value = true;  // Zawsze ustaw na true gdy klikniesz, aby pokazać popup
-}
-
-function hideInfo() {
-  isInfoPopup.value = false; // Ustaw na false, aby ukryć popup
+function showInfo(movie) {
+  emit('show-details', movie);
 }
 
 </script>
@@ -48,7 +46,7 @@ function hideInfo() {
             <div class="card-action-icon" aria-label="Note">
               <img src="@/assets/edit-icon.png" alt="Note icon"/>
             </div>
-            <div @click="showInfo" class="card-action-icon" aria-label="Info">
+            <div @click="showInfo(movie)" class="card-action-icon" aria-label="Info">
               <img src="@/assets/info-icon.png" alt="Info icon"/>
             </div>
             <div @click="publicMovie" class="card-action-icon" aria-label="Hide">
