@@ -2,17 +2,36 @@
 import MovieTile from "@/components/MovieTile.vue"
 import InfoTile from "@/components/InfoTile.vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
+import {ref} from "vue";
+
+
+const showDetails = ref(false);
+const selectedMovie = ref(null);
+
+function handleShowDetails(movie) {
+  selectedMovie.value = movie;
+  showDetails.value = true;
+}
+
+function handleClose() {
+  showDetails.value = false;
+}
 
 </script>
 
 <template>
   <section class="feed-container">
     <InfoTile></InfoTile>
-    <MovieDetailsPopup></MovieDetailsPopup>
-    <MovieTile/>
-    <MovieTile/>
-    <MovieTile/>
-    <MovieTile/>
+    <MovieDetailsPopup v-if="showDetails"
+                       :movie="selectedMovie"
+                       @close="handleClose">
+
+    </MovieDetailsPopup>
+    <MovieTile @show-details="handleShowDetails"/>
+    <MovieTile @show-details="handleShowDetails"/>
+    <MovieTile @show-details="handleShowDetails"/>
+    <MovieTile @show-details="handleShowDetails"/>
+    <MovieTile @show-details="handleShowDetails"/>
     <main class="user-content">
       <h2>---Koniec---</h2>
     </main>

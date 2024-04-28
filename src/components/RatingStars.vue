@@ -41,12 +41,12 @@ const isPointer = ref(props.readOnly ? 'default' : 'pointer');
   border-radius: 2em;
   justify-content: center;
   align-content: center;
-  width: 11rem;
+  width: 9rem;
   padding-top: 3px;
 }
 
 .rating-container .real-value {
-  margin-top: 4px;
+  margin-top: 2px;
   padding-left: 5px;
   text-align: center;
   font-weight: 600;

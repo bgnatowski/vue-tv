@@ -1,7 +1,7 @@
 <script setup>
 
 import paths from "@/router/routerPaths.js";
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import router from "@/router/index.js";
 
 const props = defineProps({
@@ -9,6 +9,24 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['toggle-sidebar']);
+const screenWidth = ref(window.innerWidth);
+const mobile = ref(false)
+const profileIconRotate = ref(false)
+const sideBarIconRotate = ref(false)
+const searchIconRotate = ref(false)
+const inputRef = ref(null);
+
+
+watch(
+    () => screenWidth.value,
+    (newWidth) => {
+      mobile.value = newWidth <= 1000;
+    }
+);
+
+window.addEventListener('resize', () => {
+  screenWidth.value = window.innerWidth;
+});
 
 function onMenuButtonClick() {
   emit('toggle-sidebar');
@@ -19,9 +37,10 @@ function toggleRotate() {
   profileIconRotate.value = !profileIconRotate.value
 }
 
-const mobile = ref(false)
-const profileIconRotate = ref(false)
-const sideBarIconRotate = ref(false)
+function onSearchClick() {
+  searchIconRotate.value = !searchIconRotate.value
+  // logika wyszukiwania lub po prostu ustawianie fokusu na input
+}
 </script>
 
 <template>
@@ -32,13 +51,16 @@ const sideBarIconRotate = ref(false)
       </div>
       <div class="search">
         <form class="search-form">
-          <input type="search" placeholder="Szukaj">
-          <div class="icon-button">
+          <input v-show="!mobile" type="search" placeholder="Szukaj">
+          <div v-show="!mobile" class="icon-button search-icon" @click="onSearchClick">
             <img src="@/assets/search-icon.png" alt="search-icon"/>
           </div>
         </form>
       </div>
-      <ul v-show="!mobile" class="navigation">
+      <ul class="navigation">
+        <li v-show="mobile" class="icon-button" @click="onSearchClick" :class="{'rotate360': searchIconRotate}">
+          <img src="@/assets/search-icon.png" alt="search-icon">
+        </li>
         <li @click="router.push(paths.USER_PROFILE_ROUTE)" class="icon-button" :class="{'rotate360': profileIconRotate}">
             <img @click="toggleRotate" src="@/assets/user.png" alt="User profile icon"/>
         </li>
@@ -89,7 +111,7 @@ header {
   display: flex;
   align-self: center;
   transition: .5s ease all;
-  width: 55px;
+  width: 60px;
   height: 55px;
   border-radius: 2em;
   padding: .5em
@@ -135,11 +157,13 @@ header {
 
 .search-form{
   display: flex;
-  justify-content: space-between;
-  align-content: center;
+  align-items: center;
+  position: relative;
 }
 
 .search-form .icon-button{
+  position: absolute;
+  right: 1em;
 }
 
 .search input {
@@ -163,7 +187,7 @@ header {
 
 @media (min-width: 1916px){
   .navigation .icon-button {
-    width: 65px;
+    width: 70px;
     height: 65px;
     border-radius: 2em;
     padding: .5em
@@ -172,7 +196,7 @@ header {
 
 @media (min-width: 3000px){
   .navigation .icon-button {
-    width: 70px;
+    width: 75px;
     height: 70px;
     border-radius: 2em;
     padding: .5em
@@ -182,7 +206,7 @@ header {
 
 @media (min-width: 4000px){
   .navigation .icon-button {
-    width: 90px;
+    width: 95px;
     height: 90px;
     border-radius: 2em;
     padding: .5em
@@ -190,12 +214,23 @@ header {
 }
 
 @media (max-width: 979px) {
+  .search input {
+    display: none;
+  }
+  .search-form {
+    width: 100%;
+  }
+
   .header-nav {
     gap: 10%
   }
 
   .search input {
     font-size: .8em;
+  }
+  .navigation .icon-button {
+    width: 65px;
+    height: 55px;
   }
 }
 
