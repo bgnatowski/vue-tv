@@ -50,14 +50,14 @@ import paths from "@/router/routerPaths.js";</script>
         <span class="button-text">Ustawienia</span>
       </div>
     </router-link>
-    <router-link :to="paths.LOGOUT_ROUTE" class="router-link-custom">
-      <div class="sidebar-button">
-        <div class="icon-button">
-          <img src="@/assets/logout_icon.png" alt="Wyloguj">
-        </div>
-        <span class="button-text">WYLOGUJ DEV</span>
-      </div>
-    </router-link>
+<!--    <router-link :to="paths.LOGOUT_ROUTE" class="router-link-custom">-->
+<!--      <div class="sidebar-button">-->
+<!--        <div class="icon-button">-->
+<!--          <img src="@/assets/logout_icon.png" alt="Wyloguj">-->
+<!--        </div>-->
+<!--        <span class="button-text">WYLOGUJ DEV</span>-->
+<!--      </div>-->
+<!--    </router-link>-->
   </div>
 </template>
 
@@ -116,18 +116,7 @@ import paths from "@/router/routerPaths.js";</script>
 }
 
 .icon-button {
-  display: flex;
-  height: 35px;
-  width: 35px;
-  align-content: center;
-  justify-content: center;
   margin-right: 1em;
-}
-
-.icon-button img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
 }
 
 @media (max-width: 979px) {
@@ -135,15 +124,44 @@ import paths from "@/router/routerPaths.js";</script>
     transition: .5s ease all;
     display: none;
   }
+}
 
-  .icon-button {
-    margin: 0
-  }
-
-  .icon-button img {
+@media (max-width: 1000px){
+  .sidebar {
+    margin: 0;
+    bottom: 0;
+    left: 0;
     width: 100%;
-    height: 100%;
-    object-fit: contain;
+    flex-direction: row;
+    position: fixed;
+    justify-content: space-evenly;
+    align-items: center;
+    z-index: 9999;
+    background-color: white;
+  }
+  .sidebar-button {
+    border-radius: 2.5em;
+  }
+}
+
+@media (max-width: 600px){
+  .icon-button {
+    height: 25px;
+    width: 25px;
+  }
+}
+
+@media (max-width: 460px){
+  .icon-button {
+    height: 20px;
+    width: 20px;
+  }
+}
+
+@media (max-width: 460px){
+  .icon-button {
+    height: 20px;
+    width: 20px;
   }
 }
 </style>

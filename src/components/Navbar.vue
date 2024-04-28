@@ -31,13 +31,18 @@ const sideBarIconRotate = ref(false)
           <h1 @click="router.push(paths.HOME_ROUTE)" class="bruno-ace-regular">VueTV</h1>
       </div>
       <div class="search">
-        <input placeholder="Szukaj"/>
+        <form class="search-form">
+          <input type="search" placeholder="Szukaj">
+          <div class="icon-button">
+            <img src="@/assets/search-icon.png" alt="search-icon"/>
+          </div>
+        </form>
       </div>
       <ul v-show="!mobile" class="navigation">
-        <li @click="router.push(paths.USER_PROFILE_ROUTE)" class="link" :class="{'rotate360': profileIconRotate}">
+        <li @click="router.push(paths.USER_PROFILE_ROUTE)" class="icon-button" :class="{'rotate360': profileIconRotate}">
             <img @click="toggleRotate" src="@/assets/user.png" alt="User profile icon"/>
         </li>
-        <li class="link" :class="{'rotate180': sideBarIconRotate}">
+        <li class="icon-button" :class="{'rotate180': sideBarIconRotate}">
           <img @click="onMenuButtonClick" src="@/assets/menu-icon.png" alt="Menu icon">
         </li>
       </ul>
@@ -80,7 +85,7 @@ header {
   gap: 8%;
 }
 
-.link {
+.navigation .icon-button {
   display: flex;
   align-self: center;
   transition: .5s ease all;
@@ -90,19 +95,18 @@ header {
   padding: .5em
 }
 
-.link img {
+.navigation .icon-button img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   margin: 0;
 }
 
-.link:hover {
+.navigation .icon-button:hover {
   background-color: var(--lighter-main);
   border: none;
   box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
 }
-
 
 .branding {
   display: flex;
@@ -124,9 +128,18 @@ header {
 .search {
   flex-direction: column;
   align-content: center;
-  justify-content: center;
+  justify-content: space-between;
   width: 20%;
   transition: .4s ease all;
+}
+
+.search-form{
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+}
+
+.search-form .icon-button{
 }
 
 .search input {
@@ -149,7 +162,7 @@ header {
 }
 
 @media (min-width: 1916px){
-  .link {
+  .navigation .icon-button {
     width: 65px;
     height: 65px;
     border-radius: 2em;
@@ -158,7 +171,7 @@ header {
 }
 
 @media (min-width: 3000px){
-  .link {
+  .navigation .icon-button {
     width: 70px;
     height: 70px;
     border-radius: 2em;
@@ -168,7 +181,7 @@ header {
 
 
 @media (min-width: 4000px){
-  .link {
+  .navigation .icon-button {
     width: 90px;
     height: 90px;
     border-radius: 2em;

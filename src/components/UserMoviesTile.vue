@@ -29,12 +29,14 @@ const props = defineProps({
 
 <style scoped>
 .post {
-  margin-left: 1em;
 }
 .post h2 {
   margin-top: 0;
   margin-bottom: 1rem;
   text-align: center;
+  font-weight: 500;
+  font-size: 1.2em;
+  font-family: "Bruno Ace SC", sans-serif;
 }
 
 .movies {

@@ -34,12 +34,11 @@
 }
 
 .feed-container {
-    position: relative;
     display: flex;
     flex-direction: column;
     align-self: flex-start;
     background: transparent;
-    margin: 0 1em;
+    padding: 0 1em;
     width: 100%;
     transition: .5s ease all;
 }
@@ -55,26 +54,9 @@
     margin: .5em 0;
     padding: .5rem 1rem .5rem 1rem;
     width: 100%;
+    height:fit-content;
 }
 
-.posts-column {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding: 1em;
-    max-height: 1500px;
-    overflow-y: auto;
-    scrollbar-width: thin;
-}
-
-.posts-column {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding: 1em;
-    max-height: 1500px;
-    overflow-y: auto;
-}
 
 .info-tile {
     display: flex;
@@ -87,7 +69,7 @@
 
 .info-tile h1 {
     font-weight: 400;
-    font-size: 2em;
+    font-size: 1.5em;
     font-family: "Bruno Ace SC", sans-serif;
 }
 
@@ -102,6 +84,15 @@
     font-family: "Bruno Ace", sans-serif;
     font-weight: 600;
     font-style: normal;
+}
+
+.icon-button {
+    display: flex;
+    height: 35px;
+    width: 35px;
+    align-content: center;
+    justify-content: center;
+    margin: 0;
 }
 
 .rotate180 {

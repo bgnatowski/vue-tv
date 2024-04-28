@@ -50,7 +50,7 @@ function minutesToText(minutes) {
 <style>
 .info-tile p {
   font-weight: 400;
-  font-size: 1.5em;
+  font-size: 1.1em;
 }
 </style>
   

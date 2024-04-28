@@ -13,17 +13,19 @@ import PostTile from "@/components/PostTile.vue";</script>
       <UserMovesTile tileType="Filmy do obejrzenia"/>
     </div>
     <div class="posts-column">
-      <section class="post">
-        <div class="info-tile">
-          <h1>Posty użytkownika:</h1>
+      <div class="info-post">
+        <div class="post">
+          <div class="info-tile">
+            <h1>Posty użytkownika:</h1>
+          </div>
         </div>
-      </section>
-      <PostTile profile></PostTile>
-      <PostTile profile></PostTile>
-      <PostTile profile></PostTile>
-      <PostTile profile></PostTile>
-      <PostTile profile></PostTile>
-      <PostTile profile></PostTile>
+      </div>
+      <div class="posts" v-dragscroll>
+        <PostTile profile></PostTile>
+        <PostTile profile></PostTile>
+        <PostTile profile></PostTile>
+        <PostTile profile></PostTile>
+      </div>
     </div>
   </section>
 </template>
@@ -41,6 +43,21 @@ import PostTile from "@/components/PostTile.vue";</script>
   gap: 1em;
   width: 40%;
   margin: 1em 0;
+}
+
+.info-post {
+  width: 100%;
+  padding: 0 1em;
+}
+
+.posts {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  padding: 1em;
+  max-height: 4000px;
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 .profile-picture {
@@ -67,18 +84,24 @@ import PostTile from "@/components/PostTile.vue";</script>
   gap: 20px;
 }
 
-/*@media(max-width: 970px){*/
-/*  .movies-column {*/
-/*    width: 20%;*/
-/*  }*/
-/*  .posts-column {*/
-/*    width: 80%;*/
-/*  }*/
-/*}*/
+@media (max-width: 1400px) {
+  .feed-container {
+    flex-direction: column;
+  }
 
-/*@media (max-width: 767px) {*/
-/*  .profile-page {*/
-/*    flex-direction: column;*/
-/*  }*/
-/*}*/
+  .movies-column {
+    align-self: center;
+    width: 80%
+  }
+}
+
+
+@media (max-width: 600px) {
+  .feed-container {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+
 </style>
