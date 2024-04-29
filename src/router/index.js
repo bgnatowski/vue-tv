@@ -72,7 +72,7 @@ const router = createRouter({
         },
         {
             path: paths.INVITATIONS_ROUTE,
-            component: () => import("../views/InvitationsVue.vue"),
+            component: () => import("../views/InvitationsView.vue"),
             name: "Invitations",
             meta: {
                 requiresAuth: true,

@@ -1,5 +1,5 @@
 <script setup>
-import Friends from "@/components/Friends.vue"
+import Friends from "@/components/FriendsComponent.vue"
 </script>
 
 <template>

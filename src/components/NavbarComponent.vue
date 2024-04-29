@@ -20,8 +20,9 @@ const inputRef = ref(null);
 watch(
     () => screenWidth.value,
     (newWidth) => {
-      mobile.value = newWidth <= 1000;
-    }
+      mobile.value = newWidth < 1000;
+    },
+    {immediate: true}
 );
 
 window.addEventListener('resize', () => {
@@ -47,7 +48,7 @@ function onSearchClick() {
   <header>
     <nav class="header-nav">
       <div class="branding">
-          <h1 @click="router.push(paths.HOME_ROUTE)" class="bruno-ace-regular">VueTV</h1>
+        <h1 @click="router.push(paths.HOME_ROUTE)" class="bruno-ace-regular">VueTV</h1>
       </div>
       <div class="search">
         <form class="search-form">
@@ -58,11 +59,12 @@ function onSearchClick() {
         </form>
       </div>
       <ul class="navigation">
-        <li v-show="mobile" class="icon-button" @click="onSearchClick" :class="{'rotate360': searchIconRotate}">
+        <li v-if="mobile" class="icon-button" @click="onSearchClick" :class="{'rotate360': searchIconRotate}">
           <img src="@/assets/search-icon.png" alt="search-icon">
         </li>
-        <li @click="router.push(paths.USER_PROFILE_ROUTE)" class="icon-button" :class="{'rotate360': profileIconRotate}">
-            <img @click="toggleRotate" src="@/assets/user.png" alt="User profile icon"/>
+        <li @click="router.push(paths.USER_PROFILE_ROUTE)" class="icon-button"
+            :class="{'rotate360': profileIconRotate}">
+          <img @click="toggleRotate" src="@/assets/user.png" alt="User profile icon"/>
         </li>
         <li class="icon-button" :class="{'rotate180': sideBarIconRotate}">
           <img @click="onMenuButtonClick" src="@/assets/menu-icon.png" alt="Menu icon">
@@ -155,13 +157,13 @@ header {
   transition: .4s ease all;
 }
 
-.search-form{
+.search-form {
   display: flex;
   align-items: center;
   position: relative;
 }
 
-.search-form .icon-button{
+.search-form .icon-button {
   position: absolute;
   right: 1em;
 }
@@ -185,7 +187,16 @@ header {
   width: 100%;
 }
 
-@media (min-width: 1916px){
+@media screen and (min-width: 3000px) {
+  .navigation .icon-button {
+    width: 80px;
+    height: 80px;
+    border-radius: 2em;
+    padding: .1em
+  }
+}
+
+@media screen and (min-width: 1916px) {
   .navigation .icon-button {
     width: 70px;
     height: 65px;
@@ -194,29 +205,11 @@ header {
   }
 }
 
-@media (min-width: 3000px){
-  .navigation .icon-button {
-    width: 75px;
-    height: 70px;
-    border-radius: 2em;
-    padding: .5em
-  }
-}
-
-
-@media (min-width: 4000px){
-  .navigation .icon-button {
-    width: 95px;
-    height: 90px;
-    border-radius: 2em;
-    padding: .5em
-  }
-}
-
-@media (max-width: 979px) {
+@media screen and (max-width: 1000px) {
   .search input {
     display: none;
   }
+
   .search-form {
     width: 100%;
   }
@@ -225,32 +218,60 @@ header {
     gap: 10%
   }
 
-  .search input {
-    font-size: .8em;
-  }
   .navigation .icon-button {
     width: 65px;
     height: 55px;
   }
 }
 
-@media (max-width: 500px) {
+@media screen and (max-width: 600px){
+  .navigation {
+    gap: 5px;
+    height: 100%;
+  }
   .header-nav {
-    gap: 5%;
+    height: 70px;
   }
 
-  .search input {
-    font-size: .8em;
+  .navigation .icon-button {
+    width: 45px;
+    height: 45px;
+    padding: .5em
   }
 }
 
-@media (max-width: 360px) {
+
+@media screen and (max-width: 320px){
+  .navigation {
+    gap: 10px;
+    height: 100%;
+
+  }
   .header-nav {
-    gap: 0;
+    height: 70px;
   }
 
-  .search input {
-    font-size: .6em;
+  .navigation .icon-button {
+    width: 35px;
+    height: 35px;
+    padding: .4em
+  }
+}
+
+@media screen and (max-width: 280px){
+  .icon-button {
+    height: 18px;
+    width: 18px;
+  }
+
+  .sidebar {
+    gap: 0;
+    height: 70px;
+  }
+
+  .sidebar-button {
+    padding: 12px;
+    overflow-y: auto;
   }
 }
 

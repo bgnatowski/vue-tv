@@ -1,5 +1,5 @@
 <script setup>
-import {ref} from "vue";
+import {nextTick, onMounted, ref} from "vue";
 
 const isShowDropdown = ref(false)
 const isShowButton = ref(true)
@@ -18,11 +18,21 @@ function hideDropdown() {
   isShowDropdown.value = false;
   isShowButton.value = true;
 }
+
+const isDraggable = ref(false);
+const postDescriptionRef = ref(null);
+
+onMounted(async () => {
+  await nextTick();
+  if (postDescriptionRef.value.offsetHeight > 100) {
+    isDraggable.value = true;
+  }
+});
 </script>
 
 <template>
   <div class="post">
-    <div class="upper-bar" v-if="props.profile">
+    <div class="upper-bar" v-if="!profile">
       <div class="user-info">
         <div class="user-image">
           <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
@@ -53,14 +63,17 @@ function hideDropdown() {
             </tbody>
           </table>
         </div>
-        <p v-dragscroll>Film świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman
+        <p class="post-description" ref="postDescriptionRef" v-dragscroll="isDraggable">Film świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman
+          dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił
+          samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem
+          dramatycznym. Coś wielkiegoFilm świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman
           dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił
           samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem
           dramatycznym. Coś wielkiego.
         </p>
       </div>
       <div class="dropdown" @mouseover="showDropdown" @mouseleave="hideDropdown">
-        <div class="dropdown-options-icon" v-if="isShowButton">
+        <div class="icon-button" v-if="isShowButton">
           <img src="@/assets/dots-icon.png" alt="Movie Options"/>
         </div>
         <div v-if="isShowDropdown" class="dropdown-content">
@@ -75,7 +88,6 @@ function hideDropdown() {
 </template>
 
 <style scoped>
-
 .user-info {
   display: flex;
   padding: .2rem;
@@ -111,8 +123,8 @@ function hideDropdown() {
 }
 
 .movie-poster {
-  width: 200px;
-  max-width: 200px;
+  width: 300px;
+  height:100%;
   margin: .2em;
   aspect-ratio: 0.7;
 }
@@ -139,12 +151,13 @@ function hideDropdown() {
   font-size: 2em;
 }
 
-.movie-details p {
+.movie-details .post-description {
   text-align: justify;
   text-justify: inter-word;
   overflow-y: auto;
   scrollbar-width: thin;
   hyphens: auto;
+  max-height: 150px;
 }
 
 /*------dropdown----*/
@@ -215,35 +228,7 @@ function hideDropdown() {
   object-fit: contain;
 }
 
-.tg {
-  border: none;
-  border-collapse: collapse;
-}
-
-.tg td {
-  overflow: hidden;
-  word-break: normal;
-}
-
-.tg th {
-  font-weight: normal;
-  overflow: hidden;
-  word-break: normal;
-  padding: 5px 0;
-}
-
-.tg .tg-0pky {
-  border-color: inherit;
-  text-align: left;
-  vertical-align: top;
-}
-
-.tg .tg-0lax {
-  text-align: left;
-  padding: 0 5px;
-}
-
-@media (max-width: 728px) {
+@media screen and (max-width: 728px) {
   .movie-poster{
     display: none;
   }
@@ -252,36 +237,5 @@ function hideDropdown() {
   }
 }
 
-
-/*@media (max-width: 767px) {*/
-/*  .movie-card {*/
-/*    transition: 0.3s;*/
-/*    flex-direction: column;*/
-/*    align-items: center;*/
-/*    padding-right: 0;*/
-/*    gap: 5px;*/
-/*    height: 15rem;*/
-/*    margin-top: 1rem;*/
-/*  }*/
-
-/*  .movie-poster {*/
-/*    aspect-ratio: auto;*/
-/*    height: 100%;*/
-/*    width: 9rem;*/
-/*  }*/
-
-/*  .movie-details,*/
-/*  .movie-header,*/
-/*  .movie-info {*/
-/*    font-size: 10px;*/
-/*    width: 100%;*/
-/*    margin-bottom: 0px;*/
-/*  }*/
-
-/*  .movie-text {*/
-/*    margin-top: 1rem;*/
-/*    padding-top: 1rem;*/
-/*  }*/
-/*}*/
 </style>
 

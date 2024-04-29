@@ -2,7 +2,7 @@
 
 import {onMounted} from "vue";
 import {getAuth, signOut} from "firebase/auth";
-import LogInOutPopup from "@/components/LogInOutPopup.vue";
+import LogInOutPopup from "@/components/AuthPopup.vue";
 
 
 //DEV LOGOUT

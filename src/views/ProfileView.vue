@@ -1,27 +1,25 @@
 <script setup>
 import UserMovesTile from "@/components/UserMoviesTile.vue"
-import PostTile from "@/components/PostTile.vue";</script>
+import PostTile from "@/components/PostTile.vue";
+import ProfilePostTitle from "@/components/ProfilePostTitle.vue";
+
+</script>
 
 <template>
   <section class="feed-container">
-    <div class="movies-column" v-dragscroll>
+    <div class="movies-column">
       <div class="profile-picture">
         <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
         <p class="user-name">prowatcher123</p>
       </div>
-      <UserMovesTile tileType="Filmy obejrzane"/>
+      <ProfilePostTitle>Filmy obejrzane</ProfilePostTitle>
+      <UserMovesTile tileType="Filmy do obejrzenia"/>
+      <ProfilePostTitle>Filmy obejrzane</ProfilePostTitle>
       <UserMovesTile tileType="Filmy do obejrzenia"/>
     </div>
     <div class="posts-column">
-      <div class="info-post">
-        <div class="post">
-          <div class="info-tile">
-            <h1>Posty użytkownika:</h1>
-          </div>
-        </div>
-      </div>
+      <ProfilePostTitle>Twoje recenzje</ProfilePostTitle>
       <div class="posts" v-dragscroll>
-        <PostTile profile></PostTile>
         <PostTile profile></PostTile>
         <PostTile profile></PostTile>
         <PostTile profile></PostTile>
@@ -33,7 +31,6 @@ import PostTile from "@/components/PostTile.vue";</script>
 <style scoped>
 .feed-container {
   flex-direction: row;
-  gap: 1em;
   margin: 0;
 }
 
@@ -42,22 +39,20 @@ import PostTile from "@/components/PostTile.vue";</script>
   flex-direction: column;
   gap: 1em;
   width: 40%;
-  margin: 1em 0;
+  padding: 1em;
 }
-
-.info-post {
-  width: 100%;
-  padding: 0 1em;
+.posts-column{
+  padding: 1em 1em 0 1em;
 }
 
 .posts {
   display: flex;
   flex-direction: column;
   height: auto;
-  padding: 1em;
   max-height: 4000px;
   overflow-y: auto;
   scrollbar-width: thin;
+  padding: 1em;
 }
 
 .profile-picture {
@@ -75,14 +70,6 @@ import PostTile from "@/components/PostTile.vue";</script>
   margin-top: 1rem;
 }
 
-.info-tile {
-  display: flex;
-  flex-direction: column;
-  align-self: center;
-  justify-content: center;
-  text-align: center;
-  gap: 20px;
-}
 
 @media (max-width: 1400px) {
   .feed-container {
@@ -91,7 +78,7 @@ import PostTile from "@/components/PostTile.vue";</script>
 
   .movies-column {
     align-self: center;
-    width: 80%
+    width: 100%
   }
 }
 

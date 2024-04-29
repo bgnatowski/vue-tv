@@ -26,11 +26,11 @@ function handleClose() {
                        @close="handleClose">
 
     </MovieDetailsPopup>
-    <MovieTile @show-details="handleShowDetails"/>
-    <MovieTile @show-details="handleShowDetails"/>
-    <MovieTile @show-details="handleShowDetails"/>
-    <MovieTile @show-details="handleShowDetails"/>
-    <MovieTile @show-details="handleShowDetails"/>
+    <MovieTile watched @show-details="handleShowDetails"/>
+    <MovieTile watched @show-details="handleShowDetails"/>
+    <MovieTile watched @show-details="handleShowDetails"/>
+    <MovieTile watched @show-details="handleShowDetails"/>
+    <MovieTile watched @show-details="handleShowDetails"/>
     <main class="user-content">
       <h2>---Koniec---</h2>
     </main>

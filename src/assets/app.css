@@ -93,6 +93,8 @@
     align-content: center;
     justify-content: center;
     margin: 0;
+    transition: .5s ease all;
+    cursor: pointer;
 }
 
 .rotate180 {
@@ -101,4 +103,32 @@
 
 .rotate360 {
     transform: rotate(360deg);
+}
+
+.tg {
+    border: none;
+    border-collapse: collapse;
+}
+
+.tg td {
+    overflow: hidden;
+    word-break: normal;
+}
+
+.tg th {
+    font-weight: normal;
+    overflow: hidden;
+    word-break: normal;
+    padding: 5px 0;
+}
+
+.tg .tg-0pky {
+    border-color: inherit;
+    text-align: left;
+    vertical-align: top;
+}
+
+.tg .tg-0lax {
+    text-align: left;
+    padding: 0 5px;
 }

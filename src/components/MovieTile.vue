@@ -3,6 +3,10 @@
 import movie from "@/models/movie.js";
 import {ref} from "vue";
 
+defineProps({
+  watched: Boolean
+})
+
 const isPublic = ref(false);
 const isWatched = ref(false);
 const isInfoPopup = ref(false);
@@ -29,18 +33,18 @@ function showInfo(movie) {
       <div class="movie-details">
         <div class="movie-text">
           <div class="movie-header">
-            <h2 class="movie-title"> {{ movie.title }} </h2>
+            <h2> {{ movie.title }} </h2>
           </div>
-          <div class="movie-info">
-            <div class="movie-metadata">
-              <p class="movie-genre">Gatunek: {{ movie.genre }}</p>
-              <p class="movie-duration">Długość: {{ movie.duration }}</p>
-            </div>
+          <div class="movie-metadata">
+            <p class="metadata-title">Gatunek:</p>
+            <p>{{ movie.genre }}</p>
+            <p class="metadata-title">Długość:</p>
+            <p> {{ movie.duration }}</p>
           </div>
         </div>
         <div class="buttons">
           <div class="card-action-buttons">
-            <div class="card-action-icon" v-if="isPublic" aria-label="Note">
+            <div class="card-action-icon" v-if="isPublic && watched" aria-label="Note">
               <img src="@/assets/recommend-icon.png" alt="Note icon"/>
             </div>
             <div class="card-action-icon" aria-label="Note">
@@ -54,12 +58,15 @@ function showInfo(movie) {
               <img src="@/assets/hide-icon.png" v-else alt="Hide icon"/>
             </div>
           </div>
-          <div class="movie-action-buttons">
+          <div class="movie-action-buttons" v-if="watched">
             <div class="action-switch">
-              <span>Obejrzany</span>
+              <div class="switch-text">
+                <p>Obejrzałeś?</p>
+                <p>Przesuń &#8594;</p>
+              </div>
               <label class="switch">
                 <input type="checkbox">
-                <span class="slider round"></span>
+                <span class="slider round"> </span>
               </label>
             </div>
           </div>
@@ -75,13 +82,14 @@ function showInfo(movie) {
   display: flex;
   align-content: center;
   justify-content: center;
-  gap: 20px;
+  width: 100%;
 }
 
 .movie-poster {
   width: 100px;
   height: 160px;
-  margin: .2em;
+  justify-content: center;
+  align-items: center;
 }
 
 .movie-poster img {
@@ -95,25 +103,13 @@ function showInfo(movie) {
   flex-direction: row;
   flex-grow: 1;
   justify-content: space-between;
-  gap: 20px;
+  padding: 0 1em;
 }
 
-.movie-text {
-  display: flow;
-}
-
-.movie-header {
-  display: flex;
-  gap: 20px;
-  font-size: 1.2em;
+.movie-header h2 {
+  font-size: 1.3em;
   color: #000;
-  font-weight: 500;
-}
-
-.movie-info {
-  display: flex;
-  gap: 20px;
-  font-size: 15px;
+  font-weight: 600;
 }
 
 .movie-metadata {
@@ -121,13 +117,22 @@ function showInfo(movie) {
   flex-direction: column;
   align-content: flex-start;
   justify-content: flex-start;
-  color: #000;
-  font-weight: 400;
-  text-align: left;
 }
 
-.movie-duration {
-  margin-top: 5px;
+.movie-metadata .metadata-title{
+  font-weight: 600;
+  text-align: left;
+  font-size: .8em;
+}
+
+.movie-metadata p{
+  font-weight: 400;
+  text-align: left;
+  font-size: .8em;
+}
+
+.movie-text{
+  width: 30%;
 }
 
 .buttons {
@@ -135,6 +140,7 @@ function showInfo(movie) {
   flex-direction: column;
   justify-content: space-between;
   align-content: space-between;
+  width: 70%;
 }
 
 .card-action-buttons {
@@ -142,12 +148,11 @@ function showInfo(movie) {
   align-content: flex-end;
   justify-content: flex-end;
   padding: .2em;
-  gap: 5px;
 }
 
 .card-action-icon {
-  height: 40px;
-  width: 40px;
+  height: 50px;
+  width: 50px;
   border-radius: 2em;
   padding: .5em;
   transition: .5s ease all;
@@ -174,8 +179,10 @@ function showInfo(movie) {
   display: flex;
   flex-direction: column;
   font-weight: 400;
-  gap: 5px;
   transition: .5s ease all;
+  justify-content: center;
+  align-items: flex-end;
+  padding-right: 5px;
 }
 
 .action-switch {
@@ -198,6 +205,18 @@ function showInfo(movie) {
   display: inline-block;
   width: 60px;
   height: 34px;
+}
+
+.switch-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+}
+
+.switch-text p {
+  font-size: .8em;
+  text-align: right;
 }
 
 /* Hide default HTML checkbox */
@@ -255,11 +274,59 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+@media screen and (max-width: 500px) {
+  .movie-poster{
+    width: 80px;
+    height: 120px;
+  }
+  .card-action-buttons {
+    padding: 0;
+  }
 
-.post-text p {
-  margin: 2px;
-  padding: 2px;
-  text-align: justify;
+  .card-action-icon {
+    height: 35px;
+    width: 35px;
+    border-radius: 2em;
+    padding: .5em;
+  }
+
+  .movie-details{
+    padding: 5px;
+  }
+
+  .switch{
+    width: 40px;
+    height: 24px;
+  }
+
+  .slider:before {
+    height: 16px;
+    width: 16px;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(15px);
+    -ms-transform: translateX(15px);
+    transform: translateX(15px);
+  }
+
+}
+
+@media screen and (max-width: 380px) {
+  .movie-poster{
+    width: 70px;
+    height: 100px;
+  }
+  .movie-header h1 {
+    font-size: .8em;
+  }
+
+  .movie-metadata p {
+    font-size: .6em;
+  }
+  .movie-metadata .metadata-title{
+    font-size: .6em;
+  }
 }
 </style>
   

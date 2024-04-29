@@ -1,7 +1,7 @@
 <script setup>
 import {computed, ref} from "vue";
 import {useRouter} from "vue-router";
-import SignInGoogleButton from "@/components/SignInGoogleButton.vue";
+import SignInGoogleButton from "@/components/GoogleButton.vue";
 import {authenticate} from "@/services/AuthenticationService.js";
 import paths from "@/router/routerPaths.js";
 

@@ -3,25 +3,26 @@ import Rating from "primevue/rating";
 import {ref} from "vue";
 
 const props = defineProps({
-  readOnly: Boolean
+  readOnly: Boolean,
+  vertical: Boolean,
 })
 
 const value = ref(4.5)
 const isPointer = ref(props.readOnly ? 'default' : 'pointer');
-
 </script>
 
+
 <template>
-  <div class="rating-container">
-    <Rating v-model="value" :readonly="readOnly" :cancel="!readOnly">
+  <div class="rating-container" :class="vertical ? 'column' : ''">
+    <Rating v-model="value" :readonly="readOnly" :cancel="!readOnly" :class="vertical ? 'column' : ''">
       <template #cancelicon>
-        <img class="cancel-icon" src="@/assets/rating/cancel.png" height="24" width="24"/>
+        <img class="cancel-icon star-icon" src="@/assets/rating/cancel.png" alt="cancel"/>
       </template>
       <template #onicon>
-        <img src="@/assets/rating/custom-onicon.png" height="24" width="24"/>
+        <img class="star-icon" src="@/assets/rating/custom-onicon.png" alt="star-fill"/>
       </template>
       <template #officon>
-        <img src="@/assets/rating/custom-officon.png" height="24" width="24"/>
+        <img class="star-icon" src="@/assets/rating/custom-officon.png" alt="star-unfilled"/>
       </template>
     </Rating>
     <p v-if="readOnly" class="real-value" v-text="value"></p>
@@ -30,36 +31,65 @@ const isPointer = ref(props.readOnly ? 'default' : 'pointer');
 </template>
 
 <style scoped>
-.cancel-icon {
-  margin-top: 1px;
-}
 
 .rating-container {
   display: flex;
-  box-shadow: 0 0px 5px 2px rgba(0, 0, 0, 0.25);
+  flex-direction: v-bind(direction);
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.25);
   background-color: transparent;
   border-radius: 2em;
-  justify-content: center;
+  justify-content: left;
   align-content: center;
-  width: 9rem;
-  padding-top: 3px;
+  padding-left: 8px;
+  padding-right: 8px;
+  width: fit-content;
+}
+
+.column {
+  flex-direction: column;
 }
 
 .rating-container .real-value {
-  margin-top: 2px;
-  padding-left: 5px;
   text-align: center;
+  align-self: center;
   font-weight: 600;
+  font-size: 1em;
 }
 
 .p-rating {
   display: flex;
-  gap: 2px;
   cursor: v-bind(isPointer);
 }
 
 .pointer {
   cursor: pointer;
+}
+
+.cancel-icon {
+  margin-top: 1px;
+}
+
+.star-icon {
+  height: 24px;
+  width: 24px;
+}
+
+@media screen and (max-width: 737px) {
+  .star-icon {
+    height: 20px;
+    width: 20px;
+  }
+
+  .rating-container .real-value {
+    font-size: .8em;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .star-icon {
+    height: 16px;
+    width: 16px;
+  }
 }
 
 </style>

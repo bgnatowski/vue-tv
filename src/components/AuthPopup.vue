@@ -38,7 +38,7 @@ const props = defineProps({
   border-radius: 3em;
   border: none;
   background-color: rgba(255, 255, 255, 0.5);
-  box-shadow: 0px 4px 13px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
   width: 50%;
   min-width: min-content;
   padding: 2em;

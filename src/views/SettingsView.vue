@@ -1,5 +1,9 @@
 <script setup>
 import {ref} from 'vue';
+import router from "@/router/index.js";
+import paths from "@/router/routerPaths.js";
+import ChangePasswordPopup from "@/components/ChangePasswordPopup.vue";
+import DeleteAccountPopup from "@/components/DeleteAccountPopup.vue";
 
 const showChangePasswordPopup = ref(false);
 const showDeleteAccountPopup = ref(false);
@@ -16,66 +20,30 @@ const confirmDeleteAccount = () => {
   showDeleteAccountPopup.value = false;
 };
 
-const closeChangePasswordPopup = () => {
-  showChangePasswordPopup.value = false;
-};
-
-const closeDeleteAccountPopup = () => {
-  showDeleteAccountPopup.value = false;
-};
 </script>
 
 <template>
   <section class="feed-container">
-    <div class="settings-container">
+    <div class="post">
       <div class="user-info">
         <img class="user-avatar" src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="Avatar użytkownika">
         <h2>{{ username }}</h2>
       </div>
       <div class="settings-actions">
-        <button @click="showChangePasswordPopup">Zmień hasło</button>
-        <button @click="showDeleteAccountPopup">Usuń konto</button>
+        <button @click="showChangePasswordPopup=true">Zmień hasło</button>
+        <button @click="showDeleteAccountPopup=true">Usuń konto</button>
+        <button>
+          <router-link :to="paths.LOGOUT_ROUTE">Wyloguj</router-link>
+        </button>
       </div>
-
-      <!-- Popup Zmiany Hasła -->
-      <div v-if="showChangePasswordPopup" class="popup-overlay" @click.self="closeChangePasswordPopup">
-        <div class="popup">
-          <button class="close-btn" @click="closeChangePasswordPopup">X</button>
-          <h3>Zmień hasło</h3>
-          <input type="password" placeholder="Obecne hasło">
-          <input type="password" placeholder="Nowe hasło">
-          <input type="password" placeholder="Wpisz ponownie nowe hasło">
-          <button @click="confirmChangePassword">Potwierdź</button>
-        </div>
-      </div>
-
-      <!-- Popup Usunięcia Konta -->
-      <div v-if="showDeleteAccountPopup" class="popup-overlay" @click.self="closeDeleteAccountPopup">
-        <div class="popup">
-          <button class="close-btn" @click="closeDeleteAccountPopup">X</button>
-          <h3>Usuń konto</h3>
-          <input type="password" placeholder="Wpisz swoje obecne hasło">
-          <button @click="confirmDeleteAccount">Potwierdź</button>
-          <p>Będziemy tęsknić :(</p>
-        </div>
-      </div>
+      <ChangePasswordPopup v-if="showChangePasswordPopup" @close="showChangePasswordPopup=false"></ChangePasswordPopup>
+      <DeleteAccountPopup v-if="showDeleteAccountPopup" @close="showDeleteAccountPopup=false"></DeleteAccountPopup>
     </div>
   </section>
 </template>
 
 <style scoped>
-.settings-container {
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-  justify-content: center;
-  border-radius: 2em;
-  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
-  background-color: rgba(255, 255, 255, 0.25);
-  margin: .5em 0;
-  padding: .5rem 1rem .5rem 1rem;
-}
-
+@import url(@/assets/auth-common.css);
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -86,15 +54,18 @@ const closeDeleteAccountPopup = () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 999;
 }
 
 .popup {
   display: flex;
   flex-direction: column;
+  position: fixed;
   padding: 2em;
   border-radius: 3em;
   box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
   background-color: #fff;
+  z-index: 999;
 }
 
 .user-info {
