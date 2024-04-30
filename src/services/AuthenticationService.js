@@ -1,10 +1,14 @@
 import {
     createUserWithEmailAndPassword,
+    deleteUser as firebaseDeleteUser,
+    EmailAuthProvider,
     getAuth,
     GoogleAuthProvider,
+    reauthenticateWithCredential,
     signInWithEmailAndPassword,
     signInWithPopup,
     signOut,
+    updatePassword as firebaseUpdatePassword,
     updateProfile
 } from "firebase/auth";
 
@@ -23,7 +27,8 @@ async function authenticateWithGoogle() {
 
 async function authenticate(email, password) {
     try {
-        await signInWithEmailAndPassword(getAuth(), email, password)
+        const credential = await signInWithEmailAndPassword(getAuth(), email, password);
+        return credential.user;
     } catch (error) {
         console.log(error.code);
         throw mapErrorCodeToMessage(error.code)
@@ -48,6 +53,48 @@ async function signOutUser() {
     await signOut(getAuth())
 }
 
+async function deleteUser(password) {
+    try {
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        if (!user || !password) {
+            throw mapErrorCodeToMessage('auth/wrong-delete')
+        }
+        // Tworzenie poświadczeń
+        const credential = EmailAuthProvider.credential(user.email, password);
+        // Ponowne uwierzytelnienie użytkownika
+        await reauthenticateWithCredential(user, credential)
+
+        // Usunięcie użytkownika
+        await firebaseDeleteUser(user);
+        await signOutUser();
+        return true;
+    } catch (error) {
+        throw mapErrorCodeToMessage(error.code);
+    }
+}
+
+async function changePassword(current, password1, password2) {
+    try {
+        if (password1 !== password2) {
+            throw mapErrorCodeToMessage("auth/different-passwords")
+        }
+
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        // Reautentykacja użytkownika
+        const credential = EmailAuthProvider.credential(user.email, current);
+        await reauthenticateWithCredential(user, credential);
+
+        // Aktualizacja hasła
+        await firebaseUpdatePassword(user, password1);
+        return true;
+    } catch (error) {
+        throw mapErrorCodeToMessage(error.code)
+    }
+}
 
 function mapErrorCodeToMessage(code) {
     switch (code) {
@@ -61,11 +108,19 @@ function mapErrorCodeToMessage(code) {
             return "Email jest zajęty";
         case "auth/weak-password":
             return "Słabe hasło!"
+        case "auth/invalid-credential":
+            return "Złe dane";
+        case "auth/wrong-delete":
+            return "Niepoprawne hasło!";
+        case "auth/too-many-requests":
+            return "Za dużo prób. Spróbuj ponownie później!";
+        case "auth/different-passwords":
+            return 'Nowe hasła nie są takie same.';
         default:
             return code;
     }
 }
 
 export {
-    authenticateWithGoogle, authenticate, signUp, signOutUser
+    authenticateWithGoogle, authenticate, signUp, signOutUser, deleteUser, changePassword
 }

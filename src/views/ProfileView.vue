@@ -2,6 +2,14 @@
 import UserMovesTile from "@/components/UserMoviesTile.vue"
 import PostTile from "@/components/PostTile.vue";
 import ProfilePostTitle from "@/components/ProfilePostTitle.vue";
+import {onBeforeMount, ref} from "vue";
+import {useUserStore} from "@/stores/userStore.js";
+
+const userStore = useUserStore();
+const username = ref('<uzytkownik>');
+onBeforeMount(() => {
+  username.value = userStore.currentUsername;
+})
 
 </script>
 
@@ -10,7 +18,7 @@ import ProfilePostTitle from "@/components/ProfilePostTitle.vue";
     <div class="movies-column">
       <div class="profile-picture">
         <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
-        <p class="user-name">prowatcher123</p>
+        <p class="user-name">{{ username }}</p>
       </div>
       <ProfilePostTitle>Filmy obejrzane</ProfilePostTitle>
       <UserMovesTile tileType="Filmy do obejrzenia"/>

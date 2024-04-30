@@ -1,44 +1,65 @@
 <script setup>
-import movie from "@/models/movie";
-import RatingStars from "@/components/RatingStars.vue";
+import {computed, ref} from "vue";
+import paths from "@/router/routerPaths.js";
+import {useRouter} from "vue-router";
+import {deleteUser} from "@/services/AuthenticationService.js";
 
-const props = defineProps({
-  movie: Object
-});
 
 const emits = defineEmits(['close']);
 
-// Funkcja do emitowania zdarzenia zamknięcia popupa
+const router = useRouter();
 function closePopup() {
   emits('close');
 }
 
-function confirmDeleteAccount() {
-  console.log("Usuwanie konta")
+const deleted = ref()
+const errorMsg = ref('')
+
+async function confirmDeleteAccount(password) {
+  try {
+    deleted.value = await deleteUser(password);
+    if(deleted.value) {
+      await router.push(paths.DELETE_ROUTE)
+    }
+  } catch (error) {
+    errorMsg.value = error;
+  }
 }
+
+const password = ref("");
+const isCompletedForm = computed(() => {
+  return !password.value;
+})
+
 
 </script>
 <template>
   <div class="overlay">
-      <div class="panel-container">
-        <div class="close-bar">
-          <div class="icon-button" @click="closePopup">
-            <img src="@/assets/close-icon.png" alt="Close icon"/>
-          </div>
+    <div class="panel-container">
+      <div class="close-bar">
+        <div class="icon-button" @click="closePopup">
+          <img src="@/assets/close-icon.png" alt="Close icon"/>
         </div>
-        <form class="delete-account-form">
-          <h1>Usuń konto</h1>
-          <input type="password" placeholder="Wpisz swoje obecne hasło">
-          <div class="buttons"></div>
-          <button @click="confirmDeleteAccount" class="action-button">Potwierdź</button>
-          <p>Będziemy tęsknić :(</p>
-        </form>
       </div>
+      <form class="delete-account-form">
+        <h1>Usuń konto</h1>
+        <input type="password" placeholder="Wpisz swoje obecne hasło" v-model="password">
+        <button
+            @click.prevent="confirmDeleteAccount(password)"
+            :disabled="isCompletedForm"
+            class="action-button">Potwierdz
+        </button>
+        <p v-if="deleted">Będziemy tęsknić :(</p>
+        <p v-else>{{ errorMsg }}</p>
+      </form>
     </div>
+  </div>
 </template>
+
 <style scoped>
 @import url(@/assets/auth-common.css);
-.panel-container{
+
+.panel-container {
   flex-direction: column;
   background-color: white;
   width: 25vw;
@@ -56,7 +77,8 @@ function confirmDeleteAccount() {
   width: 100%
 }
 
-.panel-container form label {
+.delete-account-form input {
+  font-size: 1em;
 }
 
 .overlay {
@@ -107,7 +129,6 @@ function confirmDeleteAccount() {
     height: 50px;
   }
 }
-
 
 @media screen and (max-width: 737px) {
 

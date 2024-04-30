@@ -1,25 +1,19 @@
 <script setup>
-import {ref} from 'vue';
-import router from "@/router/index.js";
-import paths from "@/router/routerPaths.js";
+import {onBeforeMount, ref} from 'vue';
 import ChangePasswordPopup from "@/components/ChangePasswordPopup.vue";
 import DeleteAccountPopup from "@/components/DeleteAccountPopup.vue";
+import routerPaths from "@/router/routerPaths.js";
+import {useRouter} from "vue-router";
+import {useUserStore} from "@/stores/userStore.js";
 
 const showChangePasswordPopup = ref(false);
 const showDeleteAccountPopup = ref(false);
-
-const username = 'Użytkownik';
-
-const confirmChangePassword = () => {
-  //todo Logika zmiany hasła
-  showChangePasswordPopup.value = false;
-};
-
-const confirmDeleteAccount = () => {
-  //todo Logika usuwania konta
-  showDeleteAccountPopup.value = false;
-};
-
+const userStore = useUserStore();
+const router = useRouter();
+const username = ref('<uzytkownik>');
+onBeforeMount(() => {
+  username.value = userStore.currentUsername;
+})
 </script>
 
 <template>
@@ -27,14 +21,12 @@ const confirmDeleteAccount = () => {
     <div class="post">
       <div class="user-info">
         <img class="user-avatar" src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="Avatar użytkownika">
-        <h2>{{ username }}</h2>
+        <h2>Witaj {{username}}!</h2>
       </div>
       <div class="settings-actions">
-        <button @click="showChangePasswordPopup=true">Zmień hasło</button>
-        <button @click="showDeleteAccountPopup=true">Usuń konto</button>
-        <button>
-          <router-link :to="paths.LOGOUT_ROUTE">Wyloguj</router-link>
-        </button>
+        <button @click="showChangePasswordPopup=true" class="action-button">Zmień hasło</button>
+        <button @click="showDeleteAccountPopup=true" class="action-button">Usuń konto</button>
+        <button class="action-button" @click="router.push(routerPaths.LOGOUT_ROUTE)">Wyloguj</button>
       </div>
       <ChangePasswordPopup v-if="showChangePasswordPopup" @close="showChangePasswordPopup=false"></ChangePasswordPopup>
       <DeleteAccountPopup v-if="showDeleteAccountPopup" @close="showDeleteAccountPopup=false"></DeleteAccountPopup>
@@ -44,30 +36,6 @@ const confirmDeleteAccount = () => {
 
 <style scoped>
 @import url(@/assets/auth-common.css);
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-
-.popup {
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  padding: 2em;
-  border-radius: 3em;
-  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
-  background-color: #fff;
-  z-index: 999;
-}
-
 .user-info {
   display: flex;
   padding: 2rem;

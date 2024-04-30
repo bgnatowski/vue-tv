@@ -11,6 +11,8 @@ const paths =
     WATCHED_ROUTE: '/vue-tv/watched',
     FRIENDS_ROUTE: '/vue-tv/friends',
     INVITATIONS_ROUTE: '/vue-tv/invitations',
+    DELETE_ROUTE: '/vue-tv/delete'
+
 }
 
 export default paths

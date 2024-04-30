@@ -86,6 +86,14 @@ const router = createRouter({
                 requiresAuth: true,
             }
         },
+        {
+            path: paths.DELETE_ROUTE,
+            component: () => import("../views/DeleteView.vue"),
+            name: "Delete",
+            meta: {
+                requiresAuth: false,
+            }
+        },
 
 
     ],

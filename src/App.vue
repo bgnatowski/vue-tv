@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, ref, watch} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {useRoute} from "vue-router";
 import Footer from "@/components/FooterComponent.vue";
@@ -12,7 +12,6 @@ const isLoggedIn = ref(false);
 const showFooter = ref(true);
 
 let auth;
-
 // Stan dla pokazywania/ukrywania Sidebar
 const isSidebarVisible = ref(true);
 

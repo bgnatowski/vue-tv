@@ -58,7 +58,7 @@ function showInfo(movie) {
               <img src="@/assets/hide-icon.png" v-else alt="Hide icon"/>
             </div>
           </div>
-          <div class="movie-action-buttons" v-if="watched">
+          <div class="movie-action-buttons" v-if="!watched">
             <div class="action-switch">
               <div class="switch-text">
                 <p>Obejrzałeś?</p>

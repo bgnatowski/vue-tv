@@ -5,27 +5,31 @@ import paths from "@/router/routerPaths.js";
 const router = useRouter()
 
 const props = defineProps({
-  out: Boolean,
+  type: String
 })
 
 </script>
 
 <template>
   <div class="panel-container">
-    <div v-if="props.out">
+    <div v-if="type === 'out'">
       <h1>Wylogowano!</h1>
       <p class="signup-text">Będziemy tęsknić!</p>
       <div class="buttons">
         <button @click="router.push(paths.LOGIN_ROUTE)" class="popup-action-button">Zaloguj ponownie</button>
       </div>
     </div>
-    <div v-else>
-      <h1>Dziękujęmy za rejestracje!</h1>
+    <div v-else-if="type === 'in'">
       <p class="signup-text">Możesz się zalogować</p>
+      <h1>Dziękujęmy za rejestracje!</h1>
       <div class="buttons">
         <button @click="router.push(paths.LOGIN_ROUTE)" class="popup-action-button">Zaloguj się</button>
       </div>
     </div>
+  </div>
+  <div v-else-if="type === 'delete'">
+    <h1>Usunięto konto!</h1>
+    <p class="signup-text">Będziemy tęsknić!</p>
   </div>
 </template>
 

@@ -1,45 +1,80 @@
 <script setup>
-import movie from "@/models/movie";
-import RatingStars from "@/components/RatingStars.vue";
-
-const props = defineProps({
-  movie: Object
-});
+import {computed, ref} from "vue";
+import {changePassword, deleteUser} from "@/services/AuthenticationService.js";
+import paths from "@/router/routerPaths.js";
 
 const emits = defineEmits(['close']);
-
-// Funkcja do emitowania zdarzenia zamknięcia popupa
 function closePopup() {
   emits('close');
 }
 
+const changed = ref()
+const errorMsg = ref('')
+
+async function confirmChangePassword(current, password1, password2) {
+  try {
+    changed.value = await changePassword(current, password1, password2);
+  } catch (error) {
+    errorMsg.value = error;
+  }
+}
+
+const currentPassword = ref("");
+const newPassword1 = ref("");
+const newPassword2 = ref("");
+const isCompletedForm = computed(() => {
+  return !currentPassword.value && (newPassword1 != newPassword2);
+})
+
 </script>
 <template>
   <div class="overlay">
-    <div class="post">
+    <div class="panel-container">
         <div class="close-bar">
           <div class="icon-button" @click="closePopup">
             <img src="@/assets/close-icon.png" alt="Close icon"/>
           </div>
         </div>
         <form class="change-password-form">
-          <h3>Zmień hasło</h3>
-          <input type="password" placeholder="Obecne hasło">
-          <input type="password" placeholder="Nowe hasło">
-          <input type="password" placeholder="Wpisz ponownie nowe hasło">
-          <button @click="confirmChangePassword">Potwierdź</button>
+          <h1>Zmień hasło</h1>
+          <input type="password" v-model="currentPassword" placeholder="Obecne hasło">
+          <input type="password" v-model="newPassword1" placeholder="Nowe hasło">
+          <input type="password" v-model="newPassword2" placeholder="Wpisz ponownie nowe hasło">
+          <button
+              @click.prevent="confirmChangePassword(password)"
+              :disabled="isCompletedForm"
+              class="action-button">Potwierdz
+          </button>
+          <p v-if="changed">Hasło zmienione</p>
+          <p v-else>{{ errorMsg }}</p>
         </form>
 
       </div>
     </div>
 </template>
 <style scoped>
-.post {
+@import url(@/assets/auth-common.css);
+
+.panel-container {
   flex-direction: column;
   background-color: white;
-  width: 80vw;
-  height: 80vh;
+  width: 25vw;
+  height: auto;
   padding: 1em;
+}
+
+.panel-container h1 {
+  font-size: 1.5em;
+}
+
+.panel-container form {
+  padding: .8em;
+  font-size: .8em;
+  width: 100%
+}
+
+.change-password-form input {
+  font-size: 1em;
 }
 
 .overlay {
@@ -82,7 +117,7 @@ function closePopup() {
   object-fit: contain;
 }
 
-@media (min-width: 2000px){
+@media (min-width: 2000px) {
   .icon-button {
     border-radius: 2em;
     padding: 10px;

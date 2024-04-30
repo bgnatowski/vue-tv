@@ -7,6 +7,7 @@ import VueDragscroll from "vue-dragscroll";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import PrimeVue from "primevue/config";
+import { createPinia } from 'pinia'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -27,6 +28,7 @@ initializeApp(firebaseConfig);
 const app = createApp(App)
 
 app.use(router)
+app.use(createPinia())
 app.use(VueDragscroll);
 app.use(PrimeVue)
 app.mount('#app')
