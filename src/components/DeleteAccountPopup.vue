@@ -3,6 +3,7 @@ import {computed, ref} from "vue";
 import paths from "@/router/routerPaths.js";
 import {useRouter} from "vue-router";
 import {deleteUser} from "@/services/AuthenticationService.js";
+import {useUserStore} from "@/stores/userStore.js";
 
 
 const emits = defineEmits(['close']);
@@ -19,7 +20,8 @@ async function confirmDeleteAccount(password) {
   try {
     deleted.value = await deleteUser(password);
     if(deleted.value) {
-      await router.push(paths.DELETE_ROUTE)
+      useUserStore().logout();
+      await router.push(paths.DELETE_ROUTE);
     }
   } catch (error) {
     errorMsg.value = error;

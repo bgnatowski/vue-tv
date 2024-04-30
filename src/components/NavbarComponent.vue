@@ -2,7 +2,7 @@
 
 import paths from "@/router/routerPaths.js";
 import {ref, watch} from "vue";
-import router from "@/router/index.js";
+import {useRouter} from "vue-router";
 
 const props = defineProps({
   isSidebarVisible: Boolean
@@ -15,7 +15,7 @@ const profileIconRotate = ref(false)
 const sideBarIconRotate = ref(false)
 const searchIconRotate = ref(false)
 const inputRef = ref(null);
-
+const router = useRouter()
 
 watch(
     () => screenWidth.value,

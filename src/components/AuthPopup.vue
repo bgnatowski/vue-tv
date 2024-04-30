@@ -26,10 +26,10 @@ const props = defineProps({
         <button @click="router.push(paths.LOGIN_ROUTE)" class="popup-action-button">Zaloguj się</button>
       </div>
     </div>
-  </div>
-  <div v-else-if="type === 'delete'">
-    <h1>Usunięto konto!</h1>
-    <p class="signup-text">Będziemy tęsknić!</p>
+    <div v-else-if="type === 'delete'">
+      <h1>Usunięto konto!</h1>
+      <p class="signup-text">Będziemy tęsknić!</p>
+    </div>
   </div>
 </template>
 

@@ -8,31 +8,39 @@ const router = createRouter({
         {
             path: paths.HOME_ROUTE,
             redirect_to: "/",
-            component: () => import("../views/HomeView.vue"),
+            component: () => import("./views/HomeView.vue"),
             name: "Home",
             meta: {blackBackground: true}
         },
         {
+            path: "/:pathMatch(.*)*",
+            name: 'NotFound',
+            component: () => import('./views/NotFoundView.vue'),
+            meta: {
+                requiresAuth: false,
+            }
+        },
+        {
             path: paths.REGISTER_ROUTE,
-            component: () => import("../views/RegisterView.vue"),
+            component: () => import("./views/RegisterView.vue"),
             name: "Register",
         },
         {
             path: paths.LOGIN_ROUTE,
-            component: () => import("../views/LoginView.vue"),
+            component: () => import("./views/LoginView.vue"),
             name: "Login"
         },
         {
             path: paths.LOGOUT_ROUTE,
-            component: () => import("../views/LogoutView.vue"),
+            component: () => import("./views/LogoutView.vue"),
             name: "Logout",
             meta: {
-                requiresAuth: true,
+                requiresAuth: false,
             }
         },
         {
             path: paths.MAIN_ROUTE,
-            component: () => import("../views/MainPageView.vue"),
+            component: () => import("./views/MainPageView.vue"),
             name: "Main",
             meta: {
                 requiresAuth: true,
@@ -40,7 +48,7 @@ const router = createRouter({
         },
         {
             path: paths.WATCHED_ROUTE,
-            component: () => import("../views/WatchedView.vue"),
+            component: () => import("./views/WatchedView.vue"),
             name: "Watched",
             meta: {
                 requiresAuth: true,
@@ -48,7 +56,7 @@ const router = createRouter({
         },
         {
             path: paths.TO_WATCH_ROUTE,
-            component: () => import("../views/ToWatchView.vue"),
+            component: () => import("./views/ToWatchView.vue"),
             name: "ToWatch",
             meta: {
                 requiresAuth: true,
@@ -56,7 +64,7 @@ const router = createRouter({
         },
         {
             path: paths.USER_PROFILE_ROUTE,
-            component: () => import("../views/ProfileView.vue"),
+            component: () => import("./views/ProfileView.vue"),
             name: "User",
             meta: {
                 requiresAuth: true,
@@ -64,7 +72,7 @@ const router = createRouter({
         },
         {
             path: paths.FRIENDS_ROUTE,
-            component: () => import("../views/FriendsView.vue"),
+            component: () => import("./views/FriendsView.vue"),
             name: "Friends",
             meta: {
                 requiresAuth: true,
@@ -72,7 +80,7 @@ const router = createRouter({
         },
         {
             path: paths.INVITATIONS_ROUTE,
-            component: () => import("../views/InvitationsView.vue"),
+            component: () => import("./views/InvitationsView.vue"),
             name: "Invitations",
             meta: {
                 requiresAuth: true,
@@ -80,7 +88,7 @@ const router = createRouter({
         },
         {
             path: paths.SETTINGS_ROUTE,
-            component: () => import("../views/SettingsView.vue"),
+            component: () => import("./views/SettingsView.vue"),
             name: "Settings",
             meta: {
                 requiresAuth: true,
@@ -88,7 +96,7 @@ const router = createRouter({
         },
         {
             path: paths.DELETE_ROUTE,
-            component: () => import("../views/DeleteView.vue"),
+            component: () => import("./views/DeleteView.vue"),
             name: "Delete",
             meta: {
                 requiresAuth: false,

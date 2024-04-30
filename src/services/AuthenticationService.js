@@ -18,7 +18,7 @@ async function authenticateWithGoogle() {
         const user = result.user;
         const username = user.email.split('@')[0];
         await updateProfile(user, {displayName: username});
-        // await createOrUpdateUserProfile(user, username);
+        return user
     } catch (error) {
         console.error("Błąd logowania z Google", error);
         throw mapErrorCodeToMessage("Błąd logowania z Google")
@@ -40,8 +40,7 @@ async function signUp(email, password, username) {
         const userCredential = await createUserWithEmailAndPassword(getAuth(), email, password);
         const user = userCredential.user;
         await updateProfile(user, {displayName: username});
-        // await createOrUpdateUserProfile(user, username);
-        await signOutUser()
+        await signOutUser();
         return true
     } catch (error) {
         console.log(error.code);

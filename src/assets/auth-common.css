@@ -52,6 +52,7 @@
     font-size: calc((0.2em + .5vmin) + (0.2em + .5vmax));
 }
 
+
 .buttons {
     display: flex;
     flex-direction: column;
