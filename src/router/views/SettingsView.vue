@@ -1,32 +1,28 @@
 <script setup>
-import {onBeforeMount, ref} from 'vue';
+import {onBeforeMount, reactive, ref} from 'vue';
 import routerPaths from "@/router/routerPaths.js";
 import {useRouter} from "vue-router";
-import {useUserStore} from "@/stores/userStore.js";
 import ActionPopup from "@/components/auth/ActionPopup.vue";
+import {useAuthStore} from "@/stores/AuthStore.js";
 
 const showChangePasswordPopup = ref(false);
 const showDeleteAccountPopup = ref(false);
 const showChangeAvatarPopup = ref(false);
-const userStore = useUserStore();
+
 const router = useRouter();
-const username = ref('uzytkownik');
-const photoUrl = ref('https://cdn-icons-png.flaticon.com/512/4715/4715330.png');
-
+const authStore = useAuthStore();
+let user = {};
 onBeforeMount(() => {
-  username.value = userStore.currentUsername;
-  photoUrl.vaule = userStore.photoUrl;
-  console.log("Settings: ", photoUrl.vaule)
+  user = authStore.user
 })
-
 </script>
 
 <template>
   <section class="feed-container">
     <div class="post">
-      <div class="user-info">
-        <img class="user-avatar" :src="photoUrl" alt="Avatar użytkownika">
-        <h2>Witaj {{username}}!</h2>
+      <div class="profile-picture">
+        <img :src="user.photoUrl" alt="profile avatar" class="user-profile-pic">
+        <p class="user-name">{{ user.username }}</p>
       </div>
       <div class="settings-actions">
         <button @click="showChangePasswordPopup=true" class="action-button">Zmień hasło</button>
@@ -43,7 +39,7 @@ onBeforeMount(() => {
 
 <style scoped>
 @import url(@/assets/auth-common.css);
-.user-info {
+.profile-picture {
   display: flex;
   padding: 2rem;
   align-items: center;
@@ -51,18 +47,22 @@ onBeforeMount(() => {
   flex-direction: column;
   width: 200px;
   height: 200px;
-  margin: auto;
+  margin: 1.5em auto;
 }
 
-.user-info img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.profile-picture {
+  text-align: center;
 }
 
-.user-info h2 {
-  margin: 1em;
-  white-space: nowrap;
+.user-profile-pic {
+  height: 8rem;
+  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
+  border-radius: 50%;
+}
+
+.user-name {
+  font-size: 1.5rem;
+  margin-top: 1rem;
 }
 
 .settings-actions {

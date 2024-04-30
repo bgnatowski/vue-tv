@@ -1,13 +1,12 @@
 <script setup>
 
 import {onMounted} from "vue";
-import {getAuth, signOut} from "firebase/auth";
-import {useUserStore} from "@/stores/userStore.js";
 import AuthPopup from "@/components/auth/AuthPopup.vue";
+import {useAuthStore} from "@/stores/AuthStore.js";
 
+const authStore = useAuthStore()
 onMounted(() => {
-  useUserStore().logout()
-  signOut(getAuth())
+  authStore.logoutUser();
 });
 
 </script>

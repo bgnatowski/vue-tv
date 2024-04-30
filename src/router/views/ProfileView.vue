@@ -2,28 +2,22 @@
 import UserMovesTile from "@/components/UserMoviesTile.vue"
 import PostTile from "@/components/PostTile.vue";
 import {onBeforeMount, ref} from "vue";
-import {useUserStore} from "@/stores/userStore.js";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import TitleTile from "@/components/TitleTile.vue";
+import {useAuthStore} from "@/stores/AuthStore.js";
 
-const userStore = useUserStore();
-const username = ref('uzytkownik');
-const photoUrl = ref('https://cdn-icons-png.flaticon.com/512/4715/4715330.png');
-
+const authStore = useAuthStore();
+let user = {};
 onBeforeMount(() => {
-  username.value = userStore.currentUsername;
-  photoUrl.vaule = userStore.photoUrl
-  console.log("Profile: ", photoUrl.vaule)
+  user = authStore.user
 })
 
 const showDetails = ref(false);
 const selectedMovie = ref(null);
 
 function handleShowDetails(movie) {
-  console.log("profil, handleShowDetails")
   selectedMovie.value = movie;
   showDetails.value = true;
-  console.log("showDetails.value: ", showDetails.value)
 }
 
 function handleClose() {
@@ -40,8 +34,8 @@ function handleClose() {
     </MovieDetailsPopup>
     <section class="movies-column">
       <div class="profile-picture">
-        <img :src="photoUrl" alt="" class="user-profile-pic">
-        <p class="user-name">{{ username }}</p>
+        <img :src="user.photoUrl" alt="profile avatar" class="user-profile-pic">
+        <p class="user-name">{{ user.username }}</p>
       </div>
       <TitleTile>Filmy obejrzane</TitleTile>
       <UserMovesTile tileType="Filmy do obejrzenia"/>

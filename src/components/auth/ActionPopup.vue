@@ -1,9 +1,9 @@
 <script setup>
-import {computed, ref} from "vue";
+import {computed, reactive, ref} from "vue";
 import paths from "@/router/routerPaths.js";
 import {useRouter} from "vue-router";
-import {changePassword, deleteUser} from "@/services/AuthenticationService.js";
-import {useUserStore} from "@/stores/userStore.js";
+import {useAuthStore} from "@/stores/AuthStore.js";
+
 
 // common for action popup//
 const props = defineProps({
@@ -11,49 +11,55 @@ const props = defineProps({
 })
 
 const emits = defineEmits(['close']);
-const errorMsg = ref('')
+
+const authStore = useAuthStore();
 const router = useRouter();
+
+const errorMsg = ref('')
+
 function closePopup() {
   emits('close');
 }
 
 // delete action
 const deleted = ref()
-const password = ref("");
+const password = ref('');
 
 const isCompletedDeleteForm = computed(() => {
   return !password.value;
 })
 
-async function confirmDeleteAccount(password) {
-  try {
-    deleted.value = await deleteUser(password);
-    if(deleted.value) {
-      useUserStore().logout();
-      await router.push(paths.DELETE_ROUTE);
-    }
-  } catch (error) {
-    errorMsg.value = error;
-  }
+function confirmDeleteAccount(password) {
+  authStore.deleteUser(password)
+      .then((isDeleted) => {
+        if (isDeleted) {
+          deleted.value = isDeleted
+          router.push(paths.DELETE_ROUTE);
+        }
+      })
+      .catch((error) => errorMsg.value = error);
 }
 
 
 // change password action
 const changedPassword = ref()
 
-const currentPassword = ref("");
-const newPassword1 = ref("");
-const newPassword2 = ref("");
+const credentials = reactive({
+  currentPassword: '',
+  newPassword1: '',
+  newPassword2: ''
+});
+
 const isCompletedChangePasswordForm = computed(() => {
-  return !currentPassword.value && (newPassword1 != newPassword2);
+  return !credentials.currentPassword && (credentials.newPassword1 != credentials.newPassword2);
 })
 
-async function confirmChangePassword(current, password1, password2) {
-  try {
-    changedPassword.value = await changePassword(current, password1, password2);
-  } catch (error) {
-    errorMsg.value = error;
-  }
+function confirmChangePassword(credentials) {
+  authStore.changePassword(credentials)
+      .then((isUpdated) => {
+        changedPassword.value = isUpdated;
+      })
+      .catch((error) => errorMsg.value = error)
 }
 
 // change image action
@@ -77,7 +83,7 @@ async function confirmChangeAvatar(image) {
           <img src="@/assets/close-icon.png" alt="Close icon"/>
         </div>
       </div>
-<!--DELETE ACCOUNT-->
+      <!--DELETE ACCOUNT-->
       <form class="action-form" v-if="actionType === 'delete'">
         <h1>Usuń konto</h1>
         <input type="password" placeholder="Wpisz swoje obecne hasło" v-model="password">
@@ -89,12 +95,12 @@ async function confirmChangeAvatar(image) {
         <p v-if="deleted">Będziemy tęsknić :(</p>
         <p v-else>{{ errorMsg }}</p>
       </form>
-<!--CHANGE PASSWORD-->
+      <!--CHANGE PASSWORD-->
       <form class="action-form" v-if="actionType === 'changePassword'">
         <h1>Zmień hasło</h1>
-        <input type="password" v-model="currentPassword" placeholder="Obecne hasło">
-        <input type="password" v-model="newPassword1" placeholder="Nowe hasło">
-        <input type="password" v-model="newPassword2" placeholder="Wpisz ponownie nowe hasło">
+        <input type="password" v-model="credentials.currentPassword" placeholder="Obecne hasło">
+        <input type="password" v-model="credentials.newPassword1" placeholder="Nowe hasło">
+        <input type="password" v-model="credentials.newPassword2" placeholder="Wpisz ponownie nowe hasło">
         <button
             @click.prevent="confirmChangePassword(password)"
             :disabled="isCompletedChangePasswordForm"
@@ -103,10 +109,10 @@ async function confirmChangeAvatar(image) {
         <p v-if="changedPassword">Hasło zmienione</p>
         <p v-else>{{ errorMsg }}</p>
       </form>
-<!--CHANGE USER IMAGE-->
+      <!--CHANGE USER IMAGE-->
       <form class="action-form" v-if="actionType === 'changeAvatar'">
         <h1>Zmień zdjęcie profilowe</h1>
-<!--        <input type="file" v-model="currentPassword" placeholder="Obecne hasło">-->
+        <!--        <input type="file" v-model="currentPassword" placeholder="Obecne hasło">-->
         <button
             @click.prevent="confirmChangeAvatar(password)"
             :disabled="isCompletedChangeAvatarForm"

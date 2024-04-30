@@ -1,19 +1,18 @@
 <script setup>
 
 import {useRouter} from "vue-router";
-import {authenticateWithGoogle} from "@/services/AuthenticationService.js";
+import { useAuthStore } from '@/stores/AuthStore';
 import paths from "@/router/routerPaths.js";
-import {useUserStore} from "@/stores/userStore.js";
 
 const router = useRouter()
+const authStore = useAuthStore();
 
 const signWithGoogle = async () => {
-  try {
-    const currentUser = await authenticateWithGoogle(router);
-    useUserStore().setUser(currentUser.displayName, currentUser.email);
-    await router.push(paths.MAIN_ROUTE);
-  } catch (error) {
-    alert(error);
+  try{
+    await authStore.registerWithGoogle()
+    await router.push(paths.MAIN_ROUTE)
+  }catch (error){
+    alert(error)
   }
 }
 </script>

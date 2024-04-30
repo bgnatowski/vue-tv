@@ -1,46 +1,54 @@
 <script setup>
 
-import {computed, ref, watch} from "vue";
+import {computed, reactive, ref, watch} from "vue";
 import {useRouter} from "vue-router";
-import {signUp} from "@/services/AuthenticationService.js";
+import {useAuthStore} from '@/stores/AuthStore';
 import paths from "@/router/routerPaths.js";
 import AuthPopup from "@/components/auth/AuthPopup.vue";
 import GoogleButton from "@/components/auth/AuthGoogleButton.vue";
 
-const email = ref("");
 const emailRepeat = ref("");
-const username = ref("");
-const password = ref("");
 const passwordRepeat = ref("");
 
 const emailMismatchError = ref('');
 const passwordMismatchError = ref('');
 
 const router = useRouter()
+const authStore = useAuthStore();
+
 const isRegistered = ref(false)
 const errMsg = ref("");
 
 const emits = defineEmits(['registered']);
 
-watch([email, emailRepeat], ([newEmail, newEmailRepeat]) => {
+const credentials = reactive({
+  email: '',
+  password: '',
+  username: '',
+});
+
+watch([credentials.email, emailRepeat], ([newEmail, newEmailRepeat]) => {
   emailMismatchError.value = newEmail !== newEmailRepeat && newEmailRepeat !== '' ? 'E-maile nie są identyczne.' : '';
 });
 
-watch([password, passwordRepeat], ([newPassword, newPasswordRepeat]) => {
+watch([credentials.password, passwordRepeat], ([newPassword, newPasswordRepeat]) => {
   passwordMismatchError.value = newPassword !== newPasswordRepeat && newPasswordRepeat !== '' ? 'Hasła nie są identyczne.' : '';
 });
 
-const register = async () => {
-  try {
-    isRegistered.value = await signUp(email.value, password.value, username.value)
-    emits('registered')
-  } catch (error) {
-    errMsg.value = error;
-  }
+const register = () => {
+  authStore.registerUser(credentials)
+      .then((isRegisteredValue) => {
+        isRegistered.value = isRegisteredValue
+        emits('registered')
+      })
+      .catch((error) => errMsg.value = error);
 };
 
 const isCompletedForm = computed(() => {
-  return !email.value || !emailRepeat.value || !username.value || !password.value || !passwordRepeat.value || email.value !== emailRepeat.value || password.value !== passwordRepeat.value;
+  return !credentials.email || !emailRepeat.value || !credentials.username
+      || !credentials.password || !passwordRepeat.value
+      || credentials.email !== emailRepeat.value
+      || credentials.password !== passwordRepeat.value;
 });
 
 </script>
@@ -52,15 +60,15 @@ const isCompletedForm = computed(() => {
       <h1>Zarejestruj się</h1>
 
       <label id="username" for="username">Nazwa użytkownika</label>
-      <input type="text" placeholder="Nazwa użytkownika" v-model="username"/>
+      <input type="text" placeholder="Nazwa użytkownika" v-model="credentials.username"/>
 
       <label id="email" for="email">E-mail</label>
-      <input type="text" placeholder="E-mail" v-model="email"/>
+      <input type="text" placeholder="E-mail" v-model="credentials.email"/>
       <label id="emailRepeat" for="emailRepeat">Powtórz e-mail</label>
       <input type="text" placeholder="Powtórz e-mail" v-model="emailRepeat"/>
 
       <label id="password" for="password">Hasło</label>
-      <input type="password" placeholder="Hasło" v-model="password"/>
+      <input type="password" placeholder="Hasło" v-model="credentials.password"/>
       <label id="passwordRepeat" for="passwordRepeat">Powtórz hasło</label>
       <input type="password" placeholder="Powtórz hasło" v-model="passwordRepeat"/>
 

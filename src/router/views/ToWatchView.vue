@@ -3,7 +3,7 @@ import MovieTile from "@/components/MovieTile.vue"
 import TitleTile from "@/components/TitleTile.vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import {ref} from "vue";
-import minutesToText from "@/services/timeUtils.js";
+import minutesToText from "@/js/timeUtils.js";
 
 
 const showDetails = ref(false);
