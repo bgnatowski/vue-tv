@@ -1,8 +1,9 @@
 <script setup>
 import MovieTile from "@/components/MovieTile.vue"
-import InfoTile from "@/components/InfoTile.vue";
+import TitleTile from "@/components/TitleTile.vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import {ref} from "vue";
+import minutesToText from "@/js/timeUtils.js";
 
 
 const showDetails = ref(false);
@@ -17,16 +18,25 @@ function handleClose() {
   showDetails.value = false;
 }
 
+const minutes = ref(123456);
+
 </script>
 
 <template>
   <section class="feed-container">
-    <InfoTile></InfoTile>
+    <TitleTile>
+      Filmy do zobaczenia
+      <template v-slot:p>Aby obejrzeć wszystko z tej listy, będziesz potrzebował:
+        <strong v-text="minutesToText(minutes)"></strong>
+      </template>
+    </TitleTile>
+
     <MovieDetailsPopup v-if="showDetails"
                        :movie="selectedMovie"
                        @close="handleClose">
 
     </MovieDetailsPopup>
+
     <MovieTile @show-details="handleShowDetails"/>
     <MovieTile @show-details="handleShowDetails"/>
     <MovieTile @show-details="handleShowDetails"/>

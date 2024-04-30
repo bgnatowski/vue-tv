@@ -1,26 +1,12 @@
 <script setup>
-import {ref} from "vue";
 import movie from "@/models/movie";
 import RatingStars from "@/components/RatingStars.vue";
-
-const isShowDropdown = ref(false)
-const isShowButton = ref(true)
 
 const props = defineProps({
   movie: Object
 });
 
 const emits = defineEmits(['close']);
-
-function showDropdown() {
-  isShowDropdown.value = true
-  isShowButton.value = false;
-}
-
-function hideDropdown() {
-  isShowDropdown.value = false;
-  isShowButton.value = true;
-}
 
 // Funkcja do emitowania zdarzenia zamknięcia popupa
 function closePopup() {
@@ -32,63 +18,49 @@ function closePopup() {
   <div class="overlay">
     <div class="post">
       <div class="movie-card">
-        <div class="movie-poster">
-          <img :src="movie.posterUrl" alt="Movie poster for Diuna"/>
-        </div>
-        <div class="movie-details">
-          <h1 class="movie-title">Diuna</h1>
-          <RatingStars read-only></RatingStars>
-          <div>
-            <table class="tg">
-              <thead>
-              <tr>
-                <td class="tg-0pky">Premiera:</td>
-                <td class="tg-0lax">{{ movie.premiere }}</td>
-              </tr>
-              <tr>
-                <th class="tg-0pky">Gatunek:</th>
-                <th class="tg-0lax">{{ movie.genre }}</th>
-              </tr>
-              <tr>
-                <td class="tg-0pky">Długość:</td>
-                <td class="tg-0lax">{{ movie.duration }}</td>
-              </tr>
-              </thead>
-            </table>
+        <div class="close-bar">
+          <div class="icon-button" @click="closePopup">
+            <img src="@/assets/close-icon.png" alt="Close icon"/>
           </div>
-          <h2>Opis</h2>
-          <p v-text="movie.description" v-dragscroll>
-          </p>
         </div>
-        <!--        jesli bedzie potrzebne>-->
-        <!--        <div class="dropdown" @mouseover="showDropdown" @mouseleave="hideDropdown">-->
-        <!--          <div class="dropdown-options-icon" v-if="isShowButton">-->
-        <!--            <img src="@/resources/dots-icon.png" alt="Movie Options"/>-->
-        <!--          </div>-->
-        <!--          <div v-if="isShowDropdown" class="dropdown-content">-->
-        <!--            <ul class="dropdown-list">-->
-        <!--              <li class="dropdown-option">Wszystkie informacje</li>-->
-        <!--              <li class="dropdown-option">2 opcja</li>-->
-        <!--            </ul>-->
-        <!--          </div>-->
-        <!--        </div>-->
-        <div class="close-button" @click="closePopup">
-          <img src="@/assets/close-icon.png" alt="Close icon"/>
+        <div class="upper-bar">
+          <div class="movie-poster">
+            <img :src="movie.posterUrl" alt="Movie poster for Diuna"/>
+          </div>
+          <div class="movie-details">
+            <h1 class="movie-title">Diuna</h1>
+            <div class="table">
+              <div class="column-1">
+                <p>Premiera:</p>
+                <p>Gatunek:</p>
+                <p>Długość:</p>
+              </div>
+              <div class="column-2">
+                <p>{{ movie.premiere }}</p>
+                <p>{{ movie.genre }}</p>
+                <p>{{ movie.duration }}</p>
+              </div>
+            </div>
+            <RatingStars read-only></RatingStars>
+          </div>
+        </div>
+        <div class="lower-bar">
+          <h2>Opis</h2>
+          <div class="movie-description">
+            <p v-text="movie.description" v-dragscroll="true"></p>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <style scoped>
-.ratings {
-  display: flex;
-  flex-direction: row;
-}
-
 .post {
+  flex-direction: row;
   background-color: white;
-  width: 70%;
+  width: 80vw;
+  height: 80vh;
+  padding: 1em;
 }
 
 .overlay {
@@ -101,60 +73,65 @@ function closePopup() {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
-}
-
-/*.show {*/
-/*  display: block;*/
-/*}*/
-
-/*.hide {*/
-/*  display: none;*/
-/*}*/
-
-.user-info {
-  display: flex;
-  padding: .2rem;
-  justify-content: flex-start;
-  align-content: flex-start;
-}
-
-.user-info p {
-  justify-content: center;
-  align-content: center;
-}
-
-.upper-bar {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.user-image {
-  display: flex;
-  height: 35px;
-  width: 35px;
-  align-content: center;
-  justify-content: center;
-  margin: auto 1em auto 0;
+  z-index: 9999;
 }
 
 .movie-card {
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  width: 100%;
   height: 100%;
-  position: relative;
+  padding: .5em;
+}
+
+.upper-bar {
+  display: flex;
+  min-height: 40%;
+  max-height: 40%;
+  width: 100%;
+}
+
+.lower-bar {
+  display: flex;
+  flex-direction: column;
+  min-height: 40%;
+  max-height: 40%;
+  width: 100%;
+}
+
+.close-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-height: 10%;
+  width: 100%;
+}
+
+.icon-button {
+  border-radius: 2em;
+  padding: 10px;
+}
+
+.icon-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.movie-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 50%;
+  gap: .3rem;
+  max-height: fit-content;
+  overflow-y: auto;
 }
 
 .movie-poster {
+  display: flex;
+  width: auto;
   height: 100%;
-  min-width: 50px;
-  min-height: 100px;
-  max-width: 300px;
-  max-height: 600px;
-  margin: .2em;
-  aspect-ratio: 0.7;
-
+  margin-right: 1em;
 }
 
 .movie-poster img {
@@ -165,174 +142,85 @@ function closePopup() {
   box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.50);
 }
 
-.movie-details {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  margin: 0.5em 0;
-  padding: 0.5em 0;
-  width: 100%;
-  gap: 10px;
+.movie-card .icon-button:hover {
+  background-color: var(--lighter-main);
+  border: none;
+  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
 }
 
-.movie-title {
-  color: #000;
-  font-size: 2em;
+.movie-card .icon-button:active {
+  background-color: var(--clicked-button);
 }
 
-.movie-details p {
+.lower-bar h2 {
+  margin-top: 10px;
+}
+
+.movie-description {
   text-align: justify;
   text-justify: inter-word;
   overflow-y: auto;
   scrollbar-width: thin;
-  hyphens: auto;
+  min-height: fit-content;
 }
 
-/*------dropdown----*/
-.close-button:hover {
-  background-color: var(--lighter-main);
-  border: none;
-  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
+.movie-details .movie-title {
+  font-size: 2em;
 }
 
-.close-button:active {
-  background-color: var(--clicked-button);
-}
-
-.close-button img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.close-button {
-  height: 50px;
-  width: 50px;
-  border-radius: 2em;
-  padding: .8em;
-  transition: .5s ease all;
-  cursor: pointer;
-}
-
-.close-button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  transition: .5s ease all;
-}
-
-.dropdown {
-  position: absolute;
-  top: 50px;
-  right: 0;
-  transition: .5s ease all;
-}
-
-
-.dropdown-content {
-  transition: .5s ease all;
-  position: static;
-  background-color: #f9f9f9;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+.table {
+  display: flex;
+  flex-direction: row;
   white-space: nowrap;
-  border-radius: 1.2em;
-  padding: .5em;
-  font-size: .8em;
 }
 
-.dropdown-list {
-  list-style-type: none;
-  cursor: pointer;
-  flex-direction: column;
-  color: #000;
-  padding: .2em .5em;
-  border-radius: 1.2em;
+.table p {
+  font-size: 1em;
 }
 
-.dropdown-option {
-  font-size: 1.2em;
-  padding: .5em 1em;
-  border-radius: 1.2em;
+.table .column-1 {
+  font-weight: 600;
+  margin-right: 5px;
 }
 
-.dropdown-options-icon {
-  height: 50px;
-  width: 50px;
-  border-radius: 2em;
-  padding: .8em;
-  transition: .5s ease all;
-  cursor: pointer;
-}
-
-.dropdown-option:hover {
-  background-color: var(--lighter-main);
-  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
-}
-
-.dropdown-option:active {
-  background-color: var(--clicked-button);
-}
-
-.dropdown-options-icon:hover {
-  background-color: var(--lighter-main);
-  border: none;
-  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
-}
-
-.dropdown-options-icon:active {
-  background-color: var(--clicked-button);
-}
-
-.dropdown-options-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.tg {
-  border: none;
-  border-collapse: collapse;
-}
-
-.tg td {
-  overflow: hidden;
-  word-break: normal;
-}
-
-.tg th {
-  font-weight: normal;
-  overflow: hidden;
-  word-break: normal;
-  padding: 5px 0;
-}
-
-.tg .tg-0pky {
-  border-color: inherit;
-  text-align: left;
-  vertical-align: top;
-}
-
-.tg .tg-0lax {
-  text-align: left;
-  padding: 0 5px;
+@media (min-width: 2000px){
+  .icon-button {
+    border-radius: 2em;
+    padding: 10px;
+    width: 50px;
+    height: 50px;
+  }
 }
 
 
-@media (max-width: 979px) {
-  .post {
-    height: 50rem;
-    min-width: 50%;
-    overflow-y: scroll;
+@media screen and (max-width: 737px) {
+  .movie-details .movie-title {
+    font-size: 1.2em;
   }
 
-  .movie-card {
-    flex-direction: column;
+  .movie-description p,
+  .table p {
+    font-size: .8em;
   }
+}
 
+@media screen and (max-width: 300px)  {
   .movie-poster {
-    margin: auto;
-    min-height: 25rem;
+    display: none;
+  }
+
+  .lower-bar,
+  .upper-bar{
+    min-height: auto;
+  }
+
+  .movie-details .movie-title {
+    font-size: 1em;
+  }
+
+  .movie-description p,
+  .table p {
+    font-size: .5em;
   }
 }
-
 </style>

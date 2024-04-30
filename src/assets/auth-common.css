@@ -52,6 +52,7 @@
     font-size: calc((0.2em + .5vmin) + (0.2em + .5vmax));
 }
 
+
 .buttons {
     display: flex;
     flex-direction: column;
@@ -136,7 +137,6 @@ button[disabled] {
 }
 
 @media (min-width: 1048px){
-    .panel-container
     .panel-container {
         border-radius: 3em;
         margin: 1em;

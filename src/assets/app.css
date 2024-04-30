@@ -33,6 +33,15 @@
     min-height: 100vh;
 }
 
+.main-auth-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 0 1rem 0;
+}
+
 .feed-container {
     display: flex;
     flex-direction: column;
@@ -42,6 +51,7 @@
     width: 100%;
     transition: .5s ease all;
 }
+
 
 .post {
     display: flex;
@@ -57,33 +67,14 @@
     height:fit-content;
 }
 
-
-.info-tile {
-    display: flex;
-    flex-direction: column;
-    align-self: center;
-    justify-content: center;
-    text-align: center;
-    gap: 20px;
-}
-
-.info-tile h1 {
-    font-weight: 400;
-    font-size: 1.5em;
-    font-family: "Bruno Ace SC", sans-serif;
-}
-
 .bruno-ace-regular {
     font-family: "Bruno Ace", sans-serif;
     font-weight: 400;
-    font-style: normal;
-
 }
 
 .bruno-ace-bold {
     font-family: "Bruno Ace", sans-serif;
     font-weight: 600;
-    font-style: normal;
 }
 
 .icon-button {
@@ -93,6 +84,8 @@
     align-content: center;
     justify-content: center;
     margin: 0;
+    transition: .5s ease all;
+    cursor: pointer;
 }
 
 .rotate180 {
@@ -101,4 +94,32 @@
 
 .rotate360 {
     transform: rotate(360deg);
+}
+
+.tg {
+    border: none;
+    border-collapse: collapse;
+}
+
+.tg td {
+    overflow: hidden;
+    word-break: normal;
+}
+
+.tg th {
+    font-weight: normal;
+    overflow: hidden;
+    word-break: normal;
+    padding: 5px 0;
+}
+
+.tg .tg-0pky {
+    border-color: inherit;
+    text-align: left;
+    vertical-align: top;
+}
+
+.tg .tg-0lax {
+    text-align: left;
+    padding: 0 5px;
 }

@@ -5,7 +5,7 @@ import paths from "@/router/routerPaths.js";</script>
     <router-link :to="paths.MAIN_ROUTE" class="router-link-custom">
       <div class="sidebar-button">
         <div class="icon-button">
-          <img src="../assets/main.png" alt="Strona główna">
+          <img src="../../assets/main.png" alt="Strona główna">
         </div>
         <span class="button-text">Strona główna</span>
       </div>
@@ -82,7 +82,7 @@ import paths from "@/router/routerPaths.js";</script>
 }
 
 .sidebar-button {
-  border-radius: 1em 1em 1em 1em;
+  border-radius: 1em;
   display: flex;
   flex-direction: row;
   justify-content: left;
@@ -119,14 +119,22 @@ import paths from "@/router/routerPaths.js";</script>
   margin-right: 1em;
 }
 
-@media (max-width: 979px) {
+@media screen and (max-width: 1000px){
+  .icon-button {
+    margin: 0;
+    height: 28px;
+    width: 28px;
+  }
   .button-text {
     transition: .5s ease all;
     display: none;
   }
-}
 
-@media (max-width: 1000px){
+  .sidebar-button {
+    border-radius: 2.5em;
+    padding: 18px;
+  }
+
   .sidebar {
     margin: 0;
     bottom: 0;
@@ -136,32 +144,79 @@ import paths from "@/router/routerPaths.js";</script>
     position: fixed;
     justify-content: space-evenly;
     align-items: center;
-    z-index: 9999;
+    z-index: 999;
     background-color: white;
+    box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
+    height: 75px;
   }
-  .sidebar-button {
-    border-radius: 2.5em;
-  }
+
 }
 
-@media (max-width: 600px){
+@media screen and (max-width: 600px){
   .icon-button {
     height: 25px;
     width: 25px;
   }
+
+  .sidebar {
+    gap: 0;
+    height: 70px;
+  }
+
+  .sidebar-button {
+    padding: 17px;
+  }
 }
 
-@media (max-width: 460px){
+@media screen and (max-width: 460px){
+  .icon-button {
+    height: 24px;
+    width: 24px;
+  }
+
+  .sidebar-button {
+    padding: 16px;
+  }
+}
+
+@media screen and (max-width: 400px){
+  .icon-button {
+    height: 23px;
+    width: 23px;
+  }
+
+
+  .sidebar-button {
+    padding: 15px;
+  }
+}
+
+@media screen and (max-width: 320px){
   .icon-button {
     height: 20px;
     width: 20px;
   }
-}
 
-@media (max-width: 460px){
-  .icon-button {
-    height: 20px;
-    width: 20px;
+  .sidebar {
+    gap: 0;
+    height: 60px;
+  }
+
+  .sidebar-button {
+    padding: 13px;
   }
 }
+
+@media screen and (max-width: 280px){
+  .icon-button {
+    height: 18px;
+    width: 18px;
+  }
+
+  .sidebar-button {
+    padding: 12px;
+    overflow-y: auto;
+  }
+}
+
 </style>

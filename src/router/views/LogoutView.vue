@@ -1,20 +1,19 @@
 <script setup>
 
 import {onMounted} from "vue";
-import {getAuth, signOut} from "firebase/auth";
-import LogInOutPopup from "@/components/LogInOutPopup.vue";
+import AuthPopup from "@/components/auth/AuthPopup.vue";
+import {useAuthStore} from "@/stores/AuthStore.js";
 
-
-//DEV LOGOUT
+const authStore = useAuthStore()
 onMounted(() => {
-  signOut(getAuth())
+  authStore.logoutUser();
 });
 
 </script>
 
 <template>
   <div class="main-container">
-    <LogInOutPopup out></LogInOutPopup>
+    <AuthPopup type="out"></AuthPopup>
   </div>
 </template>
 

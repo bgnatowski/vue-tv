@@ -1,6 +1,6 @@
 <script setup>
 import {useRouter} from "vue-router";
-import SignInGoogleButton from "@/components/SignInGoogleButton.vue";
+import SignInGoogleButton from "@/components/auth/AuthGoogleButton.vue";
 import paths from "@/router/routerPaths.js";
 
 const router = useRouter()

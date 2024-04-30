@@ -1,44 +1,44 @@
 <script setup>
-import {computed, ref} from "vue";
-import {useRouter} from "vue-router";
-import SignInGoogleButton from "@/components/SignInGoogleButton.vue";
-import {authenticate} from "@/services/AuthenticationService.js";
+import {computed, reactive, ref} from "vue";
+import GoogleButton from "@/components/auth/AuthGoogleButton.vue";
 import paths from "@/router/routerPaths.js";
-
-const email = ref("");
-const password = ref("");
-const errMsg = ref("");
+import {useRouter} from "vue-router";
+import {useAuthStore} from "@/stores/AuthStore.js";
 
 const router = useRouter();
 
-const login = async () => {
-  try {
-    await authenticate(email.value, password.value);
-    await router.push(paths.MAIN_ROUTE)
-  } catch (error) {
-    errMsg.value = error;
-  }
-};
+const credentials = reactive({
+  email: '',
+  password: ''
+});
+const authStore = useAuthStore();
+const errMsg = ref("");
 
 const isCompletedForm = computed(() => {
-  return !email.value || !password.value;
+  return !credentials.email || !credentials.password;
 })
 
+const login = async () => {
+  try {
+    await authStore.loginUser(credentials)
+    await router.push(paths.MAIN_ROUTE)
+  } catch (error){
+    errMsg.value = error
+  }
+}
 </script>
+
 
 <template>
   <div class="panel-container">
     <form>
       <h1>Zaloguj się</h1>
-
       <label id="email" for="email">E-mail</label>
-      <input type="email" placeholder="E-mail" v-model="email"/>
+      <input type="email" placeholder="E-mail" v-model="credentials.email"/>
       <label id="password" for="password">Hasło</label>
-      <input type="password" placeholder="Hasło" v-model="password"/>
-
+      <input type="password" placeholder="Hasło" v-model="credentials.password"/>
       <p v-if="errMsg"> {{ errMsg }}</p>
     </form>
-
     <div class="buttons">
       <button
           @click="login"
@@ -46,7 +46,7 @@ const isCompletedForm = computed(() => {
           type="submit"
           class="action-button">Zaloguj się
       </button>
-      <SignInGoogleButton class="google-button"></SignInGoogleButton>
+      <GoogleButton class="google-button"></GoogleButton>
     </div>
     <p class="signup-text">Nie masz jeszcze konta?
       <a class="signup-link" @click="router.push(paths.REGISTER_ROUTE)">Utwórz je</a>
