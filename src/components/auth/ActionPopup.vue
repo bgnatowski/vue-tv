@@ -2,19 +2,28 @@
 import {computed, ref} from "vue";
 import paths from "@/router/routerPaths.js";
 import {useRouter} from "vue-router";
-import {deleteUser} from "@/services/AuthenticationService.js";
+import {changePassword, deleteUser} from "@/services/AuthenticationService.js";
 import {useUserStore} from "@/stores/userStore.js";
 
+// common for action popup//
+const props = defineProps({
+  actionType: String
+})
 
 const emits = defineEmits(['close']);
-
+const errorMsg = ref('')
 const router = useRouter();
 function closePopup() {
   emits('close');
 }
 
+// delete action
 const deleted = ref()
-const errorMsg = ref('')
+const password = ref("");
+
+const isCompletedDeleteForm = computed(() => {
+  return !password.value;
+})
 
 async function confirmDeleteAccount(password) {
   try {
@@ -28,13 +37,26 @@ async function confirmDeleteAccount(password) {
   }
 }
 
-const password = ref("");
-const isCompletedForm = computed(() => {
-  return !password.value;
+
+// change password action
+const changed = ref()
+
+const currentPassword = ref("");
+const newPassword1 = ref("");
+const newPassword2 = ref("");
+const isCompletedChangeForm = computed(() => {
+  return !currentPassword.value && (newPassword1 != newPassword2);
 })
 
-
+async function confirmChangePassword(current, password1, password2) {
+  try {
+    changed.value = await changePassword(current, password1, password2);
+  } catch (error) {
+    errorMsg.value = error;
+  }
+}
 </script>
+
 <template>
   <div class="overlay">
     <div class="panel-container">
@@ -43,15 +65,30 @@ const isCompletedForm = computed(() => {
           <img src="@/assets/close-icon.png" alt="Close icon"/>
         </div>
       </div>
-      <form class="delete-account-form">
+<!--DELETE ACCOUNT-->
+      <form class="action-form" v-if="actionType === 'delete'">
         <h1>Usuń konto</h1>
         <input type="password" placeholder="Wpisz swoje obecne hasło" v-model="password">
         <button
             @click.prevent="confirmDeleteAccount(password)"
-            :disabled="isCompletedForm"
+            :disabled="isCompletedDeleteForm"
             class="action-button">Potwierdz
         </button>
         <p v-if="deleted">Będziemy tęsknić :(</p>
+        <p v-else>{{ errorMsg }}</p>
+      </form>
+<!--CHANGE PASSWORD-->
+      <form class="action-form" v-if="actionType === 'change'">
+        <h1>Zmień hasło</h1>
+        <input type="password" v-model="currentPassword" placeholder="Obecne hasło">
+        <input type="password" v-model="newPassword1" placeholder="Nowe hasło">
+        <input type="password" v-model="newPassword2" placeholder="Wpisz ponownie nowe hasło">
+        <button
+            @click.prevent="confirmChangePassword(password)"
+            :disabled="isCompletedChangeForm"
+            class="action-button">Potwierdz
+        </button>
+        <p v-if="changed">Hasło zmienione</p>
         <p v-else>{{ errorMsg }}</p>
       </form>
     </div>
@@ -96,7 +133,7 @@ const isCompletedForm = computed(() => {
   z-index: 9999;
 }
 
-.delete-account-form {
+.action-form {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -130,17 +167,5 @@ const isCompletedForm = computed(() => {
     width: 50px;
     height: 50px;
   }
-}
-
-@media screen and (max-width: 737px) {
-
-}
-
-@media screen and (max-width: 300px) {
-  .lower-bar,
-  .upper-bar {
-    min-height: auto;
-  }
-
 }
 </style>

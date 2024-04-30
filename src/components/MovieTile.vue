@@ -8,10 +8,7 @@ defineProps({
 })
 
 const isPublic = ref(false);
-const isWatched = ref(false);
-const isInfoPopup = ref(false);
 
-// definiowanie zdarzeń, które mogą być emitowane
 const emit = defineEmits(['show-details']);
 
 function publicMovie() {

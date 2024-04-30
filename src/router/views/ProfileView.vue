@@ -1,9 +1,10 @@
 <script setup>
 import UserMovesTile from "@/components/UserMoviesTile.vue"
 import PostTile from "@/components/PostTile.vue";
-import ProfilePostTitle from "@/components/ProfilePostTitle.vue";
 import {onBeforeMount, ref} from "vue";
 import {useUserStore} from "@/stores/userStore.js";
+import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
+import TitleTile from "@/components/TitleTile.vue";
 
 const userStore = useUserStore();
 const username = ref('<uzytkownik>');
@@ -11,28 +12,48 @@ onBeforeMount(() => {
   username.value = userStore.currentUsername;
 })
 
+
+const showDetails = ref(false);
+const selectedMovie = ref(null);
+
+function handleShowDetails(movie) {
+  console.log("profil, handleShowDetails")
+  selectedMovie.value = movie;
+  showDetails.value = true;
+  console.log("showDetails.value: ", showDetails.value)
+}
+
+function handleClose() {
+  showDetails.value = false;
+}
+
 </script>
 
 <template>
   <section class="feed-container">
-    <div class="movies-column">
+    <MovieDetailsPopup v-if="showDetails"
+                       :movie="selectedMovie"
+                       @close="handleClose">
+    </MovieDetailsPopup>
+    <section class="movies-column">
       <div class="profile-picture">
         <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
         <p class="user-name">{{ username }}</p>
       </div>
-      <ProfilePostTitle>Filmy obejrzane</ProfilePostTitle>
+      <TitleTile>Filmy obejrzane</TitleTile>
       <UserMovesTile tileType="Filmy do obejrzenia"/>
-      <ProfilePostTitle>Filmy obejrzane</ProfilePostTitle>
+      <TitleTile>Filmy obejrzane</TitleTile>
       <UserMovesTile tileType="Filmy do obejrzenia"/>
-    </div>
-    <div class="posts-column">
-      <ProfilePostTitle>Twoje recenzje</ProfilePostTitle>
+    </section>
+    <section class="posts-column">
+<!--      todo: if-user self -> twoje recenzje else -> recenzje znajomego -->
+      <TitleTile>Twoje recenzje</TitleTile>
       <div class="posts" v-dragscroll>
-        <PostTile profile></PostTile>
-        <PostTile profile></PostTile>
-        <PostTile profile></PostTile>
+        <PostTile profile @show-details="handleShowDetails"></PostTile>
+        <PostTile profile @show-details="handleShowDetails"></PostTile>
+        <PostTile profile @show-details="handleShowDetails"></PostTile>
       </div>
-    </div>
+    </section>
   </section>
 </template>
 

@@ -4,8 +4,8 @@ import {computed, ref, watch} from "vue";
 import {useRouter} from "vue-router";
 import {signUp} from "@/services/AuthenticationService.js";
 import paths from "@/router/routerPaths.js";
-import AuthPopup from "@/components/AuthPopup.vue";
-import GoogleButton from "@/components/GoogleButton.vue";
+import AuthPopup from "@/components/auth/AuthPopup.vue";
+import GoogleButton from "@/components/auth/AuthGoogleButton.vue";
 
 const email = ref("");
 const emailRepeat = ref("");

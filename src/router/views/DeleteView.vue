@@ -1,14 +1,16 @@
 <script setup>
-import LoginComponent from "@/views/LoginComponent.vue";
+
+import AuthPopup from "@/components/auth/AuthPopup.vue";
+
 </script>
 
 <template>
   <div class="main-container">
-    <LoginComponent/>
+    <AuthPopup type="delete"></AuthPopup>
   </div>
 </template>
 
-<style scoped>
+<style>
 .main-container {
   display: flex;
   flex-direction: column;
@@ -18,5 +20,3 @@ import LoginComponent from "@/views/LoginComponent.vue";
   padding: 1rem 0 1rem 0;
 }
 </style>
-
-

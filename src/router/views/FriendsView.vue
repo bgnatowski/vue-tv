@@ -1,10 +1,11 @@
 <script setup>
 import Friends from "@/components/FriendsComponent.vue"
+import TitleTile from "@/components/TitleTile.vue";
 </script>
 
 <template>
-  <div class="watched-container">
-    <h1>Znajomi</h1>
+  <section class="feed-container">
+    <TitleTile>Znajomi</TitleTile>
     <Friends/>
     <Friends/>
     <Friends/>
@@ -12,7 +13,7 @@ import Friends from "@/components/FriendsComponent.vue"
     <main class="user-content">
       <h2>---Koniec---</h2>
     </main>
-  </div>
+  </section>>
 </template>
 
 <style scoped>

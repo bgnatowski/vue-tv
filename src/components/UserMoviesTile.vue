@@ -1,4 +1,4 @@
-<script setup>import {nextTick, onMounted, ref} from "vue";
+<script setup>
 
 const props = defineProps({
   tileType: String,

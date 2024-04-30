@@ -5,7 +5,7 @@ import paths from "@/router/routerPaths.js";</script>
     <router-link :to="paths.MAIN_ROUTE" class="router-link-custom">
       <div class="sidebar-button">
         <div class="icon-button">
-          <img src="../assets/main.png" alt="Strona główna">
+          <img src="../../assets/main.png" alt="Strona główna">
         </div>
         <span class="button-text">Strona główna</span>
       </div>

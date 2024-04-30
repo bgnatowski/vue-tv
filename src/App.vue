@@ -2,35 +2,32 @@
 import {onMounted, ref, watch} from "vue";
 import {useRoute} from "vue-router";
 import paths from "@/router/routerPaths.js";
-import NavbarComponent from "@/components/NavbarComponent.vue";
-import SidebarComponent from "@/components/SidebarComponent.vue";
-import FooterComponent from "@/components/FooterComponent.vue";
+import NavbarComponent from "@/components/page/NavbarComponent.vue";
+import SidebarComponent from "@/components/page/SidebarComponent.vue";
+import FooterComponent from "@/components/page/FooterComponent.vue";
 import {useUserStore} from "@/stores/userStore.js";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 
+const route = useRoute();
 const showFooter = ref(false);
-const isSidebarVisible = ref(true);
+const isLoggedIn = ref(false);
+const showSidebar = ref(false);
 
 function toggleSidebar() {
-  isSidebarVisible.value = !isSidebarVisible.value;
+  showSidebar.value = !showSidebar.value;
 }
 
-const userStore = useUserStore();
-const isLoggedIn = ref(false);
-
-let auth;
 onMounted(() => {
-  auth = getAuth()
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(getAuth(), (user) => {
     if (route.path == paths.REGISTER_ROUTE) {
       isLoggedIn.value = false;
     } else {
       isLoggedIn.value = !!user;
-      isSidebarVisible.value = !isSidebarVisible.value;
+      showSidebar.value = !showSidebar.value;
     }
   })
 });
-const route = useRoute();
+
 watch(
     () => route.path,
     (newPath) => {
@@ -42,11 +39,11 @@ watch(
 </script>
 
 <template>
-  <NavbarComponent v-if="isLoggedIn" :isSidebarVisible="isSidebarVisible"
+  <NavbarComponent v-if="isLoggedIn" :isSidebarVisible="showSidebar"
                    @toggle-sidebar="toggleSidebar"></NavbarComponent>
   <main class="container">
     <transition name="sidebar">
-      <SidebarComponent v-if="isSidebarVisible && isLoggedIn"></SidebarComponent>
+      <SidebarComponent v-if="showSidebar && isLoggedIn"></SidebarComponent>
     </transition>
     <router-view></router-view>
   </main>

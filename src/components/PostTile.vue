@@ -28,6 +28,14 @@ onMounted(async () => {
     isDraggable.value = true;
   }
 });
+
+const emit = defineEmits(['show-details']);
+
+function showInfo() {
+  emit('show-details');
+  console.log('wyemitowano show details');
+}
+
 </script>
 
 <template>
@@ -78,8 +86,9 @@ onMounted(async () => {
         </div>
         <div v-if="isShowDropdown" class="dropdown-content">
           <ul class="dropdown-list">
-            <li class="dropdown-option">Wszystkie informacje</li>
-            <li class="dropdown-option">2 opcja</li>
+            <li @click="showInfo" class="dropdown-option">Więcej o filmie</li>
+            <li v-if="!profile" class="dropdown-option">Dodaj do obejrzenia (jesli nie jest jeszcze obejrzany)</li>
+            <li v-else class="dropdown-option">Usuń post</li>
           </ul>
         </div>
       </div>
@@ -189,18 +198,9 @@ onMounted(async () => {
 }
 
 .dropdown-option {
-  font-size: 1.2em;
-  padding: .5em 1em;
-  border-radius: 1.2em;
-}
-
-.dropdown-options-icon {
-  height: 50px;
-  width: 50px;
-  border-radius: 2em;
-  padding: .8em;
-  transition: .5s ease all;
-  cursor: pointer;
+  font-size: .8em;
+  padding: .4em .8em;
+  border-radius: 1em;
 }
 
 .dropdown-option:hover {
@@ -210,22 +210,6 @@ onMounted(async () => {
 
 .dropdown-option:active {
   background-color: var(--clicked-button);
-}
-
-.dropdown-options-icon:hover {
-  background-color: var(--lighter-main);
-  border: none;
-  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
-}
-
-.dropdown-options-icon:active {
-  background-color: var(--clicked-button);
-}
-
-.dropdown-options-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
 }
 
 @media screen and (max-width: 728px) {

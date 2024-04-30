@@ -1,10 +1,9 @@
 <script setup>
 import {onBeforeMount, ref} from 'vue';
-import ChangePasswordPopup from "@/components/ChangePasswordPopup.vue";
-import DeleteAccountPopup from "@/components/DeleteAccountPopup.vue";
 import routerPaths from "@/router/routerPaths.js";
 import {useRouter} from "vue-router";
 import {useUserStore} from "@/stores/userStore.js";
+import ActionPopup from "@/components/auth/ActionPopup.vue";
 
 const showChangePasswordPopup = ref(false);
 const showDeleteAccountPopup = ref(false);
@@ -28,8 +27,8 @@ onBeforeMount(() => {
         <button @click="showDeleteAccountPopup=true" class="action-button">Usuń konto</button>
         <button class="action-button" @click="router.push(routerPaths.LOGOUT_ROUTE)">Wyloguj</button>
       </div>
-      <ChangePasswordPopup v-if="showChangePasswordPopup" @close="showChangePasswordPopup=false"></ChangePasswordPopup>
-      <DeleteAccountPopup v-if="showDeleteAccountPopup" @close="showDeleteAccountPopup=false"></DeleteAccountPopup>
+      <ActionPopup action-type="change" v-if="showChangePasswordPopup" @close="showChangePasswordPopup=false"></ActionPopup>
+      <ActionPopup action-type="delete" v-if="showDeleteAccountPopup" @close="showDeleteAccountPopup=false"></ActionPopup>
     </div>
   </section>
 </template>
@@ -51,6 +50,11 @@ onBeforeMount(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.user-info h2 {
+  margin: 1em;
+  white-space: nowrap;
 }
 
 .settings-actions {

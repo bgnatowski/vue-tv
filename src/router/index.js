@@ -40,7 +40,7 @@ const router = createRouter({
         },
         {
             path: paths.MAIN_ROUTE,
-            component: () => import("./views/MainPageView.vue"),
+            component: () => import("./views/MainView.vue"),
             name: "Main",
             meta: {
                 requiresAuth: true,
