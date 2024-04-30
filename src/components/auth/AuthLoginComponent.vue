@@ -19,7 +19,7 @@ const isCompletedForm = computed(() => {
 const login = async () => {
   try {
     const currentUser = await authenticate(email.value, password.value);
-    useUserStore().setUser(currentUser.displayName, currentUser.email);
+    useUserStore().setUser(currentUser.displayName, currentUser.email, currentUser.photoURL);
     await router.push(paths.MAIN_ROUTE)
   } catch (error) {
     errMsg.value = error;

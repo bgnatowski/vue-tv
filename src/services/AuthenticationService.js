@@ -17,7 +17,11 @@ async function authenticateWithGoogle() {
         const result = await signInWithPopup(getAuth(), new GoogleAuthProvider())
         const user = result.user;
         const username = user.email.split('@')[0];
-        await updateProfile(user, {displayName: username});
+        const photoUrl = user.photoURL;
+        await updateProfile(user, {
+            displayName: username,
+            photoURL: photoUrl || "https://cdn-icons-png.flaticon.com/512/4715/4715330.png"
+        });
         return user
     } catch (error) {
         console.error("Błąd logowania z Google", error);
@@ -39,7 +43,11 @@ async function signUp(email, password, username) {
     try {
         const userCredential = await createUserWithEmailAndPassword(getAuth(), email, password);
         const user = userCredential.user;
-        await updateProfile(user, {displayName: username});
+        const defaultPhotoUrl = "https://cdn-icons-png.flaticon.com/512/4715/4715330.png";
+        await updateProfile(user, {
+            displayName: username,
+            photoURL: defaultPhotoUrl
+        });
         await signOutUser();
         return true
     } catch (error) {

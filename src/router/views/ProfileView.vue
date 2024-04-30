@@ -7,11 +7,14 @@ import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import TitleTile from "@/components/TitleTile.vue";
 
 const userStore = useUserStore();
-const username = ref('<uzytkownik>');
+const username = ref('uzytkownik');
+const photoUrl = ref('https://cdn-icons-png.flaticon.com/512/4715/4715330.png');
+
 onBeforeMount(() => {
   username.value = userStore.currentUsername;
+  photoUrl.vaule = userStore.photoUrl
+  console.log("Profile: ", photoUrl.vaule)
 })
-
 
 const showDetails = ref(false);
 const selectedMovie = ref(null);
@@ -37,7 +40,7 @@ function handleClose() {
     </MovieDetailsPopup>
     <section class="movies-column">
       <div class="profile-picture">
-        <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
+        <img :src="photoUrl" alt="" class="user-profile-pic">
         <p class="user-name">{{ username }}</p>
       </div>
       <TitleTile>Filmy obejrzane</TitleTile>

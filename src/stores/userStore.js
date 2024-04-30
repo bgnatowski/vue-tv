@@ -4,23 +4,27 @@ export const useUserStore = defineStore('userStore', {
     id: 'userStore',
     state: () => ({
         _currentUsername: localStorage.getItem('username') ?? null,
-        _currentEmail: localStorage.getItem('email') ?? null
+        _currentEmail: localStorage.getItem('email') ?? null,
+        _photoUrl: localStorage.getItem('photoUrl') ?? null
     }),
     getters: {
         currentUsername: state => state._currentUsername,
         currentEmail: state => state._currentEmail,
+        photoUrl: state => state._photoUrl,
     },
     actions: {
-        setUser(username, email) {
+        setUser(username, email, photoUrl) {
            this._currentUsername = username;
            this._currentEmail = email;
+           this._photoUrl = photoUrl;
         },
         logout() {
             this._currentUsername = null;
             this._currentEmail = null;
+            this._photoUrl = null;
         },
         hasStoredUser(){
-            console.log(this._currentUsername, " return: ", this._currentUsername == null);
+            // console.log(this._currentUsername, " return: ", this._currentUsername == null);
             return this._currentUsername == null;
         }
     }

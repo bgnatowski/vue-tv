@@ -7,28 +7,36 @@ import ActionPopup from "@/components/auth/ActionPopup.vue";
 
 const showChangePasswordPopup = ref(false);
 const showDeleteAccountPopup = ref(false);
+const showChangeAvatarPopup = ref(false);
 const userStore = useUserStore();
 const router = useRouter();
-const username = ref('<uzytkownik>');
+const username = ref('uzytkownik');
+const photoUrl = ref('https://cdn-icons-png.flaticon.com/512/4715/4715330.png');
+
 onBeforeMount(() => {
   username.value = userStore.currentUsername;
+  photoUrl.vaule = userStore.photoUrl;
+  console.log("Settings: ", photoUrl.vaule)
 })
+
 </script>
 
 <template>
   <section class="feed-container">
     <div class="post">
       <div class="user-info">
-        <img class="user-avatar" src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="Avatar użytkownika">
+        <img class="user-avatar" :src="photoUrl" alt="Avatar użytkownika">
         <h2>Witaj {{username}}!</h2>
       </div>
       <div class="settings-actions">
         <button @click="showChangePasswordPopup=true" class="action-button">Zmień hasło</button>
         <button @click="showDeleteAccountPopup=true" class="action-button">Usuń konto</button>
+        <button @click="showChangeAvatarPopup=true" class="action-button">Zmień zdjęcie profilowe</button>
         <button class="action-button" @click="router.push(routerPaths.LOGOUT_ROUTE)">Wyloguj</button>
       </div>
-      <ActionPopup action-type="change" v-if="showChangePasswordPopup" @close="showChangePasswordPopup=false"></ActionPopup>
+      <ActionPopup action-type="changePassword" v-if="showChangePasswordPopup" @close="showChangePasswordPopup=false"></ActionPopup>
       <ActionPopup action-type="delete" v-if="showDeleteAccountPopup" @close="showDeleteAccountPopup=false"></ActionPopup>
+      <ActionPopup action-type="changeAvatar" v-if="showChangeAvatarPopup" @close="showChangeAvatarPopup=false"></ActionPopup>
     </div>
   </section>
 </template>

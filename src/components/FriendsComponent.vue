@@ -24,24 +24,21 @@ export default {
       friends: [
         {
           id: 1,
-          poster: "https://static.posters.cz/image/1300/plakaty/diuna-czesc-1-i122815.jpg",
-          title: "Diuna",
+          userImage: "https://randomuser.me/api/portraits/men/21.jpg",
           username: "JohnDoe123",
           detail1: "This is a longer text to test whether it wraps properly and allows scrolling if it overflows.",
           detail2: "Another longer piece of text to see if it requires scrolling to stay within the container.",
         },
         {
           id: 2,
-          poster: "https://static.posters.cz/image/1300/plakaty/diuna-czesc-1-i122815.jpg",
-          title: "Diuna",
+          userImage: "https://randomuser.me/api/portraits/men/25.jpg",
           username: "JaneDoe456",
           detail1: "Some shorter text.",
           detail2: "Another short piece of text.",
         },
         {
           id: 3,
-          poster: "https://static.posters.cz/image/1300/plakaty/diuna-czesc-1-i122815.jpg",
-          title: "Diuna",
+          userImage: "https://randomuser.me/api/portraits/men/11.jpg",
           username: "AliceDoe789",
           detail1: "A variety of text lengths to test scrolling andfafasffasf wrafasfafasfafspping behavior.",
           detail2: "Another text to check how well it works with gsdgdgsgsdgdgsdgsdg content.",

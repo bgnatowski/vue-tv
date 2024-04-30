@@ -39,18 +39,30 @@ async function confirmDeleteAccount(password) {
 
 
 // change password action
-const changed = ref()
+const changedPassword = ref()
 
 const currentPassword = ref("");
 const newPassword1 = ref("");
 const newPassword2 = ref("");
-const isCompletedChangeForm = computed(() => {
+const isCompletedChangePasswordForm = computed(() => {
   return !currentPassword.value && (newPassword1 != newPassword2);
 })
 
 async function confirmChangePassword(current, password1, password2) {
   try {
-    changed.value = await changePassword(current, password1, password2);
+    changedPassword.value = await changePassword(current, password1, password2);
+  } catch (error) {
+    errorMsg.value = error;
+  }
+}
+
+// change image action
+const changedAvatar = ref()
+const isCompletedChangeAvatarForm = ref(false)
+
+async function confirmChangeAvatar(image) {
+  try {
+    // changedAvatar.value = await
   } catch (error) {
     errorMsg.value = error;
   }
@@ -78,17 +90,29 @@ async function confirmChangePassword(current, password1, password2) {
         <p v-else>{{ errorMsg }}</p>
       </form>
 <!--CHANGE PASSWORD-->
-      <form class="action-form" v-if="actionType === 'change'">
+      <form class="action-form" v-if="actionType === 'changePassword'">
         <h1>Zmień hasło</h1>
         <input type="password" v-model="currentPassword" placeholder="Obecne hasło">
         <input type="password" v-model="newPassword1" placeholder="Nowe hasło">
         <input type="password" v-model="newPassword2" placeholder="Wpisz ponownie nowe hasło">
         <button
             @click.prevent="confirmChangePassword(password)"
-            :disabled="isCompletedChangeForm"
+            :disabled="isCompletedChangePasswordForm"
             class="action-button">Potwierdz
         </button>
-        <p v-if="changed">Hasło zmienione</p>
+        <p v-if="changedPassword">Hasło zmienione</p>
+        <p v-else>{{ errorMsg }}</p>
+      </form>
+<!--CHANGE USER IMAGE-->
+      <form class="action-form" v-if="actionType === 'changeAvatar'">
+        <h1>Zmień zdjęcie profilowe</h1>
+<!--        <input type="file" v-model="currentPassword" placeholder="Obecne hasło">-->
+        <button
+            @click.prevent="confirmChangeAvatar(password)"
+            :disabled="isCompletedChangeAvatarForm"
+            class="action-button">Zmień
+        </button>
+        <p v-if="changedAvatar">Awatar zmieniony</p>
         <p v-else>{{ errorMsg }}</p>
       </form>
     </div>
