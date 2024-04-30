@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, ref, watch} from "vue";
+import {nextTick, onMounted, ref, watch} from "vue";
 import {useRoute} from "vue-router";
 import paths from "@/router/routerPaths.js";
 import NavbarComponent from "@/components/page/NavbarComponent.vue";
@@ -20,16 +20,18 @@ function toggleSidebar() {
 
 const authStore = useAuthStore();
 onMounted(() => {
-  authStore.init();
-  onAuthStateChanged(auth, (user) => {
-    if (route.path == paths.REGISTER_ROUTE) {
-      isLoggedIn.value = false;
-    } else {
-      isLoggedIn.value = !!user;
-      showSidebar.value = !showSidebar.value;
+      authStore.init();
+      onAuthStateChanged(getAuth(), (user) => {
+        if (route.path == paths.REGISTER_ROUTE) {
+          isLoggedIn.value = false;
+          showSidebar.value = false;
+        } else {
+          isLoggedIn.value = !!user;
+          showSidebar.value = true;
+        }
+      })
     }
-  })
-});
+);
 
 watch(
     () => route.path,
