@@ -3,7 +3,8 @@ import {computed, reactive, ref} from "vue";
 import paths from "@/router/routerPaths.js";
 import {useRouter} from "vue-router";
 import {useAuthStore} from "@/stores/AuthStore.js";
-
+import {storage} from "@/js/firebase.js";
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 // common for action popup//
 const props = defineProps({
@@ -64,13 +65,33 @@ function confirmChangePassword(credentials) {
 
 // change image action
 const changedAvatar = ref()
-const isCompletedChangeAvatarForm = ref(false)
+const file = ref();
 
-async function confirmChangeAvatar(image) {
+async function handleImageUpload(event) {
+  file.value = event.target.files[0];
+  if (!file) return;
+}
+
+async function updateProfilePhotoURL() {
   try {
-    // changedAvatar.value = await
+    if (file.value) {
+      const timestamp = Date.now();
+      const storagePath = `profilePictures/${authStore.user.uuid}/${timestamp}-${file.value.name}`;
+      const fileRef = storageRef(storage, storagePath);
+      const metadata = {
+        contentType: file.value.type
+      };
+      await uploadBytes(fileRef, file.value, metadata);
+      const downloadUrl = await getDownloadURL(fileRef);
+      await authStore.updateUserPhotoURL(downloadUrl);
+    } else {
+      const fileRef = storageRef(storage, 'profilePictures/default-user-photo.png');
+      const defaultUrl = await getDownloadURL(fileRef);
+      await authStore.updateUserPhotoURL(defaultUrl);
+    }
+    changedAvatar.value = true;
   } catch (error) {
-    errorMsg.value = error;
+    errorMsg.value = 'Nie udało się przesłać obrazka.';
   }
 }
 </script>
@@ -112,11 +133,16 @@ async function confirmChangeAvatar(image) {
       <!--CHANGE USER IMAGE-->
       <form class="action-form" v-if="actionType === 'changeAvatar'">
         <h1>Zmień zdjęcie profilowe</h1>
-        <!--        <input type="file" v-model="currentPassword" placeholder="Obecne hasło">-->
+        <input type="file" @change="handleImageUpload" accept="image/png, image/jpeg"/>
         <button
-            @click.prevent="confirmChangeAvatar(password)"
-            :disabled="isCompletedChangeAvatarForm"
+            @click.prevent="updateProfilePhotoURL"
+            :disabled="!file"
             class="action-button">Zmień
+        </button>
+        <button
+            @click.prevent="updateProfilePhotoURL"
+            :disabled="file"
+            class="action-button">Usuń
         </button>
         <p v-if="changedAvatar">Awatar zmieniony</p>
         <p v-else>{{ errorMsg }}</p>
@@ -169,6 +195,10 @@ async function confirmChangeAvatar(image) {
   width: 100%;
   height: 100%;
   padding: .5em;
+}
+
+.action-button {
+  margin: 5px;
 }
 
 .close-bar {
