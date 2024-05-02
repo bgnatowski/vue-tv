@@ -82,7 +82,7 @@ function showInfo() {
       </div>
       <div class="dropdown" @mouseover="showDropdown" @mouseleave="hideDropdown">
         <div class="icon-button" v-if="isShowButton">
-          <img src="@/assets/dots-icon.png" alt="Movie Options"/>
+          <img src="@/assets/img/dots-icon.png" alt="Movie Options"/>
         </div>
         <div v-if="isShowDropdown" class="dropdown-content">
           <ul class="dropdown-list">
@@ -97,6 +97,7 @@ function showInfo() {
 </template>
 
 <style scoped>
+@import url(@/assets/dropdown.css);
 .user-info {
   display: flex;
   padding: .2rem;
@@ -167,49 +168,6 @@ function showInfo() {
   scrollbar-width: thin;
   hyphens: auto;
   max-height: 150px;
-}
-
-/*------dropdown----*/
-.dropdown {
-  position: absolute;
-  top: 0;
-  right: 0;
-  transition: .5s ease all;
-}
-
-.dropdown-content {
-  transition: .5s ease all;
-  position: static;
-  background-color: #f9f9f9;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-  white-space: nowrap;
-  border-radius: 1.2em;
-  padding: .5em;
-  font-size: .8em;
-}
-
-.dropdown-list {
-  list-style-type: none;
-  cursor: pointer;
-  flex-direction: column;
-  color: #000;
-  padding: .2em .5em;
-  border-radius: 1.2em;
-}
-
-.dropdown-option {
-  font-size: .8em;
-  padding: .4em .8em;
-  border-radius: 1em;
-}
-
-.dropdown-option:hover {
-  background-color: var(--lighter-main);
-  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
-}
-
-.dropdown-option:active {
-  background-color: var(--clicked-button);
 }
 
 @media screen and (max-width: 728px) {

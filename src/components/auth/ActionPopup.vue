@@ -117,7 +117,7 @@ async function updateProfilePhotoURL() {
     <div class="panel-container">
       <div class="close-bar">
         <div class="icon-button" @click="closePopup">
-          <img src="@/assets/close-icon.png" alt="Close icon"/>
+          <img src="@/assets/img/close-icon.png" alt="Close icon"/>
         </div>
       </div>
       <!--DELETE ACCOUNT-->
@@ -180,6 +180,7 @@ async function updateProfilePhotoURL() {
 
 <style scoped>
 @import url(@/assets/auth-common.css);
+@import url(@/assets/buttons.css);
 
 .panel-container {
   flex-direction: column;

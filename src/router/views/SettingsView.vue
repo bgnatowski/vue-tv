@@ -4,7 +4,7 @@ import routerPaths from "@/router/routerPaths.js";
 import {useRouter} from "vue-router";
 import ActionPopup from "@/components/auth/ActionPopup.vue";
 import {useAuthStore} from "@/stores/AuthStore.js";
-import changeImageIcon from '@/assets/change-image-icon.png';
+import changeImageIcon from '@/assets/img/change-image-icon.png';
 
 const showChangePasswordPopup = ref(false);
 const showDeleteAccountPopup = ref(false);
@@ -42,6 +42,8 @@ onBeforeMount(() => {
 
 <style scoped>
 @import url(@/assets/auth-common.css);
+@import url(@/assets/buttons.css);
+
 .profile-picture {
   display: flex;
   position: relative;

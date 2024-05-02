@@ -91,7 +91,6 @@ function handleClose() {
   width: 200px;
   height: 200px;
   margin: .5em auto 0 auto;
-  cursor: pointer;
 }
 
 .profile-picture img {
