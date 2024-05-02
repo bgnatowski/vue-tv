@@ -20,7 +20,7 @@ function closePopup() {
       <div class="movie-card">
         <div class="close-bar">
           <div class="icon-button" @click="closePopup">
-            <img src="@/assets/close-icon.png" alt="Close icon"/>
+            <img src="@/assets/img/close-icon.png" alt="Close icon"/>
           </div>
         </div>
         <div class="upper-bar">

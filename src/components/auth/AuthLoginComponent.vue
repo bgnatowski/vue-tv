@@ -56,5 +56,6 @@ const login = async () => {
 
 <style scoped>
 @import url(@/assets/auth-common.css);
+@import url(@/assets/buttons.css);
 
 </style>

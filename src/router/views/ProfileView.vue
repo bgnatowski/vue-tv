@@ -34,9 +34,9 @@ function handleClose() {
     </MovieDetailsPopup>
     <section class="movies-column">
       <div class="profile-picture">
-        <img :src="user.photoUrl" alt="profile avatar" class="user-profile-pic">
-        <p class="user-name">{{ user.username }}</p>
+        <img :src="user.photoUrl" alt="profile avatar">
       </div>
+      <p class="user-name">{{ user.username }}</p>
       <TitleTile>Filmy obejrzane</TitleTile>
       <UserMovesTile tileType="Filmy do obejrzenia"/>
       <TitleTile>Filmy obejrzane</TitleTile>
@@ -63,7 +63,6 @@ function handleClose() {
 .movies-column {
   display: flex;
   flex-direction: column;
-  gap: 1em;
   width: 40%;
   padding: 1em;
 }
@@ -82,20 +81,33 @@ function handleClose() {
 }
 
 .profile-picture {
-  text-align: center;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  padding: 1em;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 200px;
+  height: 200px;
+  margin: .5em auto 0 auto;
 }
 
-.user-profile-pic {
-  height: 8rem;
-  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
+.profile-picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   border-radius: 50%;
+  border: 2px solid var(--lighter-main);
+  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
 }
 
 .user-name {
   font-size: 1.5rem;
-  margin-top: 1rem;
+  margin: .5rem;
+  text-align: center;
+  justify-self: center;
 }
-
 
 @media (max-width: 1400px) {
   .feed-container {

@@ -1,14 +1,17 @@
 <script setup>
-import {computed, reactive, ref} from "vue";
+import {computed, onMounted, reactive, ref} from "vue";
 import paths from "@/router/routerPaths.js";
 import {useRouter} from "vue-router";
 import {useAuthStore} from "@/stores/AuthStore.js";
-
+import {storage} from "@/js/firebase.js";
+import {ref as storageRef, uploadBytes, getDownloadURL} from 'firebase/storage';
 
 // common for action popup//
 const props = defineProps({
-  actionType: String
+  actionType: String,
+  isGoogleUser: Boolean
 })
+
 
 const emits = defineEmits(['close']);
 
@@ -22,24 +25,37 @@ function closePopup() {
 }
 
 // delete action
-const deleted = ref()
 const password = ref('');
+const username = ref('');
 
 const isCompletedDeleteForm = computed(() => {
-  return !password.value;
+  return password.value.length != 0;
 })
 
-function confirmDeleteAccount(password) {
-  authStore.deleteUser(password)
-      .then((isDeleted) => {
-        if (isDeleted) {
-          deleted.value = isDeleted
-          router.push(paths.DELETE_ROUTE);
-        }
-      })
-      .catch((error) => errorMsg.value = error);
+const isCompletedDeleteGoogleForm = computed(() => {
+  return username.value.length != 0;
+})
+
+async function confirmDeleteAccount(password) {
+  try {
+    let isDeleted = await authStore.deleteUser(password);
+    if (isDeleted)
+      await router.push(paths.DELETE_ROUTE);
+  } catch (error) {
+    errorMsg.value = error;
+  }
 }
 
+async function confirmDeleteGoogleAccount(username) {
+  try {
+    console.log("confirmDelete: ", username)
+    let isDeleted = await authStore.deleteGoogleUser(username);
+    if (isDeleted)
+      await router.push(paths.DELETE_ROUTE);
+  } catch (error) {
+    errorMsg.value = error;
+  }
+}
 
 // change password action
 const changedPassword = ref()
@@ -51,26 +67,47 @@ const credentials = reactive({
 });
 
 const isCompletedChangePasswordForm = computed(() => {
-  return !credentials.currentPassword && (credentials.newPassword1 != credentials.newPassword2);
+  return credentials.currentPassword.length != 0 && credentials.newPassword1.length != 0 && credentials.newPassword2.length != 0 &&
+      (credentials.newPassword1 == credentials.newPassword2);
 })
 
-function confirmChangePassword(credentials) {
-  authStore.changePassword(credentials)
-      .then((isUpdated) => {
-        changedPassword.value = isUpdated;
-      })
-      .catch((error) => errorMsg.value = error)
+async function confirmChangePassword(credentials) {
+  try{
+    changedPassword.value = await authStore.changePassword(credentials)
+  }catch(error){
+    errorMsg.value = error
+  }
 }
 
 // change image action
 const changedAvatar = ref()
-const isCompletedChangeAvatarForm = ref(false)
+const file = ref();
 
-async function confirmChangeAvatar(image) {
+async function handleImageUpload(event) {
+  file.value = event.target.files[0];
+  if (!file) return;
+}
+
+async function updateProfilePhotoURL() {
   try {
-    // changedAvatar.value = await
+    if (file.value) {
+      const timestamp = Date.now();
+      const storagePath = `profilePictures/${authStore.user.uuid}/${timestamp}-${file.value.name}`;
+      const fileRef = storageRef(storage, storagePath);
+      const metadata = {
+        contentType: file.value.type
+      };
+      await uploadBytes(fileRef, file.value, metadata);
+      const downloadUrl = await getDownloadURL(fileRef);
+      await authStore.updateUserPhotoURL(downloadUrl);
+    } else {
+      const fileRef = storageRef(storage, 'profilePictures/default-user-photo.png');
+      const defaultUrl = await getDownloadURL(fileRef);
+      await authStore.updateUserPhotoURL(defaultUrl);
+    }
+    changedAvatar.value = true;
   } catch (error) {
-    errorMsg.value = error;
+    errorMsg.value = 'Nie udało się przesłać obrazka.';
   }
 }
 </script>
@@ -80,43 +117,59 @@ async function confirmChangeAvatar(image) {
     <div class="panel-container">
       <div class="close-bar">
         <div class="icon-button" @click="closePopup">
-          <img src="@/assets/close-icon.png" alt="Close icon"/>
+          <img src="@/assets/img/close-icon.png" alt="Close icon"/>
         </div>
       </div>
       <!--DELETE ACCOUNT-->
-      <form class="action-form" v-if="actionType === 'delete'">
+      <form @submit.prevent="confirmDeleteAccount(password)" class="action-form" v-if="actionType === 'delete' && !isGoogleUser">
         <h1>Usuń konto</h1>
+        <label id="password" for="password">Hasło</label>
         <input type="password" placeholder="Wpisz swoje obecne hasło" v-model="password">
         <button
-            @click.prevent="confirmDeleteAccount(password)"
-            :disabled="isCompletedDeleteForm"
+            type="submit"
+            :disabled="!isCompletedDeleteForm"
             class="action-button">Potwierdz
         </button>
-        <p v-if="deleted">Będziemy tęsknić :(</p>
-        <p v-else>{{ errorMsg }}</p>
+        <p>{{ errorMsg }}</p>
+      </form>
+      <!--DELETE GOOGLE ACCOUNT-->
+      <form @submit.prevent="confirmDeleteGoogleAccount(username)" class="action-form" v-if="actionType === 'delete' && isGoogleUser">
+        <h1>Usuń konto</h1>
+        <label id="username" for="username">Nazwa użytkownika</label>
+        <input type="username" placeholder="Wpisz swoją nazwę użytkownika" v-model="username">
+        <button
+            type="submit"
+            :disabled="!isCompletedDeleteGoogleForm"
+            class="action-button">Potwierdz
+        </button>
+        <p>{{ errorMsg }}</p>
       </form>
       <!--CHANGE PASSWORD-->
-      <form class="action-form" v-if="actionType === 'changePassword'">
+      <form @submit.prevent="confirmChangePassword(credentials)" class="action-form" v-if="actionType === 'changePassword'" >
         <h1>Zmień hasło</h1>
+        <label>Obecne hasło:</label>
         <input type="password" v-model="credentials.currentPassword" placeholder="Obecne hasło">
+        <label>Nowe hasło:</label>
         <input type="password" v-model="credentials.newPassword1" placeholder="Nowe hasło">
+        <label>Powtórz nowe hasło:</label>
         <input type="password" v-model="credentials.newPassword2" placeholder="Wpisz ponownie nowe hasło">
-        <button
-            @click.prevent="confirmChangePassword(password)"
-            :disabled="isCompletedChangePasswordForm"
-            class="action-button">Potwierdz
-        </button>
+        <button type="submit" :disabled="!isCompletedChangePasswordForm" class="action-button">Potwierdz</button>
         <p v-if="changedPassword">Hasło zmienione</p>
         <p v-else>{{ errorMsg }}</p>
       </form>
       <!--CHANGE USER IMAGE-->
       <form class="action-form" v-if="actionType === 'changeAvatar'">
         <h1>Zmień zdjęcie profilowe</h1>
-        <!--        <input type="file" v-model="currentPassword" placeholder="Obecne hasło">-->
+        <input type="file" @change="handleImageUpload" accept="image/png, image/jpeg"/>
         <button
-            @click.prevent="confirmChangeAvatar(password)"
-            :disabled="isCompletedChangeAvatarForm"
+            @click.prevent="updateProfilePhotoURL"
+            :disabled="!file"
             class="action-button">Zmień
+        </button>
+        <button
+            @click.prevent="updateProfilePhotoURL"
+            :disabled="file"
+            class="action-button">Usuń
         </button>
         <p v-if="changedAvatar">Awatar zmieniony</p>
         <p v-else>{{ errorMsg }}</p>
@@ -127,6 +180,7 @@ async function confirmChangeAvatar(image) {
 
 <style scoped>
 @import url(@/assets/auth-common.css);
+@import url(@/assets/buttons.css);
 
 .panel-container {
   flex-direction: column;
@@ -169,6 +223,10 @@ async function confirmChangeAvatar(image) {
   width: 100%;
   height: 100%;
   padding: .5em;
+}
+
+.action-button {
+  margin: 5px;
 }
 
 .close-bar {

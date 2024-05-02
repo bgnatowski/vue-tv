@@ -3,6 +3,7 @@
 import paths from "@/router/routerPaths.js";
 import {ref, watch} from "vue";
 import {useRouter} from "vue-router";
+import SearchBar from "@/components/page/SearchBar.vue";
 
 const props = defineProps({
   isSidebarVisible: Boolean
@@ -38,9 +39,8 @@ function toggleRotate() {
   profileIconRotate.value = !profileIconRotate.value
 }
 
-function onSearchClick() {
+function onSearchIconClick() {
   searchIconRotate.value = !searchIconRotate.value
-  // logika wyszukiwania lub po prostu ustawianie fokusu na input
 }
 </script>
 
@@ -50,24 +50,17 @@ function onSearchClick() {
       <div class="branding">
         <h1 @click="router.push(paths.HOME_ROUTE)" class="bruno-ace-regular">VueTV</h1>
       </div>
-      <div class="search">
-        <form class="search-form">
-          <input v-show="!mobile" type="search" placeholder="Szukaj">
-          <div v-show="!mobile" class="icon-button search-icon" @click="onSearchClick">
-            <img src="@/assets/search-icon.png" alt="search-icon"/>
-          </div>
-        </form>
-      </div>
+      <SearchBar :mobile="mobile" type="movie" placeholder-txt="Szukaj"/>
       <ul class="navigation">
-        <li v-if="mobile" class="icon-button" @click="onSearchClick" :class="{'rotate360': searchIconRotate}">
-          <img src="@/assets/search-icon.png" alt="search-icon">
+        <li v-if="mobile" class="icon-button" @click="onSearchIconClick" :class="{'rotate360': searchIconRotate}">
+          <img src="@/assets/img/search-icon.png" alt="search-icon">
         </li>
         <li @click="router.push(paths.USER_PROFILE_ROUTE)" class="icon-button"
             :class="{'rotate360': profileIconRotate}">
-          <img @click="toggleRotate" src="@/assets/user.png" alt="User profile icon"/>
+          <img @click="toggleRotate" src="@/assets/img/user.png" alt="User profile icon"/>
         </li>
         <li class="icon-button" :class="{'rotate180': sideBarIconRotate}">
-          <img @click="onMenuButtonClick" src="@/assets/menu-icon.png" alt="Menu icon">
+          <img @click="onMenuButtonClick" src="@/assets/img/menu-icon.png" alt="Menu icon">
         </li>
       </ul>
     </nav>
@@ -149,44 +142,6 @@ header {
   font-size: 1.6em;
 }
 
-.search {
-  flex-direction: column;
-  align-content: center;
-  justify-content: space-between;
-  width: 20%;
-  transition: .4s ease all;
-}
-
-.search-form {
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-
-.search-form .icon-button {
-  position: absolute;
-  right: 1em;
-}
-
-.search input {
-  outline: none;
-  border-radius: 3em;
-  border-color: transparent;
-  padding: .7em;
-  color: #747775;
-  background-color: rgba(255, 255, 255, 0.5);
-  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
-  width: 100%;
-  height: 80%
-}
-
-.search input:hover {
-  transition: .4s ease all;
-  padding: .9em;
-  height: 90%;
-  width: 100%;
-}
-
 @media screen and (min-width: 3000px) {
   .navigation .icon-button {
     width: 80px;
@@ -208,10 +163,6 @@ header {
 @media screen and (max-width: 1000px) {
   .search input {
     display: none;
-  }
-
-  .search-form {
-    width: 100%;
   }
 
   .header-nav {

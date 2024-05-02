@@ -1,37 +1,40 @@
 <script setup>
-import {onBeforeMount, reactive, ref} from 'vue';
+import {onBeforeMount, ref} from 'vue';
 import routerPaths from "@/router/routerPaths.js";
 import {useRouter} from "vue-router";
 import ActionPopup from "@/components/auth/ActionPopup.vue";
 import {useAuthStore} from "@/stores/AuthStore.js";
+import changeImageIcon from '@/assets/img/change-image-icon.png';
 
 const showChangePasswordPopup = ref(false);
 const showDeleteAccountPopup = ref(false);
 const showChangeAvatarPopup = ref(false);
+const isGoogleAuth = ref(true);
 
 const router = useRouter();
 const authStore = useAuthStore();
 let user = {};
 onBeforeMount(() => {
   user = authStore.user
+  isGoogleAuth.value = authStore.isGoogleUser()
 })
-</script>
+</script>`
 
 <template>
   <section class="feed-container">
     <div class="post">
-      <div class="profile-picture">
+      <div @click="showChangeAvatarPopup=true" class="profile-picture">
         <img :src="user.photoUrl" alt="profile avatar" class="user-profile-pic">
-        <p class="user-name">{{ user.username }}</p>
+        <img :src="changeImageIcon" alt="change icon" class="change-image-icon">
       </div>
+      <p class="user-name">{{ user.username }}</p>
       <div class="settings-actions">
-        <button @click="showChangePasswordPopup=true" class="action-button">Zmień hasło</button>
+        <button v-if="!isGoogleAuth" @click="showChangePasswordPopup=true" class="action-button">Zmień hasło</button>
         <button @click="showDeleteAccountPopup=true" class="action-button">Usuń konto</button>
-        <button @click="showChangeAvatarPopup=true" class="action-button">Zmień zdjęcie profilowe</button>
         <button class="action-button" @click="router.push(routerPaths.LOGOUT_ROUTE)">Wyloguj</button>
       </div>
-      <ActionPopup action-type="changePassword" v-if="showChangePasswordPopup" @close="showChangePasswordPopup=false"></ActionPopup>
-      <ActionPopup action-type="delete" v-if="showDeleteAccountPopup" @close="showDeleteAccountPopup=false"></ActionPopup>
+      <ActionPopup :is-google-user="isGoogleAuth" action-type="changePassword" v-if="showChangePasswordPopup" @close="showChangePasswordPopup=false"></ActionPopup>
+      <ActionPopup :is-google-user="isGoogleAuth" action-type="delete" v-if="showDeleteAccountPopup" @close="showDeleteAccountPopup=false"></ActionPopup>
       <ActionPopup action-type="changeAvatar" v-if="showChangeAvatarPopup" @close="showChangeAvatarPopup=false"></ActionPopup>
     </div>
   </section>
@@ -39,30 +42,51 @@ onBeforeMount(() => {
 
 <style scoped>
 @import url(@/assets/auth-common.css);
+@import url(@/assets/buttons.css);
+
 .profile-picture {
   display: flex;
-  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  padding: 1em;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   width: 200px;
   height: 200px;
-  margin: 1.5em auto;
+  margin: auto;
+  cursor: pointer;
 }
 
-.profile-picture {
-  text-align: center;
+.profile-picture:hover .user-profile-pic {
+  filter: brightness(80%);
+}
+
+.profile-picture:hover .change-image-icon {
+  opacity: 1;
 }
 
 .user-profile-pic {
-  height: 8rem;
-  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   border-radius: 50%;
+  transition: filter 0.3s;
+  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
+  border: 2px solid var(--lighter-main)
 }
 
-.user-name {
-  font-size: 1.5rem;
-  margin-top: 1rem;
+.change-image-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20%;
+  height: 20%;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none; /* Zapobiega interakcji z ikoną */
 }
 
 .settings-actions {
@@ -71,6 +95,13 @@ onBeforeMount(() => {
   align-items: center;
   margin: .5rem auto .2rem auto;
   gap: .2em;
+}
+
+.user-name {
+  font-size: 1.5rem;
+  margin: 1rem auto;
+  text-align: center;
+  justify-self: center;
 }
 
 .settings-actions button {

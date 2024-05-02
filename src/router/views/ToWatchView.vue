@@ -26,9 +26,8 @@ const minutes = ref(123456);
   <section class="feed-container">
     <TitleTile>
       Filmy do zobaczenia
-      <template v-slot:p>Aby obejrzeć wszystko z tej listy, będziesz potrzebował:
-        <strong v-text="minutesToText(minutes)"></strong>
-      </template>
+      <template #p>Aby obejrzeć wszystko z tej listy, będziesz potrzebował:</template>
+      <template #strong>{{minutesToText(minutes)}}</template>
     </TitleTile>
 
     <MovieDetailsPopup v-if="showDetails"

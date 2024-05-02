@@ -9,6 +9,10 @@
         <p>
           <slot name="p"></slot>
         </p>
+        <strong>
+          <slot name="strong"></slot>
+        </strong>
+
       </div>
   </div>
 </template>
@@ -33,9 +37,16 @@
   font-weight: 400;
   font-size: 1em;
 }
+.title-tile strong {
+  font-size: 1em;
+}
 
-@media (max-width: 300px) {
+@media (max-width: 700px) {
   .title-tile {
+    font-size: .9em;
+    white-space: break-spaces;
+  }
+  .title-tile p, .title-tile strong{
     font-size: .7em;
     white-space: break-spaces;
   }

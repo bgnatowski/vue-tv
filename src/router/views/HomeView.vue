@@ -24,7 +24,7 @@ const router = useRouter()
         </div>
       </div>
       <div class="home-image">
-        <img src="@/assets/home-image.png" alt="VueTV main image"/>
+        <img src="@/assets/img/home-image.png" alt="VueTV main image"/>
       </div>
     </div>
     <div class="footer">
@@ -37,6 +37,7 @@ const router = useRouter()
 
 <style scoped>
 @import url(@/assets/auth-common.css);
+@import url(@/assets/buttons.css);
 
 .panel-container {
   background-color: #000;

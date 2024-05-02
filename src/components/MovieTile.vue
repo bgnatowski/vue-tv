@@ -42,17 +42,17 @@ function showInfo(movie) {
         <div class="buttons">
           <div class="card-action-buttons">
             <div class="card-action-icon" v-if="isPublic && watched" aria-label="Note">
-              <img src="@/assets/recommend-icon.png" alt="Note icon"/>
+              <img src="@/assets/img/recommend-icon.png" alt="Note icon"/>
             </div>
             <div class="card-action-icon" aria-label="Note">
-              <img src="@/assets/edit-icon.png" alt="Note icon"/>
+              <img src="@/assets/img/edit-icon.png" alt="Note icon"/>
             </div>
             <div @click="showInfo(movie)" class="card-action-icon" aria-label="Info">
-              <img src="@/assets/info-icon.png" alt="Info icon"/>
+              <img src="@/assets/img/info-icon.png" alt="Info icon"/>
             </div>
             <div @click="publicMovie" class="card-action-icon" aria-label="Hide">
-              <img src="@/assets/show-icon.png" v-if="isPublic" alt="Show icon"/>
-              <img src="@/assets/hide-icon.png" v-else alt="Hide icon"/>
+              <img src="@/assets/img/show-icon.png" v-if="isPublic" alt="Show icon"/>
+              <img src="@/assets/img/hide-icon.png" v-else alt="Hide icon"/>
             </div>
           </div>
           <div class="movie-action-buttons" v-if="!watched">
