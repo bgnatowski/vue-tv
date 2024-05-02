@@ -1,33 +1,36 @@
 import { defineStore } from 'pinia';
+import {addUserMovie, fetchUserMovies, removeUserMovie, updateUserMovie} from "@/js/UserMovieService.js";
 
 export const useUserMovieStore = defineStore('userMovieStore', {
     state: () => ({
         userMovies: []
     }),
     actions: {
-        addUserMovie(userMovie) {
-            const existing = this.userMovies.find(um => um.movieId === userMovie.movieId && um.userId === userMovie.userId);
-            if (!existing) {
-                this.userMovies.push(userMovie);
-            }
+        async loadUserMovies(userId) {
+            this.userMovies = await fetchUserMovies(userId);
         },
-        updateUserMovie(movieId, userId, newDetails) {
-            const index = this.userMovies.findIndex(um => um.movieId === movieId && um.userId === userId);
+        async createUserMovie(userMovie) {
+            const newMovie = await addUserMovie(userMovie);
+            this.userMovies.push(newMovie);
+        },
+        async modifyUserMovie(movieId, newDetails) {
+            await updateUserMovie(movieId, newDetails);
+            const index = this.userMovies.findIndex(m => m.id === movieId);
             if (index !== -1) {
                 this.userMovies[index] = { ...this.userMovies[index], ...newDetails };
             }
         },
-        removeUserMovie(movieId, userId) {
-            this.userMovies = this.userMovies.filter(um => um.movieId !== movieId || um.userId !== userId);
+        async deleteUserMovie(movieId) {
+            await removeUserMovie(movieId);
+            this.userMovies = this.userMovies.filter(m => m.id !== movieId);
         }
     },
     getters: {
-        getUserMovie: (state) => (movieId, userId) => {
-            return state.userMovies.find(um => um.movieId === movieId && um.userId === userId);
+        getUserMovie: (state) => (movieId) => {
+            return state.userMovies.find(m => m.id === movieId);
         }
     }
 });
-
 
 // Do tych obiektow beda odwolywać sie listy toWatch i watched i beda zawiraly movieId (to jest do movieDetails z API)
 // ale tez sie zastanawiam ze skoro w aplikacji non stop wyswietlamy tytuł, duration, gatunek i poster
@@ -40,5 +43,32 @@ export const useUserMovieStore = defineStore('userMovieStore', {
 //     isWatched: true,
 //     isPrivate: false,
 //     userRating: 4.5,
-//     note: 'notatak do filmu 255znakow?'
+//     note: 'This is my personal note for the movie.',
+//     title: 'Inception',
+//     genre: ['Sci-Fi', 'Thriller'],
+//     duration: 148,
+//     coverUrl: 'https://example.com/inception.jpg'
 // });
+
+//USAGE:
+
+// const store = useUserMovieStore();
+//
+// const userId = "user123";
+// store.loadUserMovies(userId); // Load all movies for a user
+//
+// // To add a new movie
+// store.createUserMovie({
+//     userId: userId,
+//     movieId: "movie456",
+//     isWatched: false,
+//     isPrivate: false,
+//     userRating: 4.5,
+//     note: "Must watch again!"
+// });
+//
+// // To update a movie
+// store.modifyUserMovie("movie456", { isWatched: true });
+//
+// // To delete a movie
+// store.deleteUserMovie("movie456");

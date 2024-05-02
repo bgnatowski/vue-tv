@@ -1,36 +1,28 @@
 import { defineStore } from 'pinia';
+import {addPost, deletePost, fetchPosts, updatePost} from "@/js/PostsService.js";
 
 export const usePostsStore = defineStore('postsStore', {
     state: () => ({
         posts: []
     }),
     actions: {
-        addPost(newPost) {
-            const existingPost = this.posts.find(post => post.id === newPost.id);
-            if (!existingPost) {
-                this.posts.push(newPost);
-            } else {
-                console.error('Post with this ID already exists');
+        async loadPosts() {
+            this.posts = await fetchPosts();
+        },
+        async createPost(postContent) {
+            const postId = await addPost(postContent);
+            this.posts.push({ id: postId, ...postContent });
+        },
+        async modifyPost(id, content) {
+            await updatePost(id, { content });
+            const index = this.posts.findIndex(post => post.id === id);
+            if (index !== -1) {
+                this.posts[index].content = content;
             }
         },
-        updatePost(postId, updatedContent) {
-            const postIndex = this.posts.findIndex(post => post.id === postId);
-            if (postIndex !== -1) {
-                this.posts[postIndex].postContent = updatedContent;
-            } else {
-                console.error('Post not found');
-            }
-        },
-        removePost(postId) {
-            this.posts = this.posts.filter(post => post.id !== postId);
-        }
-    },
-    getters: {
-        getPostById: (state) => (id) => {
-            return state.posts.find(post => post.id === id);
-        },
-        getPostsByMovieId: (state) => (movieId) => {
-            return state.posts.filter(post => post.movieId === movieId);
+        async removePost(id) {
+            await deletePost(id);
+            this.posts = this.posts.filter(post => post.id !== id);
         }
     }
 });
