@@ -12,8 +12,8 @@ import {
     updateProfile
 } from 'firebase/auth';
 import {defineStore} from 'pinia';
-import {auth} from '../js/firebase';
-import {reactive, ref} from 'vue';
+import {auth,} from '../js/firebase';
+import {ref} from 'vue';
 
 export const useAuthStore = defineStore('authStore', {
     state: () => ({
@@ -66,8 +66,8 @@ export const useAuthStore = defineStore('authStore', {
                     displayName: credentials.username,
                     photoURL: defaultPhotoUrl
                 });
-                await this.logoutUser();
 
+                await this.logoutUser();
                 return true
             } catch (error) {
                 throw this.mapErrorCodeToMessage(error.code);
@@ -182,6 +182,8 @@ export const useAuthStore = defineStore('authStore', {
                     return "Nie udało sie uwierzytelnić użytkownika przez usunięciem";
                 case "auth/delete":
                     return "Wystąpił problem podczas usuwania";
+                case "auth/email-already-in-use":
+                    return "Uzytkownik z takim emailem istnieje";
                 default:
                     return code;
             }
