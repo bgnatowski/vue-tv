@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onBeforeMount, ref} from 'vue';
+import {onBeforeMount, ref} from 'vue';
 import routerPaths from "@/router/routerPaths.js";
 import {useRouter} from "vue-router";
 import ActionPopup from "@/components/auth/ActionPopup.vue";
@@ -9,17 +9,15 @@ import changeImageIcon from '@/assets/change-image-icon.png';
 const showChangePasswordPopup = ref(false);
 const showDeleteAccountPopup = ref(false);
 const showChangeAvatarPopup = ref(false);
-const canChangePassword = ref(true);
+const isGoogleAuth = ref(true);
 
 const router = useRouter();
 const authStore = useAuthStore();
 let user = {};
 onBeforeMount(() => {
   user = authStore.user
-  canChangePassword.value = !authStore.isGoogleUser()
+  isGoogleAuth.value = authStore.isGoogleUser()
 })
-
-
 </script>`
 
 <template>
@@ -31,12 +29,12 @@ onBeforeMount(() => {
       </div>
       <p class="user-name">{{ user.username }}</p>
       <div class="settings-actions">
-        <button v-if="canChangePassword" @click="showChangePasswordPopup=true" class="action-button">Zmień hasło</button>
+        <button v-if="!isGoogleAuth" @click="showChangePasswordPopup=true" class="action-button">Zmień hasło</button>
         <button @click="showDeleteAccountPopup=true" class="action-button">Usuń konto</button>
         <button class="action-button" @click="router.push(routerPaths.LOGOUT_ROUTE)">Wyloguj</button>
       </div>
-      <ActionPopup action-type="changePassword" v-if="showChangePasswordPopup" @close="showChangePasswordPopup=false"></ActionPopup>
-      <ActionPopup action-type="delete" v-if="showDeleteAccountPopup" @close="showDeleteAccountPopup=false"></ActionPopup>
+      <ActionPopup :is-google-user="isGoogleAuth" action-type="changePassword" v-if="showChangePasswordPopup" @close="showChangePasswordPopup=false"></ActionPopup>
+      <ActionPopup :is-google-user="isGoogleAuth" action-type="delete" v-if="showDeleteAccountPopup" @close="showDeleteAccountPopup=false"></ActionPopup>
       <ActionPopup action-type="changeAvatar" v-if="showChangeAvatarPopup" @close="showChangeAvatarPopup=false"></ActionPopup>
     </div>
   </section>

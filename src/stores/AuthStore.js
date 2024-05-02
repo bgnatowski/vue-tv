@@ -53,7 +53,6 @@ export const useAuthStore = defineStore('authStore', {
                     displayName: username,
                     photoURL: photoUrl || "https://cdn-icons-png.flaticon.com/512/4715/4715330.png"
                 });
-                console.log(user);
             } catch (error) {
                 console.error("Błąd logowania z Google", error);
                 throw this.mapErrorCodeToMessage("Błąd logowania z Google")
@@ -69,19 +68,14 @@ export const useAuthStore = defineStore('authStore', {
                 });
                 await this.logoutUser();
 
-                const user = userCredential.user;
-                console.log(user);
                 return true
             } catch (error) {
-                console.log(error.code);
                 throw this.mapErrorCodeToMessage(error.code);
             }
         },
         async loginUser(credentials) {
             try {
-                const userCredential = await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
-                const user = userCredential.user;
-                console.log(user);
+                await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
             } catch (error) {
                 throw this.mapErrorCodeToMessage(error.code)
             }
@@ -89,14 +83,12 @@ export const useAuthStore = defineStore('authStore', {
         async logoutUser() {
             try {
                 await signOut(auth);
-                console.log('wylogowano');
             } catch (error) {
                 throw this.mapErrorCodeToMessage(error.code)
             }
         },
         async deleteUser(password) {
             try {
-                console.log("delete user")
                 const user = auth.currentUser;
 
                 if (!user || !password) {
@@ -113,6 +105,19 @@ export const useAuthStore = defineStore('authStore', {
                 throw this.mapErrorCodeToMessage(error.code);
             }
         },
+        async deleteGoogleUser(username) {
+            try {
+                const user = await this.reauthenticateGoogleUser();
+                if (!user || user.displayName !== username) {
+                    throw new Error('Invalid user credentials or username does not match.');
+                }
+                await firebaseDeleteUser(user);
+                await this.logoutUser();
+                return true;
+            } catch (error) {
+                throw new Error('Failed to delete Google user.');
+            }
+        },
         async changePassword(credentials) {
             try {
                 if (credentials.newPassword1 !== credentials.newPassword2) {
@@ -127,7 +132,7 @@ export const useAuthStore = defineStore('authStore', {
                 await firebaseUpdatePassword(user, credentials.newPassword1);
                 return true;
             } catch (error) {
-                throw this.mapErrorCodeToMessage(error.code)
+                throw this.mapErrorCodeToMessage("auth/delete")
             }
         },
         async updateUserPhotoURL(newPhotoURL) {
@@ -138,11 +143,20 @@ export const useAuthStore = defineStore('authStore', {
                     this.user.photoUrl = newPhotoURL;
                 }
             } catch (error) {
-                throw this.mapErrorCodeToMessage(error.code)
+                throw this.mapErrorCodeToMessage("auth/delete")
             }
         },
         isGoogleUser() {
             return auth.currentUser.providerData.some(provider => provider.providerId === 'google.com');
+        },
+        async reauthenticateGoogleUser() {
+            const provider = new GoogleAuthProvider();
+            try {
+                const result = await signInWithPopup(auth, provider);
+                return result.user;
+            } catch (error) {
+                throw this.mapErrorCodeToMessage("auth/reauth")
+            }
         },
         mapErrorCodeToMessage(code) {
             switch (code) {
@@ -164,6 +178,10 @@ export const useAuthStore = defineStore('authStore', {
                     return "Za dużo prób. Spróbuj ponownie później!";
                 case "auth/different-passwords":
                     return 'Nowe hasła nie są takie same.';
+                case "auth/reauth":
+                    return "Nie udało sie uwierzytelnić użytkownika przez usunięciem";
+                case "auth/delete":
+                    return "Wystąpił problem podczas usuwania";
                 default:
                     return code;
             }
