@@ -16,7 +16,7 @@ function handleShowDetails(movie) {
 function handleClose() {
   showDetails.value = false;
 }
-const minutes = ref(12345);
+const minutes = ref(1234);
 
 </script>
 
@@ -24,10 +24,9 @@ const minutes = ref(12345);
   <section class="feed-container">
     <TitleTile>
       Filmy obejrzane
-      <template v-slot:p>Do tej pory spedziłeś:
-        <strong v-text="minutesToText(minutes)"></strong>
-        na obejrzeniu wszyskich filmów!
+      <template v-slot:p>Do tej pory na obejrzenie wszystkich filów spedziłeś:
       </template>
+      <template #strong>{{minutesToText(minutes)}}</template>
     </TitleTile>
 
     <MovieDetailsPopup v-if="showDetails"
