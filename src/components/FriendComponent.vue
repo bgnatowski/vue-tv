@@ -62,6 +62,7 @@ function showProfile() {
 
 <style scoped>
 @import url(@/assets/dropdown.css);
+
 .dropdown {
   top: auto;
   right: auto;
@@ -124,7 +125,7 @@ function showProfile() {
   }
 
   .additional-text {
-    font-size: .6em;
+    font-size: .7em;
   }
 
   .additional-details {
@@ -132,18 +133,35 @@ function showProfile() {
   }
 }
 
+@media screen and (max-width: 1050px){
+  .dropdown,
+  .icon-button {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media screen and (max-width: 760px){
+  .dropdown,
+  .icon-button {
+    width: 18px;
+    height: 18px;
+  }
+}
+
 @media screen and (max-width: 460px) {
+  .post {
+    width: 45%;
+  }
+
+  .dropdown,
+  .icon-button {
+    width: 15px;
+    height: 15px;
+  }
   .profile-picture {
     width: 100px;
     height: 100px;
-  }
-
-  .username {
-    font-size: .6em;
-  }
-
-  .additional-text {
-    font-size: .4em;
   }
 
   .additional-details {

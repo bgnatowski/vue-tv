@@ -108,7 +108,6 @@ function handleDecline() {
 
 .card-action-buttons {
   display: flex;
-  padding: .5em;
   justify-content: center;
 }
 
@@ -145,17 +144,34 @@ function handleDecline() {
   .username {
     font-size: .8em;
   }
+  .friends-info button{
+    font-size: .8em;
+  }
 
 }
 
 @media screen and (max-width: 460px) {
+  .post {
+    width: 45%;
+  }
+
   .profile-picture {
     width: 100px;
     height: 100px;
   }
 
+  .card-action-icon {
+    height: 35px;
+    width: 35px;
+  }
+
   .username {
     font-size: .6em;
+  }
+
+  .friends-info button{
+    font-size: .6em;
+    white-space: break-spaces;
   }
 
 }

@@ -74,5 +74,10 @@ h1 {
   gap: 5%;
 }
 
+@media screen and (max-width: 460px) {
+  .friends-container {
+    gap: 10%;
+  }
+}
 </style>
 
