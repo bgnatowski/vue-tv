@@ -4,18 +4,17 @@ import paths from "@/router/routerPaths.js";
 import {ref, watch} from "vue";
 import {useRouter} from "vue-router";
 import SearchBar from "@/components/page/SearchBar.vue";
+import SearchResults from "@/components/page/SearchResults.vue";
 
 const props = defineProps({
   isSidebarVisible: Boolean
 });
 
-const emit = defineEmits(['toggle-sidebar']);
 const screenWidth = ref(window.innerWidth);
 const mobile = ref(false)
 const profileIconRotate = ref(false)
 const sideBarIconRotate = ref(false)
 const searchIconRotate = ref(false)
-const inputRef = ref(null);
 const router = useRouter()
 
 watch(
@@ -42,6 +41,17 @@ function toggleRotate() {
 function onSearchIconClick() {
   searchIconRotate.value = !searchIconRotate.value
 }
+
+
+const searchedMovies = ref();
+const handleSearchedMovies = (movies) => {
+  if(!movies){
+    searchedMovies.value = [];
+  }else{
+    searchedMovies.value = movies;
+  }
+};
+
 </script>
 
 <template>
@@ -50,7 +60,7 @@ function onSearchIconClick() {
       <div class="branding">
         <h1 @click="router.push(paths.HOME_ROUTE)" class="bruno-ace-regular">VueTV</h1>
       </div>
-      <SearchBar :mobile="mobile" type="movie" placeholder-txt="Szukaj"/>
+      <SearchBar :mobile="mobile" type="movie" placeholder-txt="Szukaj" @searched-movies="handleSearchedMovies"/>
       <ul class="navigation">
         <li v-if="mobile" class="icon-button" @click="onSearchIconClick" :class="{'rotate360': searchIconRotate}">
           <img src="@/assets/img/search-icon.png" alt="search-icon">
@@ -64,6 +74,7 @@ function onSearchIconClick() {
         </li>
       </ul>
     </nav>
+    <SearchResults :movies="searchedMovies" @hide-results="searchedMovies = null"></SearchResults>
   </header>
 </template>
 

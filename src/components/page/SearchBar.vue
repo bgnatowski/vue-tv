@@ -1,26 +1,39 @@
 <script setup>
 
+import {ref, watch} from "vue";
+import {searchMovie} from "@/services/TVDBService.js";
+
 const props = defineProps({
   mobile: Boolean,
   type: String,
   placeholderTxt: String
 })
 
-function onSearchClick() {
-  if(type === 'movie'){
-    // logika wyszukiwania filmu
-  }else if(type === 'friend') {
+const emits = defineEmits(['searched-movies'])
+
+const searchQuery = ref('');
+const searchedMovies = ref([]);
+
+watch(searchQuery, async (newValue) => {
+  if (props.type === 'movie') {
+    searchedMovies.value = await searchMovie(searchQuery.value)
+    emits('searched-movies', searchedMovies.value)
+  } else if (props.type === 'friend') {
     // logika wyszukiwania znajomych
-  } else if(type === 'find-friend'){
+  } else if (props.type === 'find-friend') {
     // logika szukania nowych znajomych
   }
+});
+
+async function reloadOnFocus(){
+  emits('searched-movies', searchedMovies.value)
 }
 
 </script>
 <template>
   <div class="search">
-    <form class="search-form">
-      <input v-if="!mobile" type="search" :placeholder="placeholderTxt">
+    <form @submit.prevent class="search-form">
+      <input v-if="!mobile" :placeholder="placeholderTxt" v-model="searchQuery" @focus="reloadOnFocus">
     </form>
   </div>
 </template>

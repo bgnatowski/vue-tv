@@ -20,7 +20,6 @@ const isCompletedForm = computed(() => {
 
 const login = async () => {
   try {
-    console.log(authStore);
     await authStore.loginUser(credentials)
     await router.push(paths.MAIN_ROUTE)
   } catch (error){

@@ -1,6 +1,4 @@
-import {ref} from "vue";
 
-const minutes = ref(12345)
 function minutesToText(minutes) {
     let days = Math.floor(minutes / (60 * 24));
     let hours = Math.floor((minutes % (60 * 24)) / 60);
@@ -21,4 +19,16 @@ function minutesToText(minutes) {
     return text.join(' ');
 }
 
-export default minutesToText
+function formatISODate(isoDateString) {
+    const date = new Date(isoDateString);
+    return new Intl.DateTimeFormat('pl-PL', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    }).format(date);
+}
+
+export {
+    formatISODate,
+    minutesToText
+}

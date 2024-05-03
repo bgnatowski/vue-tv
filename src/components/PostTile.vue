@@ -2,7 +2,6 @@
 import {nextTick, onMounted, ref} from "vue";
 
 const isShowDropdown = ref(false)
-const isShowButton = ref(true)
 
 const props = defineProps({
       profile: Boolean
@@ -11,12 +10,10 @@ const props = defineProps({
 
 function showDropdown() {
   isShowDropdown.value = true
-  isShowButton.value = false;
 }
 
 function hideDropdown() {
   isShowDropdown.value = false;
-  isShowButton.value = true;
 }
 
 const isDraggable = ref(false);
@@ -80,11 +77,11 @@ function showInfo() {
           dramatycznym. Coś wielkiego.
         </p>
       </div>
-      <div class="dropdown" @mouseover="showDropdown" @mouseleave="hideDropdown">
-        <div class="icon-button" v-if="isShowButton">
+      <div class="dropdown">
+        <div class="icon-button" @click="showDropdown">
           <img src="@/assets/img/dots-icon.png" alt="Movie Options"/>
         </div>
-        <div v-if="isShowDropdown" class="dropdown-content">
+        <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
           <ul class="dropdown-list">
             <li @click="showInfo" class="dropdown-option">Więcej o filmie</li>
             <li v-if="!profile" class="dropdown-option">Dodaj do obejrzenia (jesli nie jest jeszcze obejrzany)</li>
@@ -168,6 +165,15 @@ function showInfo() {
   scrollbar-width: thin;
   hyphens: auto;
   max-height: 150px;
+}
+
+.dropdown-content {
+  position: absolute;
+  right: 0;
+  top: 0; /* Aby dropdown rozkładał się bezpośrednio pod ikoną */
+  white-space: nowrap; /* Zapobiega zawijaniu tekstu */
+  z-index: 9999; /* Zapewnia, że dropdown będzie na wierzchu */
+  background-color: white; /* Tło dla lepszej widoczności */
 }
 
 @media screen and (max-width: 728px) {

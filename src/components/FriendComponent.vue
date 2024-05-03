@@ -10,16 +10,13 @@ const props = defineProps({
 });
 
 const isShowDropdown = ref(false)
-const isShowButton = ref(true)
 
 function showDropdown() {
   isShowDropdown.value = true
-  isShowButton.value = false;
 }
 
 function hideDropdown() {
   isShowDropdown.value = false;
-  isShowButton.value = true;
 }
 
 const emit = defineEmits(['show-profile']);
@@ -32,11 +29,11 @@ function showProfile() {
 
 <template>
   <div class="post">
-    <div class="dropdown" @mouseover="showDropdown" @mouseleave="hideDropdown">
-      <div class="icon-button" v-if="isShowButton">
+    <div class="dropdown">
+      <div class="icon-button" @click="showDropdown">
         <img src="@/assets/img/dots-icon.png" alt="Movie Options"/>
       </div>
-      <div v-if="isShowDropdown" class="dropdown-content">
+      <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
         <ul class="dropdown-list">
           <li @click="showProfile" class="dropdown-option">Pokaż profil</li>
           <li class="dropdown-option">Usun znajomego</li>
@@ -112,6 +109,15 @@ function showProfile() {
 .additional-text {
   font-size: .8em;
   color: #555;
+}
+
+.dropdown-content {
+  position: absolute;
+  left: 0;
+  top: 0; /* Aby dropdown rozkładał się bezpośrednio pod ikoną */
+  white-space: nowrap; /* Zapobiega zawijaniu tekstu */
+  z-index: 9999; /* Zapewnia, że dropdown będzie na wierzchu */
+  background-color: white; /* Tło dla lepszej widoczności */
 }
 
 @media screen and (max-width: 800px) {
