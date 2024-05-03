@@ -1,35 +1,33 @@
-// src/stores/movieStore.js
 import { defineStore } from 'pinia';
-import {addMovie, deleteMovie, fetchMovies, updateMovie} from "@/js/MovieService.js";
-import {addToList, getUserData, removeFromList} from "@/js/UserService.js";
+import {addMovie, deleteMovie, fetchMovies, updateMovie} from "@/services/MovieService.js";
 
-export const useUserStore = defineStore('userStore', {
+export const useMovieStore = defineStore('movieStore', {
     state: () => ({
-        uuid: null,
-        moviesToWatchIds: [],
-        moviesWatchedIds: [],
-        friendsIds: [],
-        invitationsIds: [],
-        postsIds: [],
+        movies: []
     }),
     actions: {
-        async loadUserData() {
-            const userData = await getUserData(this.uuid);
-            if (userData) {
-                this.moviesToWatchIds = userData.moviesToWatchIds || [];
-                this.moviesWatchedIds = userData.moviesWatchedIds || [];
-                this.friendsIds = userData.friendsIds || [];
-                this.invitationsIds = userData.invitationsIds || [];
-                this.postsIds = userData.postsIds || [];
+        async loadMovies() {
+            this.movies = await fetchMovies();
+        },
+        async createMovie(movieData) {
+            const newMovie = await addMovie(movieData);
+            this.movies.push(newMovie);
+        },
+        async modifyMovieDetails(movieId, newDetails) {
+            await updateMovie(movieId, newDetails);
+            const index = this.movies.findIndex(movie => movie.id === movieId);
+            if (index !== -1) {
+                this.movies[index] = { ...this.movies[index], ...newDetails };
             }
         },
-        async addToUserList(listType, itemId) {
-            await addToList(this.uuid, listType, itemId);
-            this[listType].push(itemId);
-        },
-        async removeFromUserList(listType, itemId) {
-            await removeFromList(this.uuid, listType, itemId);
-            this[listType] = this[listType].filter(id => id !== itemId);
+        async removeMovie(movieId) {
+            await deleteMovie(movieId);
+            this.movies = this.movies.filter(movie => movie.id !== movieId);
+        }
+    },
+    getters: {
+        getMovieById: (state) => {
+            return (id) => state.movies.find(movie => movie.id === id);
         }
     }
 });
@@ -55,13 +53,3 @@ export const useUserStore = defineStore('userStore', {
 // const movie = movieStore.getMovieById('movie1');
 // console.log(movie);
 
-//USAGE
-// const store = useUserStore();
-// store.$patch({ uuid: 'user123' });
-// await store.loadUserData();
-//
-// // Add to watched movies
-// store.addToUserList('moviesWatchedIds', 'movie456');
-//
-// // Remove from friends list
-// store.removeFromUserList('friendsIds', 'friend123');

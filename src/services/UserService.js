@@ -1,5 +1,17 @@
-import { collection, doc, setDoc, getDoc, updateDoc, deleteDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
-import { db } from '@/js/firebase.js'; // Make sure this path is correct
+import {arrayRemove, arrayUnion, doc, getDoc, setDoc, updateDoc} from 'firebase/firestore';
+import {db} from '@/js/firebase.js';
+
+const createUser = async (userId, userData = {}) => {
+    const userRef = doc(db, "users", userId);
+    await setDoc(userRef, {
+        moviesToWatchIds: [],
+        moviesWatchedIds: [],
+        friendsIds: [],
+        invitationsIds: [],
+        postsIds: [],
+        ...userData // Pozwala na przekazanie dodatkowych opcjonalnych pól
+    });
+};
 
 const getUserData = async (userId) => {
     const docRef = doc(db, "users", userId);
@@ -33,4 +45,4 @@ const removeFromList = async (userId, listType, itemId) => {
     });
 };
 
-export { getUserData, updateUserData, addToList, removeFromList };
+export {createUser, getUserData, updateUserData, addToList, removeFromList};

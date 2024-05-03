@@ -1,77 +1,53 @@
 import {defineStore} from 'pinia';
-import {watch} from 'vue';
-import {useAuthStore} from "@/stores/AuthStore.js";
+import {addToList, createUser, getUserData, removeFromList, updateUserData} from "@/services/UserService.js";
 
 export const useUserStore = defineStore('userStore', {
     state: () => ({
-        uuid: Number,
+        uuid: null,
         moviesToWatchIds: [],
         moviesWatchedIds: [],
-        friendsIds: [], // uuid do usera
-        invitationsIds: [], // uuid usera ktory wyslal zaroszenie
-        postsIds: [], // id do postu
+        friendsIds: [],
+        invitationsIds: [],
+        postsIds: [],
     }),
     actions: {
-        resetUser() {
-            this.user = null;
-            this.moviesToWatchIds = [];
-            this.moviesWatchedIds = [];
-            this.friendsIds = [];
-            this.invitationsIds = [];
-            this.postsIds = [];
+        async createUser() {
+            await createUser(this.uuid);
         },
-        addMovieToWatch(movieId) {
-            if (!this.moviesToWatchIds.includes(movieId)) {
-                this.moviesToWatchIds.push(movieId);
+        async loadUserData() {
+            const userData = await getUserData(this.uuid);
+            if (userData) {
+                this.moviesToWatchIds = userData.moviesToWatchIds || [];
+                this.moviesWatchedIds = userData.moviesWatchedIds || [];
+                this.friendsIds = userData.friendsIds || [];
+                this.invitationsIds = userData.invitationsIds || [];
+                this.postsIds = userData.postsIds || [];
             }
         },
-        removeMovieToWatch(movieId) {
-            this.moviesToWatchIds = this.moviesToWatchIds.filter(id => id !== movieId);
+        async updateUser(data) {
+            await updateUserData(this.uuid, data);
+            // Możesz wybrać, czy odświeżyć dane z serwera:
+            await this.loadUserData();
+            // Lub zaktualizować stan lokalny bezpośrednio:
+            // this.$patch({...data});
         },
-        addMovieWatched(movieId) {
-            if (!this.moviesWatchedIds.includes(movieId)) {
-                this.moviesWatchedIds.push(movieId);
-            }
+        async addToUserList(listType, itemId) {
+            await addToList(this.uuid, listType, itemId);
+            this[listType].push(itemId);
         },
-        removeMovieWatched(movieId) {
-            this.moviesWatchedIds = this.moviesWatchedIds.filter(id => id !== movieId);
-        },
-        addFriend(friendId) {
-            if (!this.friendsIds.includes(friendId)) {
-                this.friendsIds.push(friendId);
-            }
-        },
-        removeFriend(friendId) {
-            this.friendsIds = this.friendsIds.filter(id => id !== friendId);
-        },
-        addInvitation(invitationId) {
-            if (!this.invitationsIds.includes(invitationId)) {
-                this.invitationsIds.push(invitationId);
-            }
-        },
-        removeInvitation(invitationId) {
-            this.invitationsIds = this.invitationsIds.filter(id => id !== invitationId);
-        },
-        addPost(postId) {
-            if (!this.postsIds.includes(postId)) {
-                this.postsIds.push(postId);
-            }
-        },
-        removePost(postId) {
-            this.postsIds = this.postsIds.filter(id => id !== postId);
-        },
-    }
-}, {
-    setup() {
-        const authStore = useAuthStore();
-        watch(() => authStore.user, (newUser) => {
-            if (newUser) {
-                this.user = {
-                    uuid: newUser.uid,
-                };
-            } else {
-                this.resetUser();
-            }
-        }, {immediate: true});
+        async removeFromUserList(listType, itemId) {
+            await removeFromList(this.uuid, listType, itemId);
+            this[listType] = this[listType].filter(id => id !== itemId);
+        }
     }
 });
+//USAGE
+// const store = useUserStore();
+// store.$patch({ uuid: 'user123' });
+// await store.loadUserData();
+//
+// // Add to watched movies
+// store.addToUserList('moviesWatchedIds', 'movie456');
+//
+// // Remove from friends list
+// store.removeFromUserList('friendsIds', 'friend123');

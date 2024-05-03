@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import {addUserMovie, fetchUserMovies, removeUserMovie, updateUserMovie} from "@/js/UserMovieService.js";
+import {addUserMovie, fetchUserMovies, removeUserMovie, updateUserMovie} from "@/services/UserMovieService.js";
 
 export const useUserMovieStore = defineStore('userMovieStore', {
     state: () => ({
@@ -51,7 +51,6 @@ export const useUserMovieStore = defineStore('userMovieStore', {
 // });
 
 //USAGE:
-
 // const store = useUserMovieStore();
 //
 // const userId = "user123";

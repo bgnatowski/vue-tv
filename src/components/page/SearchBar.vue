@@ -1,14 +1,9 @@
 <script setup>
-import {onMounted, ref} from "vue";
 
 const props = defineProps({
   mobile: Boolean,
   type: String,
   placeholderTxt: String
-})
-
-onMounted(()=>{
-  console.log(props.mobile)
 })
 
 function onSearchClick() {

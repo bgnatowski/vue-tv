@@ -53,6 +53,7 @@ export const useAuthStore = defineStore('authStore', {
                     displayName: username,
                     photoURL: photoUrl || "https://cdn-icons-png.flaticon.com/512/4715/4715330.png"
                 });
+
             } catch (error) {
                 console.error("Błąd logowania z Google", error);
                 throw this.mapErrorCodeToMessage("Błąd logowania z Google")
