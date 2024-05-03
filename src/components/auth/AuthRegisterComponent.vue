@@ -2,10 +2,10 @@
 
 import {computed, reactive, ref, watch} from "vue";
 import {useRouter} from "vue-router";
-import {useAuthStore} from '@/stores/AuthStore';
 import paths from "@/router/routerPaths.js";
 import AuthPopup from "@/components/auth/AuthPopup.vue";
 import GoogleButton from "@/components/auth/AuthGoogleButton.vue";
+import {useAuthStore} from "@/stores/AuthStore.js";
 
 const emailRepeat = ref("");
 const passwordRepeat = ref("");

@@ -1,9 +1,12 @@
-import {arrayRemove, arrayUnion, doc, getDoc, setDoc, updateDoc} from 'firebase/firestore';
+import {arrayRemove, arrayUnion, deleteDoc, doc, getDoc, setDoc, updateDoc} from 'firebase/firestore';
 import {db} from '@/js/firebase.js';
 
-const createUser = async (userId, userData = {}) => {
-    const userRef = doc(db, "users", userId);
+const createUser = async (userData = {}) => {
+    const userRef = doc(db, "users", userData.uid);
     await setDoc(userRef, {
+        username: userData.username,
+        email: userData.email,
+        photoUrl: userData.photoUrl,
         moviesToWatchIds: [],
         moviesWatchedIds: [],
         friendsIds: [],
@@ -11,6 +14,10 @@ const createUser = async (userId, userData = {}) => {
         postsIds: [],
         ...userData // Pozwala na przekazanie dodatkowych opcjonalnych pól
     });
+};
+const deleteUser = async (userId) => {
+    const userRef = doc(db, "users", userId);
+    await deleteDoc(userRef);
 };
 
 const getUserData = async (userId) => {
@@ -45,4 +52,4 @@ const removeFromList = async (userId, listType, itemId) => {
     });
 };
 
-export {createUser, getUserData, updateUserData, addToList, removeFromList};
+export {createUser,deleteUser, getUserData, updateUserData, addToList, removeFromList};

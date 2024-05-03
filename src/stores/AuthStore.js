@@ -2,8 +2,7 @@ import {
     createUserWithEmailAndPassword,
     deleteUser as firebaseDeleteUser,
     EmailAuthProvider,
-    GoogleAuthProvider,
-    onAuthStateChanged,
+    GoogleAuthProvider, onAuthStateChanged,
     reauthenticateWithCredential,
     signInWithEmailAndPassword,
     signInWithPopup,
@@ -13,35 +12,25 @@ import {
 } from 'firebase/auth';
 import {defineStore} from 'pinia';
 import {auth,} from '../js/firebase';
-import {ref} from 'vue';
+import {useUserStore} from "@/stores/UserStore.js";
 
 export const useAuthStore = defineStore('authStore', {
-    state: () => ({
-        user: {
-            uuid: ref(''),
-            username: ref(''),
-            email: ref(''),
-            photoUrl: ref('')
-        }
-    }),
     actions: {
         init() {
-            onAuthStateChanged(auth, (userDetails) => {
+            onAuthStateChanged(auth, async (userDetails) => {
+                const userStore = useUserStore();
                 if (userDetails) {
-                    this.user.uuid = userDetails.uid;
-                    this.user.username = userDetails.displayName;
-                    this.user.email = userDetails.email;
-                    this.user.photoUrl = userDetails.photoURL;
+                    userStore.$patch({
+                        uuid: userDetails.uid,
+                        username: userDetails.displayName || '',
+                        email: userDetails.email || '',
+                        photoUrl: userDetails.photoURL || 'https://cdn-icons-png.flaticon.com/512/4715/4715330.png'
+                    });
+                    await userStore.loadUserData(userDetails.uid);
                 } else {
-                    this.resetUser();
+                    userStore.resetUser();
                 }
             });
-        },
-        resetUser() {
-            this.user.uuid = '';
-            this.user.username = '';
-            this.user.email = '';
-            this.user.photoUrl = '';
         },
         async registerWithGoogle() {
             try {
@@ -53,7 +42,15 @@ export const useAuthStore = defineStore('authStore', {
                     displayName: username,
                     photoURL: photoUrl || "https://cdn-icons-png.flaticon.com/512/4715/4715330.png"
                 });
-
+                const userData = {
+                    uid: user.uid,
+                    username: user.displayName,
+                    email: user.email,
+                    photoUrl: user.photoURL
+                }
+                const userStore = useUserStore();
+                await userStore.createUser(userData);
+                await userStore.loadUserData(userData.uid);
             } catch (error) {
                 console.error("Błąd logowania z Google", error);
                 throw this.mapErrorCodeToMessage("Błąd logowania z Google")
@@ -63,11 +60,20 @@ export const useAuthStore = defineStore('authStore', {
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, credentials.email, credentials.password);
                 const defaultPhotoUrl = "https://cdn-icons-png.flaticon.com/512/4715/4715330.png";
-                await updateProfile(userCredential.user, {
+                const user = userCredential.user;
+                await updateProfile(user, {
                     displayName: credentials.username,
                     photoURL: defaultPhotoUrl
                 });
 
+                const userData = {
+                    uid: user.uid,
+                    username: user.displayName,
+                    email: user.email,
+                    photoUrl: user.photoURL
+                }
+                const userStore = useUserStore();
+                await userStore.createUser(userData);
                 await this.logoutUser();
                 return true
             } catch (error) {
@@ -76,7 +82,9 @@ export const useAuthStore = defineStore('authStore', {
         },
         async loginUser(credentials) {
             try {
-                await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
+                const userCredential = await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
+                const userStore = useUserStore();
+                await userStore.loadUserData(userCredential.user.uid);
             } catch (error) {
                 throw this.mapErrorCodeToMessage(error.code)
             }
@@ -84,6 +92,8 @@ export const useAuthStore = defineStore('authStore', {
         async logoutUser() {
             try {
                 await signOut(auth);
+                const userStore = useUserStore();
+                userStore.resetUser();
             } catch (error) {
                 throw this.mapErrorCodeToMessage(error.code)
             }
@@ -100,6 +110,10 @@ export const useAuthStore = defineStore('authStore', {
                 await reauthenticateWithCredential(user, credential)
 
                 await firebaseDeleteUser(user);
+
+                const userStore = useUserStore();
+                await userStore.removeUser(user.uid)
+
                 await this.logoutUser();
                 return true;
             } catch (error) {
@@ -113,6 +127,10 @@ export const useAuthStore = defineStore('authStore', {
                     throw new Error('Invalid user credentials or username does not match.');
                 }
                 await firebaseDeleteUser(user);
+
+                const userStore = useUserStore();
+                await userStore.removeUser(user.uid)
+
                 await this.logoutUser();
                 return true;
             } catch (error) {
@@ -129,7 +147,6 @@ export const useAuthStore = defineStore('authStore', {
 
                 const credential = EmailAuthProvider.credential(user.email, credentials.currentPassword);
                 await reauthenticateWithCredential(user, credential);
-
                 await firebaseUpdatePassword(user, credentials.newPassword1);
                 return true;
             } catch (error) {
@@ -140,15 +157,13 @@ export const useAuthStore = defineStore('authStore', {
             try {
                 const user = auth.currentUser;
                 if (user) {
-                    await updateProfile(user, { photoURL: newPhotoURL });
-                    this.user.photoUrl = newPhotoURL;
+                    await updateProfile(user, {photoURL: newPhotoURL});
+                    const userStore = useUserStore();
+                    await userStore.updateUser(user.uid, {photoUrl: newPhotoURL});
                 }
             } catch (error) {
                 throw this.mapErrorCodeToMessage("auth/delete")
             }
-        },
-        isGoogleUser() {
-            return auth.currentUser.providerData.some(provider => provider.providerId === 'google.com');
         },
         async reauthenticateGoogleUser() {
             const provider = new GoogleAuthProvider();
@@ -158,6 +173,9 @@ export const useAuthStore = defineStore('authStore', {
             } catch (error) {
                 throw this.mapErrorCodeToMessage("auth/reauth")
             }
+        },
+        isGoogleUser() {
+            return auth.currentUser.providerData.some(provider => provider.providerId === 'google.com');
         },
         mapErrorCodeToMessage(code) {
             switch (code) {

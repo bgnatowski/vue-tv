@@ -2,9 +2,10 @@
 import {computed, onMounted, reactive, ref} from "vue";
 import paths from "@/router/routerPaths.js";
 import {useRouter} from "vue-router";
-import {useAuthStore} from "@/stores/AuthStore.js";
 import {storage} from "@/js/firebase.js";
 import {ref as storageRef, uploadBytes, getDownloadURL} from 'firebase/storage';
+import {useAuthStore} from "@/stores/AuthStore.js";
+import {useUserStore} from "@/stores/UserStore.js";
 
 // common for action popup//
 const props = defineProps({
@@ -13,9 +14,10 @@ const props = defineProps({
 })
 
 
-const emits = defineEmits(['close']);
+const emits = defineEmits(['close', 'changedAvatar']);
 
 const authStore = useAuthStore();
+const userStore = useUserStore();
 const router = useRouter();
 
 const errorMsg = ref('')
@@ -38,6 +40,7 @@ const isCompletedDeleteGoogleForm = computed(() => {
 
 async function confirmDeleteAccount(password) {
   try {
+    console.log("deleting account with password", userStore.username, password)
     let isDeleted = await authStore.deleteUser(password);
     if (isDeleted)
       await router.push(paths.DELETE_ROUTE);
@@ -92,7 +95,7 @@ async function updateProfilePhotoURL() {
   try {
     if (file.value) {
       const timestamp = Date.now();
-      const storagePath = `profilePictures/${authStore.user.uuid}/${timestamp}-${file.value.name}`;
+      const storagePath = `profilePictures/${userStore.uuid}/${timestamp}-${file.value.name}`;
       const fileRef = storageRef(storage, storagePath);
       const metadata = {
         contentType: file.value.type
@@ -106,6 +109,7 @@ async function updateProfilePhotoURL() {
       await authStore.updateUserPhotoURL(defaultUrl);
     }
     changedAvatar.value = true;
+    emits('changedAvatar');
   } catch (error) {
     errorMsg.value = 'Nie udało się przesłać obrazka.';
   }

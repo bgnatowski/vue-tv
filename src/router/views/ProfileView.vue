@@ -1,16 +1,22 @@
 <script setup>
 import UserMovesTile from "@/components/UserMoviesTile.vue"
 import PostTile from "@/components/PostTile.vue";
-import {onBeforeMount, ref} from "vue";
+import {onBeforeMount, onMounted, reactive, ref} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import TitleTile from "@/components/TitleTile.vue";
-import {useAuthStore} from "@/stores/AuthStore.js";
+import {useUserStore} from "@/stores/UserStore.js";
 
-const authStore = useAuthStore();
-let user = {};
-onBeforeMount(() => {
-  user = authStore.user
+const userStore = useUserStore();
+const user = reactive({
+  username: String,
+  photoUrl: String,
 })
+
+onBeforeMount(() => {
+      user.username = userStore.username;
+      user.photoUrl = userStore.photoUrl;
+    }
+)
 
 const showDetails = ref(false);
 const selectedMovie = ref(null);
@@ -34,16 +40,16 @@ function handleClose() {
     </MovieDetailsPopup>
     <section class="movies-column">
       <div class="profile-picture">
-        <img :src="user.photoUrl" alt="profile avatar">
+        <img :src="userStore.photoUrl" alt="profile avatar">
       </div>
-      <p class="user-name">{{ user.username }}</p>
+      <p class="user-name">{{ userStore.username }}</p>
       <TitleTile>Filmy obejrzane</TitleTile>
       <UserMovesTile tileType="Filmy do obejrzenia"/>
       <TitleTile>Filmy obejrzane</TitleTile>
       <UserMovesTile tileType="Filmy do obejrzenia"/>
     </section>
     <section class="posts-column">
-<!--      todo: if-user self -> twoje recenzje else -> recenzje znajomego -->
+      <!--      todo: if-user self -> twoje recenzje else -> recenzje znajomego -->
       <TitleTile>Twoje recenzje</TitleTile>
       <div class="posts" v-dragscroll>
         <PostTile profile @show-details="handleShowDetails"></PostTile>
@@ -66,7 +72,8 @@ function handleClose() {
   width: 40%;
   padding: 1em;
 }
-.posts-column{
+
+.posts-column {
   padding: 1em 1em 0 1em;
 }
 
