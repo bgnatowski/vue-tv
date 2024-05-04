@@ -1,7 +1,7 @@
 <script setup>
 import TitleTile from "@/components/TitleTile.vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
-import {computed, onBeforeMount, onMounted, ref, watch} from "vue";
+import {computed, ref} from "vue";
 import {minutesToText} from "@/js/TimeUtils.js";
 import {useUserStore} from "@/stores/UserStore.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
@@ -18,6 +18,7 @@ const handleShowDetails = (movie) => {
   selectedMovie.value = movie;
   showDetails.value = true;
 }
+
 function handleClose() {
   showDetails.value = false;
 }
@@ -40,7 +41,7 @@ const addToTotalDuration = (duration) => {
     <TitleTile>
       Filmy do zobaczenia
       <template #p>Aby obejrzeć wszystko z tej listy, będziesz potrzebował:</template>
-      <template #strong>{{minutesToText(totalDuration)}}</template>
+      <template #strong>{{ minutesToText(totalDuration) }}</template>
     </TitleTile>
 
     <MovieDetailsPopup v-if="showDetails"

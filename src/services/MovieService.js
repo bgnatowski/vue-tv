@@ -1,4 +1,4 @@
-import { collection, doc, setDoc, getDocs,updateDoc } from 'firebase/firestore';
+import {collection, doc, setDoc, getDocs, updateDoc, getDoc} from 'firebase/firestore';
 import { db } from '@/js/firebase.js';
 
 const fetchAllUserMovies = async (userId) => {
