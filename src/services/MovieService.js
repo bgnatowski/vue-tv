@@ -1,4 +1,4 @@
-import {collection, doc, setDoc, getDocs, updateDoc, getDoc} from 'firebase/firestore';
+import {collection, doc, setDoc, getDocs, updateDoc, getDoc, deleteDoc} from 'firebase/firestore';
 import { db } from '@/js/firebase.js';
 
 const fetchAllUserMovies = async (userId) => {
@@ -28,7 +28,7 @@ const updateUserMovie = async (userId, movieId, newDetails) => {
     try {
         // Aktualizujemy dane z użyciem przekazanych nowych wartości
         await updateDoc(movieDocRef, newDetails);
-        console.log(`Dokument zaktualizowany: ${movieId}`);
+        console.log(`Dokument zaktualizowany: ${movieId} o dane: ${newDetails}`);
 
         // Pobieramy zaktualizowany dokument i zwracamy jego dane
         const updatedDocSnap = await getDoc(movieDocRef);
@@ -44,5 +44,17 @@ const updateUserMovie = async (userId, movieId, newDetails) => {
     }
 };
 
+const deleteUserMovie = async (userId, movieId) => {
+    const movieDocRef = doc(db, `users/${userId}/movies`, movieId.toString());
 
-export { addMovieToUser, updateUserMovie, fetchAllUserMovies};
+    try {
+        // Usuń dokument
+        await deleteDoc(movieDocRef);
+        console.log(`Dokument usunięty: ${movieId}`);
+    } catch (error) {
+        console.error(`Błąd podczas usuwania filmu ${movieId} dla użytkownika ${userId}:`, error);
+    }
+}
+
+
+export { addMovieToUser, updateUserMovie, fetchAllUserMovies, deleteUserMovie};

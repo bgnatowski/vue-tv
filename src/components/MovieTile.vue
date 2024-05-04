@@ -1,9 +1,10 @@
 <script setup>
 
-import {computed, onBeforeMount, onMounted, ref, watch} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {fetchMovieDetails} from "@/services/TVDBService.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import {useUserStore} from "@/stores/UserStore.js";
+import RatingStars from "@/components/RatingStars.vue";
 
 // ------------------ PROPS AND EMITS -----------------------//
 const props = defineProps({
@@ -18,6 +19,35 @@ const emit = defineEmits([
 // ------------------- INSTANCJE STORES -------------------//
 const movieStore = useMovieStore();
 const userStore = useUserStore();
+
+// ------------------- DELETE FROM LIST -------------------//
+const deleteMovie = () => {
+  movieStore.removeCurrentUserMovie(
+      userStore.uid,
+      props.movieId,
+  );
+};
+
+// ------------------- MOVE TO WATCHED ----------------------//
+const moveToWatched = () => {
+  movieStore.modifyCurrentUserMovie(
+      userStore.uid,
+      props.movieId,
+      { isWatched: true }
+  );
+};
+
+// ------------------- RATING UPDATE ----------------------//
+const userRating = ref('');
+
+const updateRating = (newRating) => {
+  movieStore.modifyCurrentUserMovie(
+      userStore.uid,
+      props.movieId,
+      { userRating: newRating }
+  );
+  userRating.value = newRating;
+};
 
 // ------------------- CHANGE VISIBLE/PUBLIKACJA -----------//
 const isPrivate = ref();
@@ -57,6 +87,7 @@ const showDetails = () => {
 // ----------------------------- ZALADOWANIE DANYCH ----------------//
 const movie = ref({});
 const isLoaded = ref(false);
+
 onMounted(async () => {
   if (props.movieId != undefined) {
     movie.value = await fetchMovieDetails(props.movieId);
@@ -85,13 +116,17 @@ onMounted(async () => {
             <p class="metadata-title">Premiera: <span>{{ movie.releaseDate.substring(0, 4) }}</span></p>
             <p class="metadata-title">Gatunki: <span>{{ movie.genres.map((genre) => genre.name).join(", ") }}</span></p>
             <p class="metadata-title">Długość: <span>{{ movie.duration }} min</span></p>
+            <p class="metadata-title">Twoja ocena: <span>{{userRating}}/10</span></p>
+            <RatingStars @rating-value="updateRating" v-if="watched"></RatingStars>
           </div>
         </div>
         <div class="buttons">
           <div class="card-action-buttons">
+<!--            todo: recommend -->
             <div class="card-action-icon" v-if="!isPrivate && watched" aria-label="Recommend">
               <img src="@/assets/img/recommend-icon.png" alt="Recommend icon"/>
             </div>
+<!--            todo: note -->
             <div class="card-action-icon" aria-label="Note">
               <img src="@/assets/img/edit-icon.png" alt="Note icon"/>
             </div>
@@ -102,6 +137,9 @@ onMounted(async () => {
               <img src="@/assets/img/hide-icon.png" v-if="isPrivate" alt="Hide icon" @click="publicMovie"/>
               <img src="@/assets/img/show-icon.png" v-else alt="Show icon" @click="unpublicMovie"/>
             </div>
+            <div @click="deleteMovie" class="card-action-icon" aria-label="Delete">
+              <img src="@/assets/img/delete-icon.png" alt="Delete icon"/>
+            </div>
           </div>
           <div class="movie-action-buttons" v-if="!watched">
             <div class="action-switch">
@@ -110,7 +148,7 @@ onMounted(async () => {
                 <p>Przesuń &#8594;</p>
               </div>
               <label class="switch">
-                <input type="checkbox">
+                <input @change="moveToWatched" type="checkbox">
                 <span class="slider round"> </span>
               </label>
             </div>

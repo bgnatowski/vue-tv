@@ -25,7 +25,7 @@ watch(searchQuery, async (newValue) => {
   }
 });
 
-async function reloadOnFocus(){
+async function reloadSearched(){
   emits('searched-movies', searchedMovies.value)
 }
 
@@ -33,7 +33,7 @@ async function reloadOnFocus(){
 <template>
   <div class="search">
     <form @submit.prevent class="search-form">
-      <input v-if="!mobile" :placeholder="placeholderTxt" v-model="searchQuery" @focus="reloadOnFocus">
+      <input v-if="!mobile" :placeholder="placeholderTxt" v-model="searchQuery" @click="reloadSearched">
     </form>
   </div>
 </template>

@@ -1,14 +1,24 @@
 <script setup>
 import Rating from "primevue/rating";
-import {onBeforeMount, onMounted, ref} from "vue";
+import {onBeforeMount, onMounted, ref, watch} from "vue";
 
 const props = defineProps({
   readOnly: Boolean,
   vertical: Boolean,
-  rating: Number
+  rating: Number,
+  totalCount: Number
 })
+
+const emits = defineEmits(['rating-value'])
 const isPointer = ref(props.readOnly ? 'default' : 'pointer');
 const stars = ref();
+
+// Emituj wartość tylko, gdy nie jest read-only
+watch(stars, (newValue) => {
+  if (!props.readOnly) {
+    emits("rating-value", newValue);
+  }
+});
 
 onBeforeMount(() =>{
   stars.value = props.rating;
@@ -30,7 +40,7 @@ onBeforeMount(() =>{
         <img class="star-icon" src="@/assets/rating/custom-officon.png" alt="star-unfilled"/>
       </template>
     </Rating>
-    <p v-if="readOnly" class="real-value" v-text="stars"></p>
+    <p v-if="readOnly" class="real-value">{{ stars }}</p>
   </div>
 </template>
 

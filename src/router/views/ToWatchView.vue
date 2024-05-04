@@ -50,8 +50,8 @@ const addToTotalDuration = (duration) => {
     </MovieDetailsPopup>
 
     <MovieTile
-        v-for="(movieId, index) in moviesToWatchIds"
-        :key="index"
+        v-for="(movieId) in moviesToWatchIds"
+        :key="movieId"
         :movie-id="movieId"
         @show-details="handleShowDetails"
         @emit-duration="addToTotalDuration"

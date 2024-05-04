@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia';
-import {addMovieToUser, fetchAllUserMovies, updateUserMovie} from "@/services/MovieService.js";
+import {addMovieToUser, deleteUserMovie, fetchAllUserMovies, updateUserMovie} from "@/services/MovieService.js";
 
 export const useMovieStore = defineStore('movieStore', {
     state: () => ({
@@ -73,6 +73,21 @@ export const useMovieStore = defineStore('movieStore', {
             const index = this.currentUserMovies.findIndex(m => m.movieId === movieId);
             if (index !== -1) {
                 this.currentUserMovies[index] = { ...this.currentUserMovies[index], ...newDetails };
+            }
+        },
+        async removeCurrentUserMovie(userId, movieId) {
+            // Usuń dokument filmu z bazy danych
+            await deleteUserMovie(userId, movieId);
+
+            // Usuń film z lokalnego stanu
+            const index = this.currentUserMovies.findIndex((movie) => movie.movieId === movieId);
+
+            // Jeśli film istnieje w lokalnym stanie, usuń go
+            if (index !== -1) {
+                this.currentUserMovies.splice(index, 1);
+                console.log(`Film o ID ${movieId} został usunięty z lokalnego stanu.`);
+            } else {
+                console.warn(`Film o ID ${movieId} nie został znaleziony w lokalnym stanie.`);
             }
         },
     },
