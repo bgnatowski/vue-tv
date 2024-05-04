@@ -19,9 +19,10 @@ const hideDropdown = () => {
   isShowDropdown.value = false;
 };
 
-const showDetails = (id) => {
-  emit('show-details', id);
-};
+const showDetails = () => {
+  emit('show-details', props.movie);
+  console.log('MovieTile: wyemitowano show details',  props.movie);
+}
 
 const userStore = useUserStore();
 const movieStore = useMovieStore();
@@ -71,7 +72,7 @@ const addToWatched = () => {
       </div>
       <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
         <ul class="dropdown-list">
-          <li @click="showDetails(movie.id)" class="dropdown-option">Zobacz więcej</li>
+          <li @click="showDetails" class="dropdown-option">Zobacz więcej</li>
           <li @click="addToWatch" class="dropdown-option">Dodaj do obejrzenia</li>
           <li @click="addToWatched" class="dropdown-option">Dodaj do obejrzanych</li>
         </ul>

@@ -77,6 +77,16 @@
     font-weight: 600;
 }
 
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    font-size: 1.5em;
+    color: var(--main-color);
+}
+
 .icon-button {
     display: flex;
     height: 35px;

@@ -1,32 +1,43 @@
 <script setup>
-import MovieTile from "@/components/MovieTile.vue"
 import TitleTile from "@/components/TitleTile.vue";
-import {onBeforeMount, ref} from "vue";
+import {onMounted, ref} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import {minutesToText} from "@/js/TimeUtils";
 import {useUserStore} from "@/stores/UserStore.js";
+import MovieTile from "@/components/MovieTile.vue";
+import {useMovieStore} from "@/stores/MovieStore.js";
 
+// --------------------- POPUP -------------- ///
 const showDetails = ref(false);
-const selectedMovieId = ref('');
-
-const handleShowDetails = (id) => {
-  console.log("handleShowDetails for movie id: ", id);
-  if(id){
-    selectedMovieId.value = id;
-    showDetails.value = true;
-  }
+const selectedMovie = ref(null);
+const handleShowDetails = (movie) => {
+  selectedMovie.value = movie;
+  showDetails.value = true;
 }
-
 function handleClose() {
   showDetails.value = false;
 }
-const minutes = ref(1234);
 
+// --------------------- MOVIE TILE -------------- ///
 const userStore = useUserStore();
-
-onBeforeMount(() => {
-
+const moviesWatchedIds = ref([]);
+onMounted( () => {
+  moviesWatchedIds.value = userStore.moviesWatchedIds;
 })
+
+// ------------------- TOTAL DURATION ---------- //
+const totalDuration = ref(0);
+
+const addToTotalDuration = (duration) => {
+  totalDuration.value += duration;
+};
+
+// ------------------- CHANGE VISIBLE -----------//
+const movieStore = useMovieStore()
+const handleChangeVisible = ({ movieId, value }) => {
+  console.log('change visible movie ', movieId, value)
+  movieStore.modifyUserMovie(userStore.uuid, movieId, { isPrivate: value })
+}
 
 </script>
 
@@ -36,16 +47,23 @@ onBeforeMount(() => {
       Filmy obejrzane
       <template v-slot:p>Do tej pory na obejrzenie wszystkich filów spedziłeś:
       </template>
-      <template #strong>{{minutesToText(minutes)}}</template>
+      <template #strong>{{minutesToText(totalDuration)}}</template>
     </TitleTile>
 
     <MovieDetailsPopup v-if="showDetails"
-                       :movie-id="selectedMovieId"
+                       :movie="selectedMovie"
                        @close="handleClose">
-
     </MovieDetailsPopup>
 
-    <MovieTile watched @show-details="handleShowDetails"/>
+    <MovieTile
+        watched
+        v-for="(movieId, index) in moviesWatchedIds"
+        :key="index"
+        :movie-id="movieId"
+        @show-details="handleShowDetails"
+        @emit-duration="addToTotalDuration"
+        @change-visible="handleChangeVisible"
+    />
     <main class="user-content">
       <h2>---Koniec---</h2>
     </main>

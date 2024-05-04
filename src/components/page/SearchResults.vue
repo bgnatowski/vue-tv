@@ -12,12 +12,12 @@ const handleMouseOut = () => {
   emits('hide-results');
 };
 
+// --------------------- POPUP -------------- ///
 const showDetails = ref(false);
-const selectedMovieId = ref();
-
-const handleShowDetails = (id) => {
-  console.log("handleShowDetails for movie id: ", id);
-  selectedMovieId.value = id;
+const selectedMovie = ref(null);
+const handleShowDetails = (movie) => {
+  console.log("handleShowDetails for movie: ", movie);
+  selectedMovie.value = movie;
   showDetails.value = true;
 }
 

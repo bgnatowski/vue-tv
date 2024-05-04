@@ -1,7 +1,7 @@
 <script setup>
 import UserMovesTile from "@/components/UserMoviesTile.vue"
 import PostTile from "@/components/PostTile.vue";
-import {onBeforeMount, onMounted, reactive, ref} from "vue";
+import {onBeforeMount, reactive, ref} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import TitleTile from "@/components/TitleTile.vue";
 import {useUserStore} from "@/stores/UserStore.js";
@@ -18,14 +18,14 @@ onBeforeMount(() => {
     }
 )
 
+// --------------------- POPUP -------------- ///
 const showDetails = ref(false);
-const selectedMovieId = ref(null);
-
-function handleShowDetails(movieId) {
-  selectedMovieId.value = movieId;
+const selectedMovie = ref(null);
+const handleShowDetails = (movie) => {
+  console.log("handleShowDetails for movie: ", movie);
+  selectedMovie.value = movie;
   showDetails.value = true;
 }
-
 function handleClose() {
   showDetails.value = false;
 }
@@ -35,7 +35,7 @@ function handleClose() {
 <template>
   <section class="feed-container">
     <MovieDetailsPopup v-if="showDetails"
-                       :movie-id="selectedMovieId"
+                       :movie="selectedMovie"
                        @close="handleClose">
     </MovieDetailsPopup>
     <section class="movies-column">

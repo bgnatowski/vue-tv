@@ -1,32 +1,53 @@
 <script setup>
 
-import {ref} from "vue";
-import {sampleMovie} from "@/services/TVDBService.js";
+import {onBeforeMount, ref} from "vue";
+import {fetchMovieDetails} from "@/services/TVDBService.js";
 
-defineProps({
-  watched: Boolean
+// ------------------ PROPS AND EMITS -----------------------//
+const props = defineProps({
+  watched: Boolean,
+  movieId: {type: Number, required: true}
 })
+const emit = defineEmits([
+  'show-details',
+  'emit-duration',
+  'change-visible'
+]);
 
+//------------------------- todo PUBLIKACJA ------------------------//
 const isPublic = ref(false);
 
-const emit = defineEmits(['show-details']);
-
 function publicMovie() {
-  isPublic.value = !isPublic.value;
+  isPublic.value = true;
+  emit('change-visible', {movieId: movie.value.id, value: true} )
 }
 
-const movie = sampleMovie;
-
-const showDetails = (id) => {
-  emit('show-details', id);
-  console.log('MovieTile: wyemitowano show details');
+function unpublicMovie() {
+  isPublic.value = false
+  emit('change-visible', {movieId: movie.value.id, value: false} )
 }
+
+// ---------------------------POKAZANIE POPUPU ----------------//
+const showDetails = () => {
+  emit('show-details', movie.value);
+}
+
+// ----------------------------- ZALADOWANIE DANYCH ----------------//
+const movie = ref({});
+const isLoaded = ref(false);
+onBeforeMount(async () => {
+  if (props.movieId != undefined) {
+    movie.value = await fetchMovieDetails(props.movieId);
+    isLoaded.value = true;
+    emit("emit-duration", movie.value.duration)
+  }
+});
 
 </script>
 
 <template>
   <section class="post">
-    <div class="movie-card">
+    <div class="movie-card" v-if="isLoaded">
       <div class="movie-poster">
         <img :src="movie.posterPath" alt="Movie poster"/>
       </div>
@@ -37,8 +58,8 @@ const showDetails = (id) => {
           </div>
           <div class="movie-metadata">
             <p class="metadata-title">Premiera: <span>{{ movie.releaseDate.substring(0, 4) }}</span></p>
-            <p class="metadata-title">Gatunki:  <span>{{ movie.genres.map((genre) => genre.name).join(", ") }}</span></p>
-            <p class="metadata-title">Długość:  <span>{{ movie.duration }} min</span> </p>
+            <p class="metadata-title">Gatunki: <span>{{ movie.genres.map((genre) => genre.name).join(", ") }}</span></p>
+            <p class="metadata-title">Długość: <span>{{ movie.duration }} min</span></p>
           </div>
         </div>
         <div class="buttons">
@@ -49,12 +70,12 @@ const showDetails = (id) => {
             <div class="card-action-icon" aria-label="Note">
               <img src="@/assets/img/edit-icon.png" alt="Note icon"/>
             </div>
-            <div @click="showDetails(movie.id)" class="card-action-icon" aria-label="Info">
+            <div @click="showDetails" class="card-action-icon" aria-label="Info">
               <img src="@/assets/img/info-icon.png" alt="Info icon"/>
             </div>
-            <div @click="publicMovie" class="card-action-icon" aria-label="Hide">
-              <img src="@/assets/img/show-icon.png" v-if="isPublic" alt="Show icon"/>
-              <img src="@/assets/img/hide-icon.png" v-else alt="Hide icon"/>
+            <div class="card-action-icon" aria-label="Hide">
+              <img src="@/assets/img/show-icon.png" v-if="isPublic" alt="Show icon" @click="unpublicMovie"/>
+              <img src="@/assets/img/hide-icon.png" v-else alt="Hide icon" @click="publicMovie"/>
             </div>
           </div>
           <div class="movie-action-buttons" v-if="!watched">
@@ -71,6 +92,9 @@ const showDetails = (id) => {
           </div>
         </div>
       </div>
+    </div>
+    <div v-else class="loading">
+      <p>Ładowanie...</p>
     </div>
   </section>
 </template>

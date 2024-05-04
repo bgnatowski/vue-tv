@@ -1,28 +1,20 @@
 <script setup>
 import RatingStars from "@/components/RatingStars.vue";
-import {computed, onBeforeMount, onMounted, ref} from "vue";
-import {fetchMovieDetails} from "@/services/TVDBService.js";
 
 const props = defineProps({
-  movieId: Number
-});
-
-const movie = ref({});
-
-const isLoaded = ref(false); // Wskaźnik, czy dane są załadowane
-
-onBeforeMount(async () => {
-  if (props.movieId != undefined) {
-    console.log("OnMounted: ", props.movieId);
-    movie.value = await fetchMovieDetails(props.movieId);
-    isLoaded.value = true; // Dane załadowane
-    console.log("obiekt filmu:", movie.value);
+  movie: {
+    id: '',
+    title: '',
+    genres: '',
+    duration: '',
+    releaseDate: '',
+    posterPath: '',
+    description: '',
+    rating: '',
   }
 });
 
 const emits = defineEmits(['close']);
-
-// Funkcja do emitowania zdarzenia zamknięcia popupa
 function closePopup() {
   emits('close');
 }
@@ -37,7 +29,7 @@ function closePopup() {
             <img src="@/assets/img/close-icon.png" alt="Close icon"/>
           </div>
         </div>
-        <div v-if="isLoaded" class="upper-bar">
+        <div class="upper-bar">
           <div class="movie-poster">
             <img :src="movie.posterPath" alt="Movie poster"/>
           </div>
@@ -58,9 +50,6 @@ function closePopup() {
             <RatingStars read-only :rating="movie.rating"></RatingStars>
           </div>
         </div>
-        <div v-else class="loading">
-          <p>Ładowanie...</p>
-        </div>
         <div class="lower-bar">
           <h2>Opis</h2>
           <div class="movie-description">
@@ -71,6 +60,7 @@ function closePopup() {
     </div>
   </div>
 </template>
+
 <style scoped>
 .post {
   flex-direction: row;
@@ -106,16 +96,6 @@ function closePopup() {
   min-height: 40%;
   max-height: 40%;
   width: 100%;
-}
-
-.loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-  font-size: 1.5em;
-  color: var(--main-color);
 }
 
 .lower-bar {

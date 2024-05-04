@@ -1,5 +1,6 @@
 <script setup>
-import {nextTick, onMounted, ref} from "vue";
+import {nextTick, onMounted, reactive, ref} from "vue";
+import {sampleMovie} from "@/services/TVDBService.js";
 
 const isShowDropdown = ref(false)
 
@@ -28,10 +29,22 @@ onMounted(async () => {
 
 const emit = defineEmits(['show-details']);
 
-function showDetails() {
-  emit('show-details', 693134); //na razie na szytywno diuny terailse
-  console.log('PostTile: wyemitowano show details');
+const movie = sampleMovie;
+// ---------------------------POKAZANIE POPUPU ----------------//
+const showDetails = () => {
+  emit('show-details', movie);
+  console.log('MovieTile: wyemitowano show details', movie);
 }
+
+const post = reactive({
+  content: "Film świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman\n" +
+      "          dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił\n" +
+      "          samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem\n" +
+      "          dramatycznym. Coś wielkiegoFilm świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman\n" +
+      "          dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił\n" +
+      "          samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem\n" +
+      "          dramatycznym. Coś wielkiego."
+})
 
 </script>
 
@@ -47,34 +60,28 @@ function showDetails() {
     </div>
     <div class="movie-card">
       <div class="movie-poster">
-        <img src="https://static.posters.cz/image/1300/plakaty/diuna-czesc-1-i122815.jpg"
+        <img :src="movie.posterPath"
              alt="Movie poster for Diuna"/>
       </div>
       <div class="movie-details">
-        <h1 class="movie-title">Diuna</h1>
+        <h1 class="movie-title">{{movie.title}}</h1>
         <div>
           <table class="tg">
             <thead>
             <tr>
-              <th class="tg-0pky">Gatunek:</th>
-              <th class="tg-0lax">Sci-Fi</th>
+              <th class="tg-0pky">Gatunki:</th>
+              <th class="tg-0lax">{{movie.genres.map((genre) => genre.name).join(", ")}}</th>
             </tr>
             </thead>
             <tbody>
             <tr>
               <td class="tg-0pky">Długość:</td>
-              <td class="tg-0lax">124 min</td>
+              <td class="tg-0lax">{{ movie.duration }} min</td>
             </tr>
             </tbody>
           </table>
         </div>
-        <p class="post-description" ref="postDescriptionRef" v-dragscroll="isDraggable">Film świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman
-          dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił
-          samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem
-          dramatycznym. Coś wielkiegoFilm świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman
-          dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił
-          samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem
-          dramatycznym. Coś wielkiego.
+        <p class="post-description" ref="postDescriptionRef" v-dragscroll="isDraggable"> {{post.content}}
         </p>
       </div>
       <div class="dropdown">

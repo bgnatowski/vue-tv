@@ -20,17 +20,6 @@ export const useUserStore = defineStore('userStore', {
             invitationsIds: [],
             postsIds: [],
         }),
-        getters: {
-            getUid: state => state.uuid,
-            getUsername: state => state.username,
-            getEmail: state => state.email,
-            getPhotoUrl: state => state.photoUrl,
-            getMoviesToWatchIds: state => state.moviesToWatchIds,
-            getMoviesWatchedIds: state => state.moviesWatchedIds,
-            getFriendsIds: state => state.friendsIds,
-            getInvitationsIds: state => state.invitationsIds,
-            getPostsIds: state => state.postsIds
-        },
         actions: {
             resetUser() {
                 this.$reset();
