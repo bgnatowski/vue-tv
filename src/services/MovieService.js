@@ -1,26 +1,25 @@
-import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
-import {db} from "@/js/firebase.js";
+import { collection, doc, setDoc, getDocs, query, where, updateDoc, deleteDoc } from 'firebase/firestore';
+import { db } from '@/js/firebase.js';
 
-const movieCollection = collection(db, "movies");
-
-const fetchMovies = async () => {
-    const querySnapshot = await getDocs(movieCollection);
+const fetchUserMovies = async (userId) => {
+    const q = query(collection(db, "userMovies"), where("userId", "==", userId));
+    const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };
-
-const addMovie = async (movie) => {
-    const docRef = await addDoc(movieCollection, movie);
-    return { id: docRef.id, ...movie };
+const addMovie = async (userMovieData) => {
+    console.log('moviestore: ', userMovieData)
+    const movieDocRef = doc(collection(db, 'movies'));
+    await setDoc(movieDocRef, userMovieData);
 };
 
-const updateMovie = async (movieId, newDetails) => {
-    const docRef = doc(db, "movies", movieId);
-    await updateDoc(docRef, newDetails);
+const updateUserMovie = async (movieId, newDetails) => {
+    const movieDocRef = doc(db, "userMovies", movieId);
+    await updateDoc(movieDocRef, newDetails);
 };
 
-const deleteMovie = async (movieId) => {
-    const docRef = doc(db, "movies", movieId);
-    await deleteDoc(docRef);
+const removeUserMovie = async (movieId) => {
+    const movieDocRef = doc(db, "userMovies", movieId);
+    await deleteDoc(movieDocRef);
 };
 
-export { fetchMovies, addMovie, updateMovie, deleteMovie };
+export { fetchUserMovies, addMovie, updateUserMovie, removeUserMovie };

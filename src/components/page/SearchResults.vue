@@ -14,6 +14,7 @@ const handleMouseOut = () => {
 
 const showDetails = ref(false);
 const selectedMovieId = ref();
+
 const handleShowDetails = (id) => {
   console.log("handleShowDetails for movie id: ", id);
   selectedMovieId.value = id;
@@ -23,7 +24,6 @@ const handleShowDetails = (id) => {
 function handleClose() {
   showDetails.value = false;
 }
-
 </script>
 
 <template>

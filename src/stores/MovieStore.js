@@ -1,54 +1,73 @@
 import { defineStore } from 'pinia';
-import {addMovie, deleteMovie, fetchMovies, updateMovie} from "@/services/MovieService.js";
+import {addMovie, fetchUserMovies, removeUserMovie, updateUserMovie} from "@/services/MovieService.js";
 
 export const useMovieStore = defineStore('movieStore', {
     state: () => ({
-        movies: []
+        userMovies: []
     }),
     actions: {
-        async loadMovies() {
-            this.movies = await fetchMovies();
+        async loadUserMovies(userId) {
+            this.userMovies = await fetchUserMovies(userId);
         },
-        async createMovie(movieData) {
-            const newMovie = await addMovie(movieData);
-            this.movies.push(newMovie);
+        async createUserMovie(userMovie) {
+            const newMovie = await addMovie(userMovie);
+            this.userMovies.push(newMovie);
         },
-        async modifyMovieDetails(movieId, newDetails) {
-            await updateMovie(movieId, newDetails);
-            const index = this.movies.findIndex(movie => movie.id === movieId);
+        async modifyUserMovie(movieId, newDetails) {
+            await updateUserMovie(movieId, newDetails);
+            const index = this.userMovies.findIndex(m => m.id === movieId);
             if (index !== -1) {
-                this.movies[index] = { ...this.movies[index], ...newDetails };
+                this.userMovies[index] = { ...this.userMovies[index], ...newDetails };
             }
         },
-        async removeMovie(movieId) {
-            await deleteMovie(movieId);
-            this.movies = this.movies.filter(movie => movie.id !== movieId);
+        async deleteUserMovie(movieId) {
+            await removeUserMovie(movieId);
+            this.userMovies = this.userMovies.filter(m => m.id !== movieId);
         }
     },
     getters: {
-        getMovieById: (state) => {
-            return (id) => state.movies.find(movie => movie.id === id);
+        getUserMovie: (state) => (movieId) => {
+            return state.userMovies.find(m => m.id === movieId);
         }
     }
 });
 
-
-// To jakby movie details czyli to co sie bedzie wyswietlac po kliknieciu ikony (i) w popupie
-// Dodawanie filmu
-// movieStore.addMovie(
-// {
-//     id: 'id-to-samo-co-z-api',
+// Do tych obiektow beda odwolywać sie listy toWatch i watched i beda zawiraly movieId (to jest do movieDetails z API)
+// ale tez sie zastanawiam ze skoro w aplikacji non stop wyswietlamy tytuł, duration, gatunek i poster
+// to czy tu tez nie musi być zeby miec od razu po zaciagnieciu z api,
+// a detailsy tylko dociagac z api
+// Dodanie filmu związane z użytkownikiem
+// userMovieStore.addUserMovie({
+//     userId: 'user1',
+//     movieId: 'movie1',
+//     isWatched: true,
+//     isPrivate: false,
+//     userRating: 4.5,
+//     note: 'This is my personal note for the movie.',
 //     title: 'Inception',
-//     genres: ['Sci-Fi', 'Thriller'],
-//     duration: 148, // minutes - z api nie kojarze jak tam jest w jakiej formie
-//     releaseDate: 2010,
-//     posterPath: 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.',
-//     description: 'https://example.com/inception.jpg',
-//     rating: 4,
-// })
-// Aktualizacja filmu:
-// movieStore.updateMovieDetails('id', { duration: 150 });
-// Pobranie filmu po ID:
-// const movie = movieStore.getMovieById('movie1');
-// console.log(movie);
+//     genre: ['Sci-Fi', 'Thriller'],
+//     duration: 148,
+//     coverUrl: 'https://example.com/inception.jpg'
+// });
 
+//USAGE:
+// const store = useUserMovieStore();
+//
+// const userId = "user123";
+// store.loadUserMovies(userId); // Load all movies for a user
+//
+// // To add a new movie
+// store.createUserMovie({
+//     userId: userId,
+//     movieId: "movie456",
+//     isWatched: false,
+//     isPrivate: false,
+//     userRating: 4.5,
+//     note: "Must watch again!"
+// });
+//
+// // To update a movie
+// store.modifyUserMovie("movie456", { isWatched: true });
+//
+// // To delete a movie
+// store.deleteUserMovie("movie456");

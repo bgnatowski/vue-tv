@@ -61,9 +61,13 @@ export const useUserStore = defineStore('userStore', {
                 await updateUserData(uid, data);
                 this.$patch({...data});
             },
-            async addToUserList(listType, itemId) {
-                await addToList(this.uuid, listType, itemId);
-                this[listType].push(itemId);
+            async addToUserList(listType, movieId) {
+                // console.log('addToUserList: ', listType)
+                // console.log('movieId :', movieId)
+                await addToList(this.uuid, listType, movieId);
+
+                const field = `${listType}Ids`;
+                this[field].push(movieId);
             },
             async removeFromUserList(listType, itemId) {
                 await removeFromList(this.uuid, listType, itemId);

@@ -1,9 +1,10 @@
 <script setup>
 import MovieTile from "@/components/MovieTile.vue"
 import TitleTile from "@/components/TitleTile.vue";
-import {ref} from "vue";
+import {onBeforeMount, ref} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import {minutesToText} from "@/js/TimeUtils";
+import {useUserStore} from "@/stores/UserStore.js";
 
 const showDetails = ref(false);
 const selectedMovieId = ref('');
@@ -20,6 +21,12 @@ function handleClose() {
   showDetails.value = false;
 }
 const minutes = ref(1234);
+
+const userStore = useUserStore();
+
+onBeforeMount(() => {
+
+})
 
 </script>
 
@@ -38,10 +45,6 @@ const minutes = ref(1234);
 
     </MovieDetailsPopup>
 
-    <MovieTile watched @show-details="handleShowDetails"/>
-    <MovieTile watched @show-details="handleShowDetails"/>
-    <MovieTile watched @show-details="handleShowDetails"/>
-    <MovieTile watched @show-details="handleShowDetails"/>
     <MovieTile watched @show-details="handleShowDetails"/>
     <main class="user-content">
       <h2>---Koniec---</h2>

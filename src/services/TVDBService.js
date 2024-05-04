@@ -19,7 +19,7 @@ async function searchMovie(query){
             title: movie.title,
             genres: movie.genre_ids.map(id => genreMap[id] || 'Nieznany gatunek'),
             posterPath: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-            releaseDate: movie.release_date
+            releaseDate: movie.release_date,
         })));
     } catch {
         console.log('Błąd w czasie pobierania danych')

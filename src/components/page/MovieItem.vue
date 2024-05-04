@@ -1,11 +1,13 @@
 <script setup>
 import { ref } from 'vue';
+import {useUserStore} from "@/stores/UserStore.js";
+import {useMovieStore} from "@/stores/MovieStore.js";
 
 const props = defineProps({
   movie: Object,
 });
 
-const emit = defineEmits(['show-details', 'to-watch', 'to-watched']);
+const emit = defineEmits(['show-details']);
 
 const isShowDropdown = ref(false);
 
@@ -18,21 +20,40 @@ const hideDropdown = () => {
 };
 
 const showDetails = (id) => {
-  // Logika do pokazywania szczegółów filmu
-  console.log('wyemitowano show-details', id);
   emit('show-details', id);
 };
 
+const userStore = useUserStore();
+const movieStore = useMovieStore();
+
 const addToWatch = () => {
-  // Logika do dodawania filmu do listy do obejrzenia
-  emit('to-watch');
-  console.log('wyemitowano to-watch');
+  let m = props.movie;
+  console.log("addToWatch, movie id: ", m.id);
+  console.log("handleToWatch, user: ", userStore.uuid);
+  userStore.addToUserList('moviesToWatch', m.id)
+  movieStore.createUserMovie({
+    userId: userStore.uuid, //jakby klucz obcy
+    movieId: m.id, //jakby klucz glowny
+    isWatched: false,
+    isPrivate: true,
+    userRating: 0,
+    note: '',
+  });
 };
 
 const addToWatched = () => {
-  // Logika do dodawania filmu do listy obejrzanych
-  emit('to-watched');
-  console.log('wyemitowano to-watched');
+  let m = props.movie;
+  console.log("addToWatched, movie id: ", m.id);
+  console.log("addToWatched, user: ", userStore.uuid);
+  userStore.addToUserList('moviesWatched', m.id)
+  movieStore.createUserMovie({
+    userId: userStore.uuid,
+    movieId: m.id,
+    isWatched: true,
+    isPrivate: true,
+    userRating: 0,
+    note: '',
+  });
 };
 </script>
 

@@ -12,7 +12,6 @@ const createUser = async (userData = {}) => {
         friendsIds: [],
         invitationsIds: [],
         postsIds: [],
-        ...userData // Pozwala na przekazanie dodatkowych opcjonalnych pól
     });
 };
 const deleteUser = async (userId) => {
