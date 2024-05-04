@@ -1,69 +1,49 @@
 <script setup>
-import {onMounted, reactive, ref} from "vue";
 
 const props = defineProps({
-  id: Number,
-  userImage: String,
-  username: String,
-  detail1: String,
-  detail2: String
+  friend: {
+    uid: '',
+    username: '',
+    photoUrl: 'https://randomuser.me/api/portraits/men/2.jpg',
+    friendsIds: [],
+    postsIds: []
+  }
 });
 
-const isShowDropdown = ref(false)
-
-function showDropdown() {
-  isShowDropdown.value = true
+function handleDeleteFriend() {
+  console.log('wyemitowano delete friend');
 }
-
-function hideDropdown() {
-  isShowDropdown.value = false;
-}
-
-const emit = defineEmits(['show-profile']);
 
 function showProfile() {
-  emit('show-profile');
   console.log('wyemitowano show profile');
 }
+
 </script>
 
 <template>
   <div class="post">
-    <div class="dropdown">
-      <div class="icon-button" @click="showDropdown">
-        <img src="@/assets/img/dots-icon.png" alt="Movie Options"/>
-      </div>
-      <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
-        <ul class="dropdown-list">
-          <li @click="showProfile" class="dropdown-option">Pokaż profil</li>
-          <li class="dropdown-option">Usun znajomego</li>
-        </ul>
-      </div>
+    <div @click="handleDeleteFriend" class="delete-friend-icon" aria-label="Delete">
+      <img src="@/assets/img/delete-icon.png" alt="Delete icon"/>
     </div>
     <div class="profile-picture">
       <img
           class="friends-picture"
-          :src="userImage"
-          :alt="`Profile picture of ${username}`"
+          :src="friend.photoUrl"
+          :alt="`Profile picture of ${friend.username}`"
       />
     </div>
     <div class="friends-info">
-      <h2 class="username">{{ username }}</h2>
-      <div class="additional-details">
-        <p class="additional-text">{{ detail1 }}</p>
-        <p class="additional-text">{{ detail2 }}</p>
-      </div>
+      <h2 class="username">{{ friend.username }}</h2>
+      <button
+          @click="showProfile"
+          class="action-button">Zobacz profil
+      </button>
     </div>
   </div>
 </template>
 
 <style scoped>
-@import url(@/assets/dropdown.css);
-
-.dropdown {
-  top: auto;
-  right: auto;
-}
+@import url(@/assets/buttons.css);
 .post {
   width: 30%;
   height: auto;
@@ -72,13 +52,13 @@ function showProfile() {
 
 .profile-picture {
   display: flex;
-  padding: 1em;
+  padding: 5px;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   align-self: center;
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
 }
 
 .profile-picture img {
@@ -98,48 +78,59 @@ function showProfile() {
   font-size: 1em;
 }
 
-.additional-details {
-  text-align: left;
-  overflow: auto;
-  white-space: normal;
-  max-height: 100px;
-  -webkit-overflow-scrolling: touch;
+.action-button {
+  padding: .5em;
+  font-size: 1em;
+  margin-top: 5px;
 }
 
-.additional-text {
-  font-size: .8em;
-  color: #555;
+.username {
+  font-size: 1em;
 }
 
-.dropdown-content {
-  position: absolute;
-  left: 0;
-  top: 0; /* Aby dropdown rozkładał się bezpośrednio pod ikoną */
-  white-space: nowrap; /* Zapobiega zawijaniu tekstu */
-  z-index: 9999; /* Zapewnia, że dropdown będzie na wierzchu */
-  background-color: white; /* Tło dla lepszej widoczności */
+.delete-friend-icon {
+  align-self: flex-end;
+  height: 40px;
+  width: 40px;
+  padding: 5px;
+  border-radius: 2em;
+  transition: .5s ease all;
+  cursor: pointer;
 }
+
+.delete-friend-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: .5s ease all;
+}
+
+.delete-friend-icon:hover {
+  border: none;
+  background-color: var(--lighter-main);
+  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
+  transition: .5s ease all;
+}
+
+.delete-friend-icon:active {
+  background-color: var(--clicked-button);
+  transition: .5s ease all;
+}
+
 
 @media screen and (max-width: 800px) {
   .profile-picture {
-    width: 150px;
-    height: 150px;
+    width: 140px;
+    height: 140px;
   }
 
   .username {
     font-size: .8em;
   }
 
-  .additional-text {
-    font-size: .7em;
-  }
-
-  .additional-details {
-    max-height: 50px;
-  }
 }
 
-@media screen and (max-width: 1050px){
+@media screen and (max-width: 1050px) {
   .dropdown,
   .icon-button {
     width: 20px;
@@ -147,7 +138,7 @@ function showProfile() {
   }
 }
 
-@media screen and (max-width: 760px){
+@media screen and (max-width: 760px) {
   .dropdown,
   .icon-button {
     width: 18px;
@@ -165,13 +156,11 @@ function showProfile() {
     width: 15px;
     height: 15px;
   }
+
   .profile-picture {
     width: 100px;
     height: 100px;
   }
 
-  .additional-details {
-    max-height: 30px;
-  }
 }
 </style>

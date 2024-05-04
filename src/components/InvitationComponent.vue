@@ -70,6 +70,7 @@ function handleDecline() {
 .action-button {
   padding: .5em;
   font-size: 1em;
+  margin-top: 5px;
 }
 
 .post {
@@ -80,13 +81,13 @@ function handleDecline() {
 
 .profile-picture {
   display: flex;
-  padding: 1em;
+  padding: 10px;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   align-self: center;
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
 }
 
 .profile-picture img {
@@ -137,8 +138,8 @@ function handleDecline() {
 
 @media screen and (max-width: 800px) {
   .profile-picture {
-    width: 150px;
-    height: 150px;
+    width: 140px;
+    height: 140px;
   }
 
   .username {

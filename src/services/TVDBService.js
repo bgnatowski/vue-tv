@@ -1,3 +1,5 @@
+import {ref} from "vue";
+
 const options = {
     method: 'GET',
     headers: {
@@ -94,8 +96,47 @@ const sampleMovie = {
     rating: sampleMovieData.vote_average
 };
 
+const sampleFriends = ref([
+    {
+        uid: 1,
+        username: "johndoe1",
+        photoUrl: "https://randomuser.me/api/portraits/men/1.jpg",
+        friendsIds: [],
+        postsIds: []
+    },
+    {
+        uid: 2,
+        username: "johndoe2",
+        photoUrl: "https://randomuser.me/api/portraits/men/2.jpg",
+        friendsIds: [],
+        postsIds: []
+    },
+    {
+        uid: 3,
+        username: "johndoe3",
+        photoUrl: "https://randomuser.me/api/portraits/men/3.jpg",
+        friendsIds: [],
+        postsIds: []
+    },
+    {
+        uid: 4,
+        username: "johndoe4",
+        photoUrl: "https://randomuser.me/api/portraits/men/4.jpg",
+        friendsIds: [],
+        postsIds: []
+    },
+    {
+        uid: 5,
+        username: "johndoe1",
+        photoUrl: "https://randomuser.me/api/portraits/men/5.jpg",
+        friendsIds: [],
+        postsIds: []
+    },
+])
+
 export {
     searchMovie,
     fetchMovieDetails,
-    sampleMovie
+    sampleMovie,
+    sampleFriends
 }
