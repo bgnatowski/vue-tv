@@ -1,20 +1,25 @@
 <script setup>
 import Rating from "primevue/rating";
-import {ref} from "vue";
+import {onBeforeMount, onMounted, ref} from "vue";
 
 const props = defineProps({
   readOnly: Boolean,
   vertical: Boolean,
+  rating: Number
+})
+const isPointer = ref(props.readOnly ? 'default' : 'pointer');
+const stars = ref();
+
+onBeforeMount(() =>{
+  stars.value = props.rating;
 })
 
-const value = ref(4.5)
-const isPointer = ref(props.readOnly ? 'default' : 'pointer');
 </script>
 
 
 <template>
   <div class="rating-container" :class="vertical ? 'column' : ''">
-    <Rating v-model="value" :readonly="readOnly" :cancel="!readOnly" :class="vertical ? 'column' : ''">
+    <Rating :stars="10" v-model="stars" :readonly="readOnly" :cancel="!readOnly" :class="vertical ? 'column' : ''">
       <template #cancelicon>
         <img class="cancel-icon star-icon" src="@/assets/rating/cancel.png" alt="cancel"/>
       </template>
@@ -25,9 +30,8 @@ const isPointer = ref(props.readOnly ? 'default' : 'pointer');
         <img class="star-icon" src="@/assets/rating/custom-officon.png" alt="star-unfilled"/>
       </template>
     </Rating>
-    <p v-if="readOnly" class="real-value" v-text="value"></p>
+    <p v-if="readOnly" class="real-value" v-text="stars"></p>
   </div>
-
 </template>
 
 <style scoped>
@@ -43,6 +47,7 @@ const isPointer = ref(props.readOnly ? 'default' : 'pointer');
   padding-left: 8px;
   padding-right: 8px;
   width: fit-content;
+  margin: 3px;
 }
 
 .column {

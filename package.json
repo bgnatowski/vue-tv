@@ -11,6 +11,7 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "firebase": "^10.11.1",
     "normalize.css": "^8.0.1",
     "pinia": "^2.1.7",

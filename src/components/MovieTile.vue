@@ -1,7 +1,7 @@
 <script setup>
 
-import movie from "@/models/movie.js";
 import {ref} from "vue";
+import {sampleMovie} from "@/services/TVDBService.js";
 
 defineProps({
   watched: Boolean
@@ -15,8 +15,11 @@ function publicMovie() {
   isPublic.value = !isPublic.value;
 }
 
-function showInfo(movie) {
-  emit('show-details', movie);
+const movie = sampleMovie;
+
+const showDetails = (id) => {
+  emit('show-details', id);
+  console.log('MovieTile: wyemitowano show details');
 }
 
 </script>
@@ -25,7 +28,7 @@ function showInfo(movie) {
   <section class="post">
     <div class="movie-card">
       <div class="movie-poster">
-        <img :src="movie.posterUrl" alt="Movie poster for Diuna"/>
+        <img :src="movie.posterPath" alt="Movie poster"/>
       </div>
       <div class="movie-details">
         <div class="movie-text">
@@ -33,10 +36,9 @@ function showInfo(movie) {
             <h2> {{ movie.title }} </h2>
           </div>
           <div class="movie-metadata">
-            <p class="metadata-title">Gatunek:</p>
-            <p>{{ movie.genre }}</p>
-            <p class="metadata-title">Długość:</p>
-            <p> {{ movie.duration }}</p>
+            <p class="metadata-title">Premiera: <span>{{ movie.releaseDate.substring(0, 4) }}</span></p>
+            <p class="metadata-title">Gatunki:  <span>{{ movie.genres.map((genre) => genre.name).join(", ") }}</span></p>
+            <p class="metadata-title">Długość:  <span>{{ movie.duration }} min</span> </p>
           </div>
         </div>
         <div class="buttons">
@@ -47,7 +49,7 @@ function showInfo(movie) {
             <div class="card-action-icon" aria-label="Note">
               <img src="@/assets/img/edit-icon.png" alt="Note icon"/>
             </div>
-            <div @click="showInfo(movie)" class="card-action-icon" aria-label="Info">
+            <div @click="showDetails(movie.id)" class="card-action-icon" aria-label="Info">
               <img src="@/assets/img/info-icon.png" alt="Info icon"/>
             </div>
             <div @click="publicMovie" class="card-action-icon" aria-label="Hide">
@@ -99,14 +101,16 @@ function showInfo(movie) {
   display: flex;
   flex-direction: row;
   flex-grow: 1;
-  justify-content: space-between;
+  /*justify-content: space-between;*/
   padding: 0 1em;
+  width: 100%;
 }
 
 .movie-header h2 {
   font-size: 1.3em;
   color: #000;
   font-weight: 600;
+  width: 100%;
 }
 
 .movie-metadata {
@@ -116,20 +120,26 @@ function showInfo(movie) {
   justify-content: flex-start;
 }
 
-.movie-metadata .metadata-title{
+.movie-metadata .metadata-title {
   font-weight: 600;
   text-align: left;
   font-size: .8em;
 }
 
-.movie-metadata p{
+.movie-metadata p {
   font-weight: 400;
   text-align: left;
-  font-size: .8em;
+  font-size: .9em;
 }
 
-.movie-text{
-  width: 30%;
+.movie-details span {
+  font-weight: 300;
+  text-align: left;
+  font-size: .9em;
+}
+
+.movie-text {
+  width: 60%;
 }
 
 .buttons {
@@ -137,7 +147,7 @@ function showInfo(movie) {
   flex-direction: column;
   justify-content: space-between;
   align-content: space-between;
-  width: 70%;
+  width: 40%;
 }
 
 .card-action-buttons {
@@ -272,10 +282,11 @@ input:checked + .slider:before {
 }
 
 @media screen and (max-width: 500px) {
-  .movie-poster{
+  .movie-poster {
     width: 80px;
     height: 120px;
   }
+
   .card-action-buttons {
     padding: 0;
   }
@@ -287,11 +298,11 @@ input:checked + .slider:before {
     padding: .5em;
   }
 
-  .movie-details{
+  .movie-details {
     padding: 5px;
   }
 
-  .switch{
+  .switch {
     width: 40px;
     height: 24px;
   }
@@ -310,10 +321,11 @@ input:checked + .slider:before {
 }
 
 @media screen and (max-width: 380px) {
-  .movie-poster{
+  .movie-poster {
     width: 70px;
     height: 100px;
   }
+
   .movie-header h1 {
     font-size: .8em;
   }
@@ -321,7 +333,8 @@ input:checked + .slider:before {
   .movie-metadata p {
     font-size: .6em;
   }
-  .movie-metadata .metadata-title{
+
+  .movie-metadata .metadata-title {
     font-size: .6em;
   }
 }

@@ -50,14 +50,6 @@ import paths from "@/router/routerPaths.js";</script>
         <span class="button-text">Ustawienia</span>
       </div>
     </router-link>
-<!--    <router-link :to="paths.LOGOUT_ROUTE" class="router-link-custom">-->
-<!--      <div class="sidebar-button">-->
-<!--        <div class="icon-button">-->
-<!--          <img src="@/assets/logout_icon.png" alt="Wyloguj">-->
-<!--        </div>-->
-<!--        <span class="button-text">WYLOGUJ DEV</span>-->
-<!--      </div>-->
-<!--    </router-link>-->
   </div>
 </template>
 

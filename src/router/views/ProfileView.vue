@@ -19,10 +19,10 @@ onBeforeMount(() => {
 )
 
 const showDetails = ref(false);
-const selectedMovie = ref(null);
+const selectedMovieId = ref(null);
 
-function handleShowDetails(movie) {
-  selectedMovie.value = movie;
+function handleShowDetails(movieId) {
+  selectedMovieId.value = movieId;
   showDetails.value = true;
 }
 
@@ -35,7 +35,7 @@ function handleClose() {
 <template>
   <section class="feed-container">
     <MovieDetailsPopup v-if="showDetails"
-                       :movie="selectedMovie"
+                       :movie-id="selectedMovieId"
                        @close="handleClose">
     </MovieDetailsPopup>
     <section class="movies-column">

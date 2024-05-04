@@ -1,5 +1,7 @@
 <script setup>
 import MovieItem from "@/components/page/MovieItem.vue";
+import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
+import {ref} from "vue";
 
 const props = defineProps({
   movies: Array
@@ -9,6 +11,19 @@ const emits = defineEmits(['hide-results']);
 const handleMouseOut = () => {
   emits('hide-results');
 };
+
+const showDetails = ref(false);
+const selectedMovieId = ref();
+const handleShowDetails = (id) => {
+  console.log("handleShowDetails for movie id: ", id);
+  selectedMovieId.value = id;
+  showDetails.value = true;
+}
+
+function handleClose() {
+  showDetails.value = false;
+}
+
 </script>
 
 <template>
@@ -18,8 +33,13 @@ const handleMouseOut = () => {
         :key="movie.id"
         :movie="movie"
         class="movie-item"
+        @show-details="handleShowDetails"
     />
   </ul>
+  <MovieDetailsPopup v-if="showDetails"
+                     :movie-id="selectedMovieId"
+                     @close="handleClose">
+  </MovieDetailsPopup>
 </template>
 
 <style scoped>

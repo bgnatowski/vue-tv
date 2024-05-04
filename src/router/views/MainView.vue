@@ -14,11 +14,11 @@ onMounted(() => {
 });
 
 const showDetails = ref(false);
-const selectedMovie = ref(null);
+const selectedMovieId = ref(null);
 
-function handleShowDetails(movie) {
+function handleShowDetails(movieId) {
   console.log("main, handleShowDetails")
-  selectedMovie.value = movie;
+  selectedMovieId.value = movieId;
   showDetails.value = true;
 }
 
@@ -31,7 +31,7 @@ function handleClose() {
 <template>
   <section class="feed-container" :style="hasScrollbar ? 'margin: 0' : ''">
     <MovieDetailsPopup v-if="showDetails"
-                       :movie="selectedMovie"
+                       :movieId="selectedMovieId"
                        @close="handleClose">
     </MovieDetailsPopup>
     <div class="posts-column">

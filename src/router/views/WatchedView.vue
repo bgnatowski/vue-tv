@@ -6,11 +6,14 @@ import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import {minutesToText} from "@/js/TimeUtils";
 
 const showDetails = ref(false);
-const selectedMovie = ref(null);
+const selectedMovieId = ref('');
 
-function handleShowDetails(movie) {
-  selectedMovie.value = movie;
-  showDetails.value = true;
+const handleShowDetails = (id) => {
+  console.log("handleShowDetails for movie id: ", id);
+  if(id){
+    selectedMovieId.value = id;
+    showDetails.value = true;
+  }
 }
 
 function handleClose() {
@@ -30,7 +33,7 @@ const minutes = ref(1234);
     </TitleTile>
 
     <MovieDetailsPopup v-if="showDetails"
-                       :movie="selectedMovie"
+                       :movie-id="selectedMovieId"
                        @close="handleClose">
 
     </MovieDetailsPopup>

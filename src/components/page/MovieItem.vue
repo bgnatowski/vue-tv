@@ -17,10 +17,10 @@ const hideDropdown = () => {
   isShowDropdown.value = false;
 };
 
-const showDetails = () => {
+const showDetails = (id) => {
   // Logika do pokazywania szczegółów filmu
-  emit('show-details');
-  console.log('wyemitowano show-details');
+  console.log('wyemitowano show-details', id);
+  emit('show-details', id);
 };
 
 const addToWatch = () => {
@@ -38,10 +38,10 @@ const addToWatched = () => {
 
 <template>
   <div class="movie-item">
-    <img :src="movie.poster_path" alt="Film Poster" class="movie-poster">
+    <img :src="movie.posterPath" alt="Film Poster" class="movie-poster">
     <div class="movie-info">
       <h3>{{ movie.title }}</h3>
-      <span>Premiera: {{ movie.release_date.substring(0,4) }}</span>
+      <span>Premiera: {{ movie.releaseDate.substring(0,4) }}</span>
       <span>Gatunki: {{ movie.genres.join(', ') }}</span>
     </div>
     <div class="dropdown">
@@ -50,7 +50,7 @@ const addToWatched = () => {
       </div>
       <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
         <ul class="dropdown-list">
-          <li @click="showDetails" class="dropdown-option">Zobacz więcej</li>
+          <li @click="showDetails(movie.id)" class="dropdown-option">Zobacz więcej</li>
           <li @click="addToWatch" class="dropdown-option">Dodaj do obejrzenia</li>
           <li @click="addToWatched" class="dropdown-option">Dodaj do obejrzanych</li>
         </ul>

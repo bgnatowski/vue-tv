@@ -28,9 +28,9 @@ onMounted(async () => {
 
 const emit = defineEmits(['show-details']);
 
-function showInfo() {
-  emit('show-details');
-  console.log('wyemitowano show details');
+function showDetails() {
+  emit('show-details', 693134); //na razie na szytywno diuny terailse
+  console.log('PostTile: wyemitowano show details');
 }
 
 </script>
@@ -83,7 +83,7 @@ function showInfo() {
         </div>
         <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
           <ul class="dropdown-list">
-            <li @click="showInfo" class="dropdown-option">Więcej o filmie</li>
+            <li @click="showDetails" class="dropdown-option">Więcej o filmie</li>
             <li v-if="!profile" class="dropdown-option">Dodaj do obejrzenia (jesli nie jest jeszcze obejrzany)</li>
             <li v-else class="dropdown-option">Usuń post</li>
           </ul>

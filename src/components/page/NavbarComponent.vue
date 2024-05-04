@@ -10,6 +10,8 @@ const props = defineProps({
   isSidebarVisible: Boolean
 });
 
+const emits = defineEmits(['toggle-sidebar'])
+
 const screenWidth = ref(window.innerWidth);
 const mobile = ref(false)
 const profileIconRotate = ref(false)
@@ -30,7 +32,7 @@ window.addEventListener('resize', () => {
 });
 
 function onMenuButtonClick() {
-  emit('toggle-sidebar');
+  emits('toggle-sidebar');
   sideBarIconRotate.value = !sideBarIconRotate.value
 }
 
