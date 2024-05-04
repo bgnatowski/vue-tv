@@ -1,7 +1,9 @@
 <script setup>
 
-import {onBeforeMount, ref} from "vue";
+import {computed, onBeforeMount, onMounted, ref, watch} from "vue";
 import {fetchMovieDetails} from "@/services/TVDBService.js";
+import {useMovieStore} from "@/stores/MovieStore.js";
+import {useUserStore} from "@/stores/UserStore.js";
 
 // ------------------ PROPS AND EMITS -----------------------//
 const props = defineProps({
@@ -11,21 +13,41 @@ const props = defineProps({
 const emit = defineEmits([
   'show-details',
   'emit-duration',
-  'change-visible'
 ]);
 
-//------------------------- todo PUBLIKACJA ------------------------//
-const isPublic = ref(false);
+// ------------------- INSTANCJE STORES -------------------//
+const movieStore = useMovieStore();
+const userStore = useUserStore();
+
+// ------------------- CHANGE VISIBLE/PUBLIKACJA -----------//
+const isPrivate = ref();
 
 function publicMovie() {
-  isPublic.value = true;
-  emit('change-visible', {movieId: movie.value.id, value: true} )
+  movieStore.modifyUserMovie(
+      userStore.uid,
+      props.movieId,
+      { isPrivate: false }
+  );
+  isPrivate.value = false;
 }
 
 function unpublicMovie() {
-  isPublic.value = false
-  emit('change-visible', {movieId: movie.value.id, value: false} )
+  movieStore.modifyUserMovie(
+      userStore.uid,
+      props.movieId,
+      { isPrivate: true }
+  );
+  isPrivate.value = true;
 }
+
+// ------------------- WATCHER NA AKTUALIZACJE W STORE --------//
+watch(
+    () => isPrivate.value,
+    (newVal) => {
+      isPrivate.value = newVal !== undefined ? newVal : true;
+    },
+    { immediate: true }
+);
 
 // ---------------------------POKAZANIE POPUPU ----------------//
 const showDetails = () => {
@@ -35,11 +57,14 @@ const showDetails = () => {
 // ----------------------------- ZALADOWANIE DANYCH ----------------//
 const movie = ref({});
 const isLoaded = ref(false);
-onBeforeMount(async () => {
+onMounted(async () => {
   if (props.movieId != undefined) {
     movie.value = await fetchMovieDetails(props.movieId);
-    isLoaded.value = true;
     emit("emit-duration", movie.value.duration)
+    isPrivate.value = movieStore.getMovieById(props.movieId).isPrivate;
+    isLoaded.value = true;
+  }else{
+    console.log('BLAD')
   }
 });
 
@@ -64,8 +89,8 @@ onBeforeMount(async () => {
         </div>
         <div class="buttons">
           <div class="card-action-buttons">
-            <div class="card-action-icon" v-if="isPublic && watched" aria-label="Note">
-              <img src="@/assets/img/recommend-icon.png" alt="Note icon"/>
+            <div class="card-action-icon" v-if="!isPrivate && watched" aria-label="Recommend">
+              <img src="@/assets/img/recommend-icon.png" alt="Recommend icon"/>
             </div>
             <div class="card-action-icon" aria-label="Note">
               <img src="@/assets/img/edit-icon.png" alt="Note icon"/>
@@ -74,8 +99,8 @@ onBeforeMount(async () => {
               <img src="@/assets/img/info-icon.png" alt="Info icon"/>
             </div>
             <div class="card-action-icon" aria-label="Hide">
-              <img src="@/assets/img/show-icon.png" v-if="isPublic" alt="Show icon" @click="unpublicMovie"/>
-              <img src="@/assets/img/hide-icon.png" v-else alt="Hide icon" @click="publicMovie"/>
+              <img src="@/assets/img/hide-icon.png" v-if="isPrivate" alt="Hide icon" @click="publicMovie"/>
+              <img src="@/assets/img/show-icon.png" v-else alt="Show icon" @click="unpublicMovie"/>
             </div>
           </div>
           <div class="movie-action-buttons" v-if="!watched">

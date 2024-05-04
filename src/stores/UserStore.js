@@ -10,7 +10,7 @@ import {
 
 export const useUserStore = defineStore('userStore', {
         state: () => ({
-            uuid: null,
+            uid: null,
             username: '',
             email: '',
             photoUrl: '',
@@ -34,7 +34,8 @@ export const useUserStore = defineStore('userStore', {
             async loadUserData(uid) {
                 const userData = await getUserData(uid);
                 if (userData) {
-                    this.uuid = userData.uid;
+                    console.log(userData)
+                    this.uid = userData.uid;
                     this.username = userData.username;
                     this.email = userData.email;
                     this.photoUrl = userData.photoUrl;
@@ -53,13 +54,13 @@ export const useUserStore = defineStore('userStore', {
             async addToUserList(listType, movieId) {
                 // console.log('addToUserList: ', listType)
                 // console.log('movieId :', movieId)
-                await addToList(this.uuid, listType, movieId);
+                await addToList(this.uid, listType, movieId);
 
                 const field = `${listType}Ids`;
                 this[field].push(movieId);
             },
             async removeFromUserList(listType, itemId) {
-                await removeFromList(this.uuid, listType, itemId);
+                await removeFromList(this.uid, listType, itemId);
                 this[listType] = this[listType].filter(id => id !== itemId);
             }
         }

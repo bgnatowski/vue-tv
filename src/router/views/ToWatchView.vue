@@ -20,9 +20,11 @@ function handleClose() {
 
 // --------------------- MOVIE TILE -------------- ///
 const userStore = useUserStore();
+const movieStore = useMovieStore();
 const moviesToWatchIds = ref([]);
 onMounted( () => {
   moviesToWatchIds.value = userStore.moviesToWatchIds;
+  movieStore.loadAllUserMovies(userStore.uid);
 })
 
 // ------------------- TOTAL DURATION ---------- //
@@ -30,13 +32,6 @@ const totalDuration = ref(0);
 const addToTotalDuration = (duration) => {
   totalDuration.value += duration;
 };
-
-// ------------------- CHANGE VISIBLE -----------//
-const movieStore = useMovieStore()
-const handleChangeVisible = ({ movieId, value }) => {
-  console.log('change visible movie ', movieId, value)
-  movieStore.modifyUserMovie(userStore.uuid, movieId, { isPrivate: value })
-}
 
 </script>
 
@@ -59,7 +54,6 @@ const handleChangeVisible = ({ movieId, value }) => {
         :movie-id="movieId"
         @show-details="handleShowDetails"
         @emit-duration="addToTotalDuration"
-        @change-visible="handleChangeVisible"
     />
     <main class="user-content">
       <h2>---Koniec---</h2>

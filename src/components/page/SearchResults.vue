@@ -1,5 +1,5 @@
 <script setup>
-import MovieItem from "@/components/page/MovieItem.vue";
+import MovieItem from "@/components/page/SearchResultItem.vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import {ref} from "vue";
 

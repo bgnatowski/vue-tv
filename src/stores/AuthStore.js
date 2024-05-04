@@ -21,7 +21,7 @@ export const useAuthStore = defineStore('authStore', {
                 const userStore = useUserStore();
                 if (userDetails) {
                     userStore.$patch({
-                        uuid: userDetails.uid,
+                        uid: userDetails.uid,
                         username: userDetails.displayName || '',
                         email: userDetails.email || '',
                         photoUrl: userDetails.photoURL || 'https://cdn-icons-png.flaticon.com/512/4715/4715330.png'

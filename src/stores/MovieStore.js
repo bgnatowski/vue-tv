@@ -1,35 +1,33 @@
 import { defineStore } from 'pinia';
-import {addMovie, fetchUserMovies, removeUserMovie, updateUserMovie} from "@/services/MovieService.js";
+import {addMovieToUser, fetchAllUserMovies, updateUserMovie} from "@/services/MovieService.js";
 
 export const useMovieStore = defineStore('movieStore', {
     state: () => ({
         userMovies: []
     }),
+    getters: {
+        getMovieById: (state) => (movieId) => {
+            return state.userMovies.find((movie) => movie.movieId === movieId);
+        }
+    },
     actions: {
-        async loadUserMovies(userId) {
-            this.userMovies = await fetchUserMovies(userId);
+        async loadAllUserMovies(userId) {
+            if(!this.userMovies.length){
+                this.userMovies = await fetchAllUserMovies(userId);
+            }
         },
-        async createUserMovie(userMovie) {
-            const newMovie = await addMovie(userMovie);
+        async createUserMovie(userMovieDetails) {
+            const newMovie = await addMovieToUser(userMovieDetails);
             this.userMovies.push(newMovie);
         },
-        async modifyUserMovie(movieId, newDetails) {
-            await updateUserMovie(movieId, newDetails);
+        async modifyUserMovie(userId, movieId, newDetails) {
+            await updateUserMovie(userId, movieId, newDetails);
             const index = this.userMovies.findIndex(m => m.id === movieId);
             if (index !== -1) {
                 this.userMovies[index] = { ...this.userMovies[index], ...newDetails };
             }
         },
-        async deleteUserMovie(movieId) {
-            await removeUserMovie(movieId);
-            this.userMovies = this.userMovies.filter(m => m.id !== movieId);
-        }
     },
-    getters: {
-        getUserMovie: (state) => (movieId) => {
-            return state.userMovies.find(m => m.id === movieId);
-        }
-    }
 });
 
 // Do tych obiektow beda odwolywać sie listy toWatch i watched i beda zawiraly movieId (to jest do movieDetails z API)

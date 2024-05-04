@@ -29,12 +29,12 @@ const movieStore = useMovieStore();
 
 const addToWatch = () => {
   let m = props.movie;
-  console.log("addToWatch, movie id: ", m.id);
-  console.log("handleToWatch, user: ", userStore.uuid);
+  // console.log("addToWatch, movie id: ", m.id);
+  // console.log("handleToWatch, user: ", userStore.uid);
   userStore.addToUserList('moviesToWatch', m.id)
   movieStore.createUserMovie({
-    userId: userStore.uuid, //jakby klucz obcy
-    movieId: m.id, //jakby klucz glowny
+    userId: userStore.uid,
+    movieId: m.id,
     isWatched: false,
     isPrivate: true,
     userRating: 0,
@@ -45,10 +45,10 @@ const addToWatch = () => {
 const addToWatched = () => {
   let m = props.movie;
   console.log("addToWatched, movie id: ", m.id);
-  console.log("addToWatched, user: ", userStore.uuid);
+  console.log("addToWatched, user: ", userStore.uid);
   userStore.addToUserList('moviesWatched', m.id)
   movieStore.createUserMovie({
-    userId: userStore.uuid,
+    userId: userStore.uid,
     movieId: m.id,
     isWatched: true,
     isPrivate: true,

@@ -4,6 +4,7 @@ import {db} from '@/js/firebase.js';
 const createUser = async (userData = {}) => {
     const userRef = doc(db, "users", userData.uid);
     await setDoc(userRef, {
+        uid: userData.uid,
         username: userData.username,
         email: userData.email,
         photoUrl: userData.photoUrl,
