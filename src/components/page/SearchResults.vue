@@ -16,7 +16,6 @@ const handleMouseOut = () => {
 const showDetails = ref(false);
 const selectedMovie = ref(null);
 const handleShowDetails = (movie) => {
-  console.log("handleShowDetails for movie: ", movie);
   selectedMovie.value = movie;
   showDetails.value = true;
 }
@@ -37,7 +36,7 @@ function handleClose() {
     />
   </ul>
   <MovieDetailsPopup v-if="showDetails"
-                     :movie-id="selectedMovieId"
+                     :movie="selectedMovie"
                      @close="handleClose">
   </MovieDetailsPopup>
 </template>

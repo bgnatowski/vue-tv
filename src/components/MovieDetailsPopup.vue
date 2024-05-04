@@ -11,6 +11,7 @@ const props = defineProps({
     posterPath: '',
     description: '',
     rating: '',
+    voteCount: ''
   }
 });
 
@@ -40,11 +41,13 @@ function closePopup() {
                 <p>Premiera:</p>
                 <p>Gatunki:</p>
                 <p>Długość:</p>
+                <p>Ilość ocen:</p>
               </div>
               <div class="column-2">
                 <p>{{ movie.releaseDate }}</p>
                 <p>{{ movie.genres.map((genre) => genre.name).join(", ") }}</p>
                 <p>{{ movie.duration }}</p>
+                <p>{{ movie.voteCount }}</p>
               </div>
             </div>
             <RatingStars read-only :rating="movie.rating"></RatingStars>

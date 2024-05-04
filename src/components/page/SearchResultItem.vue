@@ -2,6 +2,7 @@
 import {ref} from 'vue';
 import {useUserStore} from "@/stores/UserStore.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
+import {fetchMovieDetails} from "@/services/TVDBService.js";
 
 // ----------- STORES ------------------//
 const userStore = useUserStore();
@@ -21,9 +22,10 @@ const hideDropdown = () => {
 };
 
 // ------------- POPUP -------------//
-const showDetails = () => {
-  emit('show-details', props.movie);
-  // console.log('MovieTile: wyemitowano show details', props.movie);
+const showDetails = async () => {
+  const movieDetails = await fetchMovieDetails(props.movie.id)
+  emit('show-details', movieDetails);
+  console.log('MovieTile: wyemitowano show details', props.movie);
 }
 
 // -------------- TO LISTS ---------- //

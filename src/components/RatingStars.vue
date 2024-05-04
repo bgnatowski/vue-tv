@@ -40,7 +40,7 @@ onBeforeMount(() =>{
         <img class="star-icon" src="@/assets/rating/custom-officon.png" alt="star-unfilled"/>
       </template>
     </Rating>
-    <p v-if="readOnly" class="real-value">{{ stars }}</p>
+    <p v-if="readOnly" class="real-value"> {{ stars }} / 10</p>
   </div>
 </template>
 
@@ -68,7 +68,8 @@ onBeforeMount(() =>{
   text-align: center;
   align-self: center;
   font-weight: 600;
-  font-size: 1em;
+  font-size: .9em;
+  margin-left: 5px;
 }
 
 .p-rating {

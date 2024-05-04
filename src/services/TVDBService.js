@@ -41,7 +41,8 @@ async function fetchMovieDetails(id){
             releaseDate: movieData.release_date,
             posterPath: `https://image.tmdb.org/t/p/w500${movieData.poster_path}`,
             description: movieData.overview,
-            rating: movieData.vote_average
+            rating: movieData.vote_average,
+            voteCount: movieData.vote_count,
         }
     } catch {
         console.log('Błąd w czasie pobierania danych')
