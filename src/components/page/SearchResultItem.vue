@@ -1,59 +1,50 @@
 <script setup>
-import { ref } from 'vue';
+import {ref} from 'vue';
 import {useUserStore} from "@/stores/UserStore.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
 
-const props = defineProps({
-  movie: Object,
-});
+// ----------- STORES ------------------//
+const userStore = useUserStore();
+const movieStore = useMovieStore();
 
+// ---------- PROPS AND EMITS ---------- //
+const props = defineProps({movie: Object,});
 const emit = defineEmits(['show-details']);
 
+// ----------- DROPDOWN --------------//
 const isShowDropdown = ref(false);
-
 const showDropdown = () => {
   isShowDropdown.value = true;
 };
-
 const hideDropdown = () => {
   isShowDropdown.value = false;
 };
 
+// ------------- POPUP -------------//
 const showDetails = () => {
   emit('show-details', props.movie);
-  console.log('MovieTile: wyemitowano show details',  props.movie);
+  // console.log('MovieTile: wyemitowano show details', props.movie);
 }
 
-const userStore = useUserStore();
-const movieStore = useMovieStore();
-
-const addToWatch = () => {
+// -------------- TO LISTS ---------- //
+const addToWatch = async () => {
   let m = props.movie;
   // console.log("addToWatch, movie id: ", m.id);
-  // console.log("handleToWatch, user: ", userStore.uid);
-  userStore.addToUserList('moviesToWatch', m.id)
-  movieStore.createUserMovie({
-    userId: userStore.uid,
-    movieId: m.id,
-    isWatched: false,
-    isPrivate: true,
-    userRating: 0,
-    note: '',
+  await movieStore.createCurrentUserMovie({
+    uId: userStore.uid,
+    mId: m.id,
+    isWatched: false
   });
 };
 
-const addToWatched = () => {
+const addToWatched = async () => {
   let m = props.movie;
-  console.log("addToWatched, movie id: ", m.id);
-  console.log("addToWatched, user: ", userStore.uid);
-  userStore.addToUserList('moviesWatched', m.id)
-  movieStore.createUserMovie({
-    userId: userStore.uid,
-    movieId: m.id,
-    isWatched: true,
-    isPrivate: true,
-    userRating: 0,
-    note: '',
+  // console.log("addToWatched, movie id: ", m.id);
+  // console.log("addToWatched, user: ", userStore.uid);
+  await movieStore.createCurrentUserMovie({
+    uId: userStore.uid,
+    mId: m.id,
+    isWatched: true
   });
 };
 </script>
@@ -63,7 +54,7 @@ const addToWatched = () => {
     <img :src="movie.posterPath" alt="Film Poster" class="movie-poster">
     <div class="movie-info">
       <h3>{{ movie.title }}</h3>
-      <span>Premiera: {{ movie.releaseDate.substring(0,4) }}</span>
+      <span>Premiera: {{ movie.releaseDate.substring(0, 4) }}</span>
       <span>Gatunki: {{ movie.genres.join(', ') }}</span>
     </div>
     <div class="dropdown">

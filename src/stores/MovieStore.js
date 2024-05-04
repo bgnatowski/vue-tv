@@ -1,71 +1,79 @@
-import { defineStore } from 'pinia';
+import {defineStore} from 'pinia';
 import {addMovieToUser, fetchAllUserMovies, updateUserMovie} from "@/services/MovieService.js";
 
 export const useMovieStore = defineStore('movieStore', {
     state: () => ({
-        userMovies: []
+        currentUserMovies: [],
+        otherUserMovies: [],
+        currentViewedUserId: null,
     }),
     getters: {
-        getMovieById: (state) => (movieId) => {
-            return state.userMovies.find((movie) => movie.movieId === movieId);
-        }
+        getCurrentUserMovieById: (state) => (movieId) => {
+            return state.currentUserMovies.find((movie) => movie.movieId === movieId);
+        },
+        getOtherUserMovieById: (state) => (movieId) => {
+            return state.otherUserMovies.find((movie) => movie.movieId === movieId);
+        },
+        getCurrentUserWatched: (state) => {
+            return state.currentUserMovies.filter((movie) => movie.isWatched);
+        },
+        getCurrentUserToWatch: (state) => {
+            return state.currentUserMovies.filter((movie) => !movie.isWatched);
+        },
+        getCurrentUserWatchedIds: (state) => {
+            return state.currentUserMovies.filter((movie) => movie.isWatched).map(m => {
+                if(m){
+                    return m.movieId
+                }
+            });
+        },
+        getCurrentUserToWatchIds: (state) => {
+            console.log(state.currentUserMovies);
+            return state.currentUserMovies.filter((movie) => !movie.isWatched).map(m => {
+                if(m){
+                    return m.movieId
+                }
+            });
+        },
     },
     actions: {
-        async loadAllUserMovies(userId) {
-            if(!this.userMovies.length){
-                this.userMovies = await fetchAllUserMovies(userId);
+        async loadCurrentUserMovies(userId) {
+            this.currentUserMovies = await fetchAllUserMovies(userId);
+        },
+        async loadOtherUserMovies(userId) {
+            this.otherUserMovies = await fetchAllUserMovies(userId);
+            this.currentViewedUserId = userId;
+        },
+        async createCurrentUserMovie(movieDetails) {
+            const userMovieObject = {
+                userId: movieDetails.uId,
+                movieId: movieDetails.mId,
+                isWatched: movieDetails.isWatched,
+                isPrivate: true,
+                userRating: 0,
+                note: '',
+            };
+
+            try {
+                const newMovie = await addMovieToUser(userMovieObject);
+
+                if (newMovie) {
+                    this.currentUserMovies.push(newMovie);
+                    console.log('Movie added to currentUserMovies:', newMovie);
+                } else {
+                    console.error('Failed to add movie, retrying...');
+                }
+            } catch (error) {
+                // Obsłuż błędy zapisu
+                console.error('Error adding new movie:', error);
             }
         },
-        async createUserMovie(userMovieDetails) {
-            const newMovie = await addMovieToUser(userMovieDetails);
-            this.userMovies.push(newMovie);
-        },
-        async modifyUserMovie(userId, movieId, newDetails) {
+        async modifyCurrentUserMovie(userId, movieId, newDetails) {
             await updateUserMovie(userId, movieId, newDetails);
-            const index = this.userMovies.findIndex(m => m.id === movieId);
+            const index = this.currentUserMovies.findIndex(m => m.movieId === movieId);
             if (index !== -1) {
-                this.userMovies[index] = { ...this.userMovies[index], ...newDetails };
+                this.currentUserMovies[index] = { ...this.currentUserMovies[index], ...newDetails };
             }
         },
     },
 });
-
-// Do tych obiektow beda odwolywać sie listy toWatch i watched i beda zawiraly movieId (to jest do movieDetails z API)
-// ale tez sie zastanawiam ze skoro w aplikacji non stop wyswietlamy tytuł, duration, gatunek i poster
-// to czy tu tez nie musi być zeby miec od razu po zaciagnieciu z api,
-// a detailsy tylko dociagac z api
-// Dodanie filmu związane z użytkownikiem
-// userMovieStore.addUserMovie({
-//     userId: 'user1',
-//     movieId: 'movie1',
-//     isWatched: true,
-//     isPrivate: false,
-//     userRating: 4.5,
-//     note: 'This is my personal note for the movie.',
-//     title: 'Inception',
-//     genre: ['Sci-Fi', 'Thriller'],
-//     duration: 148,
-//     coverUrl: 'https://example.com/inception.jpg'
-// });
-
-//USAGE:
-// const store = useUserMovieStore();
-//
-// const userId = "user123";
-// store.loadUserMovies(userId); // Load all movies for a user
-//
-// // To add a new movie
-// store.createUserMovie({
-//     userId: userId,
-//     movieId: "movie456",
-//     isWatched: false,
-//     isPrivate: false,
-//     userRating: 4.5,
-//     note: "Must watch again!"
-// });
-//
-// // To update a movie
-// store.modifyUserMovie("movie456", { isWatched: true });
-//
-// // To delete a movie
-// store.deleteUserMovie("movie456");

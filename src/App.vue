@@ -7,6 +7,8 @@ import SidebarComponent from "@/components/page/SidebarComponent.vue";
 import FooterComponent from "@/components/page/FooterComponent.vue";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {useAuthStore} from "@/stores/AuthStore.js";
+import {useMovieStore} from "@/stores/MovieStore";
+import {useUserStore} from "@/stores/UserStore.js";
 
 const route = useRoute();
 const showFooter = ref(false);

@@ -1,10 +1,16 @@
 <script setup>
 import TitleTile from "@/components/TitleTile.vue";
-import {onMounted, ref} from "vue";
+import {computed, onBeforeMount, onMounted, ref} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import {minutesToText} from "@/js/TimeUtils";
 import {useUserStore} from "@/stores/UserStore.js";
 import MovieTile from "@/components/MovieTile.vue";
+import {useMovieStore} from "@/stores/MovieStore.js";
+
+// --------------- STORES ------------------- //
+const userStore = useUserStore();
+const movieStore = useMovieStore();
+
 
 // --------------------- POPUP -------------- ///
 const showDetails = ref(false);
@@ -18,15 +24,12 @@ function handleClose() {
 }
 
 // --------------------- MOVIE TILE -------------- ///
-const userStore = useUserStore();
-const moviesWatchedIds = ref([]);
-onMounted( () => {
-  moviesWatchedIds.value = userStore.moviesWatchedIds;
-})
+const moviesWatchedIds = computed(() => {
+  return movieStore.getCurrentUserWatchedIds;
+});
 
 // ------------------- TOTAL DURATION ---------- //
 const totalDuration = ref(0);
-
 const addToTotalDuration = (duration) => {
   totalDuration.value += duration;
 };

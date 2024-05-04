@@ -13,12 +13,14 @@ import {
 import {defineStore} from 'pinia';
 import {auth,} from '../js/firebase';
 import {useUserStore} from "@/stores/UserStore.js";
+import {useMovieStore} from "@/stores/MovieStore.js";
 
 export const useAuthStore = defineStore('authStore', {
     actions: {
         init() {
             onAuthStateChanged(auth, async (userDetails) => {
                 const userStore = useUserStore();
+                const movieStore = useMovieStore();
                 if (userDetails) {
                     userStore.$patch({
                         uid: userDetails.uid,
@@ -27,6 +29,7 @@ export const useAuthStore = defineStore('authStore', {
                         photoUrl: userDetails.photoURL || 'https://cdn-icons-png.flaticon.com/512/4715/4715330.png'
                     });
                     await userStore.loadUserData(userDetails.uid);
+                    await movieStore.loadCurrentUserMovies(userDetails.uid)
                 } else {
                     userStore.resetUser();
                 }

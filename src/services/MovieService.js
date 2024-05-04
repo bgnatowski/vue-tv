@@ -18,19 +18,29 @@ const addMovieToUser = async (userMovieDetails) => {
     const movieDocRef = doc(db, `users/${userMovieDetails.userId}/movies`, userMovieDetails.movieId.toString());
     // Dodaj lub zaktualizuj dokument filmu w kontekście tego użytkownika
     await setDoc(movieDocRef, userMovieDetails);
+    return userMovieDetails;
 };
 
 const updateUserMovie = async (userId, movieId, newDetails) => {
-    // Definiujemy ścieżkę do dokumentu filmu w zagnieżdżonej kolekcji
+    // Ścieżka do dokumentu filmu w zagnieżdżonej kolekcji
     const movieDocRef = doc(db, `users/${userId}/movies`, movieId.toString());
 
     try {
         // Aktualizujemy dane z użyciem przekazanych nowych wartości
-        console.log('new details:', newDetails)
         await updateDoc(movieDocRef, newDetails);
         console.log(`Dokument zaktualizowany: ${movieId}`);
+
+        // Pobieramy zaktualizowany dokument i zwracamy jego dane
+        const updatedDocSnap = await getDoc(movieDocRef);
+        if (updatedDocSnap.exists()) {
+            return updatedDocSnap.data();
+        } else {
+            console.error(`Dokument nie istnieje: ${movieId}`);
+            return null;
+        }
     } catch (error) {
         console.error(`Błąd przy aktualizacji filmu ${movieId} dla użytkownika ${userId}:`, error);
+        return null;
     }
 };
 

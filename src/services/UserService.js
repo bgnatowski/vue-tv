@@ -8,8 +8,6 @@ const createUser = async (userData = {}) => {
         username: userData.username,
         email: userData.email,
         photoUrl: userData.photoUrl,
-        moviesToWatchIds: [],
-        moviesWatchedIds: [],
         friendsIds: [],
         invitationsIds: [],
         postsIds: [],
@@ -36,20 +34,4 @@ const updateUserData = async (userId, data) => {
     await updateDoc(userRef, data);
 };
 
-const addToList = async (userId, listType, itemId) => {
-    const userRef = doc(db, "users", userId);
-    const field = `${listType}Ids`;
-    await updateDoc(userRef, {
-        [field]: arrayUnion(itemId)
-    });
-};
-
-const removeFromList = async (userId, listType, itemId) => {
-    const userRef = doc(db, "users", userId);
-    const field = `${listType}Ids`;
-    await updateDoc(userRef, {
-        [field]: arrayRemove(itemId)
-    });
-};
-
-export {createUser,deleteUser, getUserData, updateUserData, addToList, removeFromList};
+export {createUser,deleteUser, getUserData, updateUserData,};

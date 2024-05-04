@@ -23,7 +23,7 @@ const userStore = useUserStore();
 const isPrivate = ref();
 
 function publicMovie() {
-  movieStore.modifyUserMovie(
+  movieStore.modifyCurrentUserMovie(
       userStore.uid,
       props.movieId,
       { isPrivate: false }
@@ -32,7 +32,7 @@ function publicMovie() {
 }
 
 function unpublicMovie() {
-  movieStore.modifyUserMovie(
+  movieStore.modifyCurrentUserMovie(
       userStore.uid,
       props.movieId,
       { isPrivate: true }
@@ -61,7 +61,7 @@ onMounted(async () => {
   if (props.movieId != undefined) {
     movie.value = await fetchMovieDetails(props.movieId);
     emit("emit-duration", movie.value.duration)
-    isPrivate.value = movieStore.getMovieById(props.movieId).isPrivate;
+    isPrivate.value = movieStore.getCurrentUserMovieById(props.movieId).isPrivate;
     isLoaded.value = true;
   }else{
     console.log('BLAD')
