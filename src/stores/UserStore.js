@@ -52,6 +52,18 @@ export const useUserStore = defineStore('userStore', {
                 // Zaktualizuj użytkownika w bazie danych
                 await updateUserData(this.uid, { friendsIds: this.friendsIds });
             }
+        },
+        async deleteFriend(friendId) {
+            const index = this.friendsIds.indexOf(friendId);
+            // Jeśli znajomy jest na liście, usuń go
+            if (index !== -1) {
+                this.friendsIds.splice(index, 1);
+
+                // Zaktualizuj użytkownika w bazie danych
+                await updateUserData(this.uid, { friendsIds: this.friendsIds });
+            } else {
+                console.warn(`Friend with ID ${friendId} is not in the friends list.`);
+            }
         }
     }
 });

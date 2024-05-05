@@ -1,27 +1,55 @@
 <script setup>
 
+import {onMounted, ref} from "vue";
+import {fetchUserByUid} from "@/services/UserService.js";
+import {useFriendRequestStore} from "@/stores/FriendRequestStore.js";
+import {useUserStore} from "@/stores/UserStore.js";
+
+// --------------------- STORES -------------------------//
+const friendRequestStore = useFriendRequestStore();
+const userStore = useUserStore();
+
+// -------------------- PROPS AND EMITS -----------------//
 const props = defineProps({
-  friend: {
-    uid: '',
-    username: '',
-    photoUrl: 'https://randomuser.me/api/portraits/men/2.jpg',
-    friendsIds: [],
-    postsIds: []
-  }
+  friendId: ''
 });
 
-function handleDeleteFriend() {
-  console.log('wyemitowano delete friend');
+// -------------------- FUNKCJE -----------------------//
+
+const handleDeleteFriend = async () => {
+  console.log('wyemitowano handleDeleteFriend');
+  await friendRequestStore.sendDeleteRequest(userStore.uid, props.friendId)
+  await userStore.deleteFriend(props.friendId)
+  console.log(`Usunieto znajomego ${props.friendId}`);
 }
 
 function showProfile() {
   console.log('wyemitowano show profile');
 }
 
+// -------------------ZALADOWANIE DANYCH ----------------//
+const friend = ref({
+  uid: '',
+  username: '',
+  photoUrl: '',
+  friendsIds: [],
+  postsIds: []
+})
+const isLoaded = ref(false);
+
+onMounted(async () => {
+  if (props.friendId != undefined) {
+    friend.value = await fetchUserByUid(props.friendId);
+    isLoaded.value = true;
+  } else {
+    console.log('BLAD LADOWANIA')
+  }
+});
+
 </script>
 
 <template>
-  <div class="post">
+  <div class="post" v-if="isLoaded">
     <div @click="handleDeleteFriend" class="delete-friend-icon" aria-label="Delete">
       <img src="@/assets/img/delete-icon.png" alt="Delete icon"/>
     </div>
@@ -39,6 +67,9 @@ function showProfile() {
           class="action-button">Zobacz profil
       </button>
     </div>
+  </div>
+  <div v-else class="loading">
+    <p>Ładowanie...</p>
   </div>
 </template>
 

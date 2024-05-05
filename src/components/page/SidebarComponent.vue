@@ -15,7 +15,7 @@ import paths from "@/router/routerPaths.js";</script>
         <div class="icon-button">
           <img src="@/assets/img/video.png" alt="Filmy obejrzane">
         </div>
-        <span class="button-text">Filmy ukonczone</span>
+        <span class="button-text">Filmy obejrzane</span>
       </div>
     </router-link>
     <router-link :to="paths.TO_WATCH_ROUTE" class="router-link-custom">
@@ -23,7 +23,7 @@ import paths from "@/router/routerPaths.js";</script>
         <div class="icon-button">
           <img src="@/assets/img/watching-a-movie.png" alt="Filmy do obejrzenia">
         </div>
-        <span class="button-text">Filmy do zobaczenia</span>
+        <span class="button-text">Filmy do obejrzenia</span>
       </div>
     </router-link>
     <router-link :to="paths.FRIENDS_ROUTE" class="router-link-custom">

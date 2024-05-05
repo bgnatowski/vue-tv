@@ -3,13 +3,15 @@ import TitleTile from "@/components/TitleTile.vue";
 import InvitationComponent from "@/components/InvitationComponent.vue";
 import {computed, onMounted} from "vue";
 import {useFriendRequestStore} from "@/stores/FriendRequestStore.js";
+import {useUserStore} from "@/stores/UserStore.js";
 
 // --------------- STORES ------------------- //
 const friendRequestStore = useFriendRequestStore();
+const userStore = useUserStore()
 
 // ------------- INVITATION ------------------//
 const friendsRequests = computed(() => {
-  return friendRequestStore.getPendingFriendsRequests;
+  return friendRequestStore.getPendingFriendsRequests.filter(r => r.receiverId === userStore.uid);
 });
 
 onMounted(() =>{
@@ -33,10 +35,6 @@ onMounted(() =>{
 </template>
 
 <style scoped>
-h1 {
-  margin-left: 1rem;
-}
-
 .friends-container {
   display: flex;
   flex-wrap: wrap;

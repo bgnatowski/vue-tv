@@ -1,19 +1,64 @@
 <script setup>
-import FriendComponent from "@/components/FriendComponent.vue"
 import TitleTile from "@/components/TitleTile.vue";
-import {ref} from "vue";
-import SearchBar from "@/components/page/SearchBar.vue";
-import {sampleFriends} from "@/services/TVDBService.js";
-const sFriends = sampleFriends
+import {useFriendRequestStore} from "@/stores/FriendRequestStore.js";
+import {computed, onMounted, watch} from "vue";
+import {useUserStore} from "@/stores/UserStore.js";
+import FriendComponent from "@/components/FriendComponent.vue";
+
+// --------------- STORES ------------------- //
+const friendRequestStore = useFriendRequestStore();
+const userStore = useUserStore();
+
+// ------------- ACCEPTED FRIENDS --------------//
+const friendsAcceptedRequests = computed(() => {
+  return friendRequestStore.getAcceptedFriendsRequests.filter(r => r.receiverId !== userStore.uid);
+});
+
+const friendsToDeleteRequests = computed(() => {
+  return friendRequestStore.getToDeleteFriendsRequests;
+});
+
+const friendsIds = computed( () => userStore.getFriendsIds)
+
+function updateFriendsFromRequests() {
+  if(friendsAcceptedRequests.value != undefined){
+    friendsAcceptedRequests.value.forEach((request) => {
+      if (!friendsIds.value.includes(request.receiverId)) {
+        userStore.addFriend(request.receiverId);
+        console.log(`Uzytkownik ${request.receiverId} zaakceptował twoje(${request.senderId}) zaproszenie.`)
+      }
+      friendRequestStore.deleteOldRequest(request.id);
+    });
+  }
+  if(friendsToDeleteRequests.value != null){
+    friendsToDeleteRequests.value.forEach((request) => {
+      if (friendsIds.value.includes(request.senderId)) {
+        userStore.deleteFriend(request.senderId);
+        console.log(`Uzytkownik ${request.senderId} usunał Cię(${request.receiverId}) ze znajomych.`)
+      }
+      friendRequestStore.deleteOldRequest(request.id);
+    });
+  }
+}
+
+watch(friendsAcceptedRequests, () => {
+  updateFriendsFromRequests();
+});
+
+onMounted(() => {
+  updateFriendsFromRequests();
+  console.log("friendsIds:", friendsIds.value);
+  console.log("friendsAcceptedRequests:", friendsAcceptedRequests.value);
+});
+
 </script>
 
 <template>
   <section class="feed-container">
     <TitleTile>Znajomi</TitleTile>
-<!--    <SearchBar type="friend" placeholder-txt="Filtruj znajomych"></SearchBar>-->
-      <div class="friends-container">
-        <FriendComponent v-for="friend in sFriends" :key="friend.uid" :friend="friend"/>
-      </div>
+    <div class="friends-container">
+      <FriendComponent v-for="friendId in friendsIds" :key="friendId" :friend-id="friendId"/>
+    </div>
     <main class="user-content">
       <h2>---Koniec---</h2>
     </main>
@@ -21,14 +66,8 @@ const sFriends = sampleFriends
 </template>
 
 <style scoped>
-.search {
-  width: 50%;
-  align-self: center;
-  margin-bottom: 10px;
-}
-
-h1 {
-  margin-left: 1rem;
+.user-content {
+  margin: auto;
 }
 
 .friends-container {

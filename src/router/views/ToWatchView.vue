@@ -39,7 +39,7 @@ const addToTotalDuration = (duration) => {
 <template>
   <section class="feed-container">
     <TitleTile>
-      Filmy do zobaczenia
+      Filmy do obejrzenia
       <template #p>Aby obejrzeć wszystko z tej listy, będziesz potrzebował:</template>
       <template #strong>{{ minutesToText(totalDuration) }}</template>
     </TitleTile>

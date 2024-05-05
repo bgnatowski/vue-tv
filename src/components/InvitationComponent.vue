@@ -60,7 +60,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="post">
+  <div class="post" v-if="isLoaded">
     <div class="profile-picture">
       <img
           class="friends-picture"
@@ -83,6 +83,9 @@ onMounted(async () => {
           class="action-button">Zobacz profil
       </button>
     </div>
+  </div>
+  <div v-else class="loading">
+    <p>Ładowanie...</p>
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <script setup>
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import {useUserStore} from "@/stores/UserStore.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import {useFriendRequestStore} from "@/stores/FriendRequestStore.js";
@@ -17,12 +17,19 @@ const isShowDropdown = ref(false);
 const showDropdown = () => isShowDropdown.value = true;
 const hideDropdown = () => isShowDropdown.value = false;
 
+// ------------- COMPUTED --------------//
+const isFriend = computed(() => userStore.getFriendsIds.includes(props.user.id));
+const isMe = computed(() => userStore.getUid == props.user.uid);
+const isAlreadySent = computed(() => friendsRequestStore.isPendingFor(userStore.uid, props.user.id));
+
 // ------------- SEND REQUEST -------------//
 const sendFriendRequest = async () => {
-  console.log('sending request...', friendsRequestStore)
-  await friendsRequestStore.sendRequest(userStore.uid, props.user.id);
-  console.log('friendRequests:', friendsRequestStore.getFriendsRequests)
-  hideDropdown();
+  if(!isAlreadySent){
+    console.log('sending request...');
+    await friendsRequestStore.sendInvitationRequest(userStore.uid, props.user.id);
+    console.log('friendRequests:', friendsRequestStore.getFriendsRequests)
+    hideDropdown();
+  }
 };
 
 // -------------- GO TO PROFILE ---------- //
@@ -31,13 +38,19 @@ const goToProfile = async () => {
   hideDropdown();
 };
 
+
 </script>
 
 <template>
   <div class="user-item">
     <img :src="user.photoUrl" alt="User Photo" class="user-photo">
-    <div class="user-info">
+    <div class="user-info" v-if="isMe">
       <h3>{{ user.username }}</h3>
+      <h2>Twoj profil</h2>
+    </div>
+    <div class="user-info" v-else>
+      <h3>{{ user.username }}</h3>
+      <h2 v-if="isFriend">Znajomy</h2>
     </div>
     <div class="dropdown">
       <div class="icon-button" @click="showDropdown">
@@ -46,7 +59,7 @@ const goToProfile = async () => {
       <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
         <ul class="dropdown-list">
           <li @click="goToProfile" class="dropdown-option">Zobacz profil</li>
-          <li @click="sendFriendRequest" class="dropdown-option">Wyślij zaproszenie do znajomych</li>
+          <li @click="sendFriendRequest" v-if="isAlreadySent" class="dropdown-option">Wyślij zaproszenie do znajomych</li>
         </ul>
       </div>
     </div>
@@ -87,6 +100,11 @@ const goToProfile = async () => {
 .user-info h3 {
   margin: 0;
   font-size: 1.2em;
+}
+.user-info h2 {
+  margin: 0;
+  font-size: .8em;
+  color: #444444;
 }
 
 .dropdown {
