@@ -1,47 +1,21 @@
 <script setup>
-import FriendComponent from "@/components/FriendComponent.vue"
 import TitleTile from "@/components/TitleTile.vue";
-import {ref} from "vue";
 import InvitationComponent from "@/components/InvitationComponent.vue";
 import SearchBar from "@/components/page/SearchBar.vue";
+import {useUserStore} from "@/stores/UserStore.js";
+import {onMounted} from "vue";
 
-const friends = ref([
-  {
-    id: 1,
-    userImage: "https://randomuser.me/api/portraits/men/21.jpg",
-    username: "JohnDoe123",
-    detail1: "This is a longer text to test whether it wraps properly and allows scrolling if it overflows.",
-    detail2: "Another longer piece of text to see if it requires scrolling to stay within the container.",
-  },
-  {
-    id: 2,
-    userImage: "https://randomuser.me/api/portraits/men/25.jpg",
-    username: "JaneDoe456",
-    detail1: "Some shorter text.",
-    detail2: "Another short piece of text.",
-  },
-  {
-    id: 3,
-    userImage: "https://randomuser.me/api/portraits/men/11.jpg",
-    username: "AliceDoe789",
-    detail1: "A variety of text lengths to test scrolling andfafasffasf wrafasfafasfafspping behavior.",
-    detail2: "Another text to check how well it works with gsdgdgsgsdgdgsdgsdg content.",
-  },
-  {
-    id: 4,
-    userImage: "https://randomuser.me/api/portraits/men/11.jpg",
-    username: "AliceDoe789",
-    detail1: "A variety of text lengths to test scrolling andfafasffasf wrafasfafasfafspping behavior.",
-    detail2: "Another text to check how well it works with gsdgdgsgsdgdgsdgsdg content.",
-  },
-  {
-    id: 5,
-    userImage: "https://randomuser.me/api/portraits/men/11.jpg",
-    username: "AliceDoe789",
-    detail1: "A variety of text lengths to test scrolling andfafasffasf wrafasfafasfafspping behavior.",
-    detail2: "Another text to check how well it works with gsdgdgsgsdgdgsdgsdg content.",
-  },
-])
+// --------------- STORES ------------------- //
+const userStore = useUserStore();
+
+// ------------- INVITATION ------------------//
+const userInvitationsIds = userStore.invitationsIds;
+
+onMounted(() =>{
+  console.log("invitationsIds: ", userInvitationsIds)
+  console.log("friendsId: ", userStore.friendsIds)
+})
+
 </script>
 
 <template>
@@ -49,7 +23,10 @@ const friends = ref([
     <TitleTile>Zaproszenia do znajomych</TitleTile>
     <SearchBar type="find-friend" placeholder-txt="Szukaj znajomych"></SearchBar>
     <div class="friends-container">
-      <InvitationComponent v-for="friend in friends" :key="friend.id" v-bind="friend"/>
+<!--      <InviteFriendComponent v-if="isSearched" @send-invitation></InviteFriendComponent>-->
+      <InvitationComponent
+          v-for="invitationId in userInvitationsIds"
+          :key="invitationId" :invitationId="invitationId"/>
     </div>
     <main class="user-content">
       <h2>---Koniec---</h2>

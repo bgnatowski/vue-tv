@@ -1,41 +1,59 @@
 <script setup>
-import {onMounted, reactive, ref} from "vue";
+
+import {onMounted, ref} from "vue";
+import {fetchUserByUid} from "@/services/UserService.js";
+import {useUserStore} from "@/stores/UserStore.js";
+
+// ---------------------- STORE ------------------------//
+const userStore = useUserStore();
+
+// -------------------- PROPS AND EMITS --------------- //
 
 const props = defineProps({
-  id: Number,
-  userImage: String,
-  username: String,
+  invitationId: String
 });
-
-const isShowDropdown = ref(false)
-const isShowButton = ref(true)
-
-function showDropdown() {
-  isShowDropdown.value = true
-  isShowButton.value = false;
-}
-
-function hideDropdown() {
-  isShowDropdown.value = false;
-  isShowButton.value = true;
-}
 
 const emit = defineEmits(['show-profile', 'accept-user', 'decline-user']);
 
+// ---------------------- FUNCTIONS --------------- //
 function showProfile() {
   emit('show-profile');
   console.log('wyemitowano show profile');
 }
 
 function handleAccept() {
-  emit('accept-user');
-  console.log('wyemitowano accept-user');
+  userStore.acceptInvitation(props.invitationId);
 }
 
 function handleDecline() {
+  console.log('wyemitowano decline-user');
+  userStore.declineInvitation(props.invitationId)
+}
+
+function sendInvitation() {
   emit('decline-user');
   console.log('wyemitowano decline-user');
 }
+
+// ----------------------------- ZALADOWANIE DANYCH ----------------//
+const userProfile = ref({
+  uid: '',
+  username: '',
+  photoUrl: '',
+  friendsIds: [],
+  postsIds: []
+})
+const isLoaded = ref(false);
+
+onMounted(async () => {
+  if (props.invitationId != undefined) {
+    userProfile.value = await fetchUserByUid(props.invitationId);
+    isLoaded.value = true;
+  } else {
+    console.log('BLAD')
+  }
+});
+
 </script>
 
 <template>
@@ -43,17 +61,17 @@ function handleDecline() {
     <div class="profile-picture">
       <img
           class="friends-picture"
-          :src="userImage"
-          :alt="`Profile picture of ${username}`"
+          :src="userProfile.photoUrl"
+          :alt="`Profile picture of ${userProfile.username}`"
       />
     </div>
     <div class="friends-info">
-      <h2 class="username">{{ username }}</h2>
+      <h2 class="username">{{ userProfile.username }}</h2>
       <div class="card-action-buttons">
         <div @click="handleAccept" class="card-action-icon" aria-label="Accept">
           <img src="@/assets/img/accept-icon.png" alt="Accpet icon"/>
         </div>
-        <div  @click="handleDecline" class="card-action-icon" aria-label="Decline">
+        <div @click="handleDecline" class="card-action-icon" aria-label="Decline">
           <img src="@/assets/img/decline-icon.png" alt="Decline icon"/>
         </div>
       </div>
@@ -67,6 +85,7 @@ function handleDecline() {
 
 <style scoped>
 @import url(@/assets/buttons.css);
+
 .action-button {
   padding: .5em;
   font-size: 1em;
@@ -120,7 +139,7 @@ function handleDecline() {
   cursor: pointer;
 }
 
-.card-action-icon img{
+.card-action-icon img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -145,7 +164,8 @@ function handleDecline() {
   .username {
     font-size: .8em;
   }
-  .friends-info button{
+
+  .friends-info button {
     font-size: .8em;
   }
 
@@ -170,7 +190,7 @@ function handleDecline() {
     font-size: .6em;
   }
 
-  .friends-info button{
+  .friends-info button {
     font-size: .6em;
     white-space: break-spaces;
   }

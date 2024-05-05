@@ -1,10 +1,12 @@
 import {defineStore} from 'pinia';
 import {
-    createUser,
+    acceptInvitation,
+    createUser, declineInvitation,
     deleteUser,
     getUserData,
     updateUserData
 } from "@/services/UserService.js";
+import {arrayRemove, arrayUnion} from "firebase/firestore";
 
 export const useUserStore = defineStore('userStore', {
         state: () => ({
@@ -43,6 +45,24 @@ export const useUserStore = defineStore('userStore', {
                 await updateUserData(uid, data);
                 this.$patch({...data});
             },
+            async acceptInvitation(invitationId) {
+                await acceptInvitation(invitationId, this.uid);
+                console.log('po accept invitation')
+                // Zaktualizuj stan lokalny
+                this.$patch(state => {
+                    state.friendsIds = [...state.friendsIds, invitationId];
+                    state.invitationsIds = state.invitationsIds.filter(id => id !== invitationId);
+                });
+            },
+            async declineInvitation(invitationId) {
+                // Usuń zaproszenie
+                await declineInvitation(invitationId, this.uid);
+
+                // Zaktualizuj stan lokalny
+                this.$patch(state => {
+                    state.invitationsIds = state.invitationsIds.filter(id => id !== invitationId);
+                });
+            }
         }
     })
 ;

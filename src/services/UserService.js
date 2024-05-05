@@ -34,4 +34,54 @@ const updateUserData = async (userId, data) => {
     await updateDoc(userRef, data);
 };
 
-export {createUser,deleteUser, getUserData, updateUserData,};
+// Nowa funkcja do pobrania użytkownika po UID
+const fetchUserByUid = async (uid) => {
+    const userDocRef = doc(db, "users", uid);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists()) {
+        return userDocSnap.data();
+    } else {
+        console.error(`Nie znaleziono użytkownika o UID: ${uid}`);
+        return null;
+    }
+};
+
+const acceptInvitation = async (invitationId, currentUserId) => {
+    try {
+        // Użytkownik akceptuje zaproszenie
+        const userDocRef = doc(db, `users`, currentUserId);
+        await updateDoc(userDocRef, {
+            friendsIds: arrayUnion(invitationId),
+            invitationsIds: arrayRemove(invitationId)
+        });
+        console.log("Zaakceptowano u siebie")
+
+        // Zapraszający użytkownik powinien otrzymać informację, by dodać Ciebie do friendsIds
+        const friendDocRef = doc(db, `users`, invitationId);
+        await updateDoc(friendDocRef, {
+            friendsIds: arrayUnion(currentUserId)
+        });
+        console.log("Poinformowano znajomego")
+
+        console.log(`Zaproszenie zaakceptowane i użytkownicy zostali dodani do znajomych.`);
+    } catch (error) {
+        console.error(`Błąd podczas akceptowania zaproszenia:`, error);
+    }
+}
+
+const declineInvitation = async (invitationId, currentUserId) => {
+    try {
+        const userDocRef = doc(db, `users`, currentUserId);
+        await updateDoc(userDocRef, {
+            invitationsIds: arrayRemove(invitationId)
+        });
+
+        console.log(`Zaproszenie odrzucone i usunięte z listy.`);
+    } catch (error) {
+        console.error(`Błąd podczas odrzucania zaproszenia:`, error);
+    }
+}
+
+
+export {createUser,deleteUser, getUserData, updateUserData, fetchUserByUid, acceptInvitation, declineInvitation };
