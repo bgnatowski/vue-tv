@@ -26,8 +26,8 @@ function updateFriendsFromRequests() {
       if (!friendsIds.value.includes(request.receiverId)) {
         userStore.addFriend(request.receiverId);
         console.log(`Uzytkownik ${request.receiverId} zaakceptował twoje(${request.senderId}) zaproszenie.`)
+        friendRequestStore.deleteOldRequest(request.id);
       }
-      friendRequestStore.deleteOldRequest(request.id);
     });
   }
   if(friendsToDeleteRequests.value != null){
@@ -35,8 +35,8 @@ function updateFriendsFromRequests() {
       if (friendsIds.value.includes(request.senderId)) {
         userStore.deleteFriend(request.senderId);
         console.log(`Uzytkownik ${request.senderId} usunał Cię(${request.receiverId}) ze znajomych.`)
+        friendRequestStore.deleteOldRequest(request.id);
       }
-      friendRequestStore.deleteOldRequest(request.id);
     });
   }
 }

@@ -29,6 +29,17 @@ export const useMovieStore = defineStore('movieStore', {
                 }
             });
         },
+        isOnAnyList: (state) => (movieId) => {
+            return state.currentUserMovies.some((movie) => movie.movieId === movieId);
+        },
+        isOnWatched: (state) => (movieId) => {
+            const movie = state.currentUserMovies.find((movie) => movie.movieId === movieId);
+            return movie ? movie.isWatched : false;
+        },
+        isOnToWatch: (state) => (movieId) => {
+            const movie = state.currentUserMovies.find((movie) => movie.movieId === movieId);
+            return movie ? !movie.isWatched : false;
+        },
     },
     actions: {
         async initCurrentUserMovies(userId) {

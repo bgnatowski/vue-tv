@@ -1,5 +1,5 @@
 <script setup>
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import {useUserStore} from "@/stores/UserStore.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import {fetchMovieDetails} from "@/services/TVDBService.js";
@@ -51,6 +51,12 @@ const addToWatched = async () => {
   });
   hideDropdown()
 };
+
+// ---------------------- IS ON LIST? --------- //
+const isOnWatched = computed(() => movieStore.isOnWatched(props.movie.id))
+const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movie.id))
+const isOnAnyList = computed(() => movieStore.isOnAnyList(props.movie.id))
+
 </script>
 
 <template>
@@ -60,6 +66,8 @@ const addToWatched = async () => {
       <h3>{{ movie.title }}</h3>
       <span>Premiera: {{ movie.releaseDate.substring(0, 4) }}</span>
       <span>Gatunki: {{ movie.genres.join(', ') }}</span>
+      <span class="on-list" v-if="isOnWatched">Na liście: obejrzane</span>
+      <span class="on-list" v-else-if="isOnToWatch">Na liście: do obejrzenia</span>
     </div>
     <div class="dropdown">
       <div class="icon-button" @click="showDropdown">
@@ -68,8 +76,8 @@ const addToWatched = async () => {
       <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
         <ul class="dropdown-list">
           <li @click="showDetails" class="dropdown-option">Zobacz więcej</li>
-          <li @click="addToWatch" class="dropdown-option">Dodaj do obejrzenia</li>
-          <li @click="addToWatched" class="dropdown-option">Dodaj do obejrzanych</li>
+          <li @click="addToWatch" v-if="!isOnAnyList" class="dropdown-option">Dodaj do obejrzenia</li>
+          <li @click="addToWatched" v-if="!isOnAnyList" class="dropdown-option">Dodaj do obejrzanych</li>
         </ul>
       </div>
     </div>
@@ -78,7 +86,6 @@ const addToWatched = async () => {
 
 <style scoped>
 @import url(@/assets/dropdown.css);
-
 .movie-item {
   display: flex;
   align-items: center;
@@ -121,6 +128,12 @@ const addToWatched = async () => {
 .movie-info span {
   font-size: 0.8em;
   color: #444;
+}
+
+.movie-info .on-list{
+  font-size: 0.7em;
+  font-weight: 600;
+  color: var(--main-color);
 }
 
 .dropdown {
