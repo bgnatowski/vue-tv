@@ -24,7 +24,8 @@ const isAlreadySent = computed(() => friendsRequestStore.isPendingFor(userStore.
 
 // ------------- SEND REQUEST -------------//
 const sendFriendRequest = async () => {
-  if(!isAlreadySent){
+  console.log('sending?')
+  if(!isAlreadySent.value && !isFriend.value){
     console.log('sending request...');
     await friendsRequestStore.sendInvitationRequest(userStore.uid, props.user.id);
     console.log('friendRequests:', friendsRequestStore.getFriendsRequests)
@@ -65,7 +66,7 @@ onMounted(() =>{
       <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
         <ul class="dropdown-list">
           <li @click="goToProfile" class="dropdown-option">Zobacz profil</li>
-          <li @click="sendFriendRequest" v-if="!isAlreadySent" class="dropdown-option">Wyślij zaproszenie do znajomych</li>
+          <li @click="sendFriendRequest" v-if="!isAlreadySent && !isFriend" class="dropdown-option">Wyślij zaproszenie do znajomych</li>
         </ul>
       </div>
     </div>
