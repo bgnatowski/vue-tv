@@ -25,9 +25,13 @@ const handleShowDetails = (movie) => {
   selectedMovie.value = movie;
   showDetails.value = true;
 }
+
 function handleClose() {
   showDetails.value = false;
 }
+
+
+
 
 </script>
 
@@ -42,9 +46,17 @@ function handleClose() {
         <img :src="userStore.photoUrl" alt="profile avatar">
       </div>
       <p class="user-name">{{ userStore.username }}</p>
-      <TitleTile class="list" @click="router.push(paths.WATCHED_ROUTE)">Filmy obejrzane</TitleTile>
+      <TitleTile class="list"
+                 @click="router.push(paths.WATCHED_ROUTE)"
+      >
+        Filmy obejrzane
+      </TitleTile>
       <UserMovesTile list-type="watched"/>
-      <TitleTile class="list" @click="router.push(paths.TO_WATCH_ROUTE)">Filmy do obejrzenia</TitleTile>
+      <TitleTile class="list"
+                 @click="router.push(paths.TO_WATCH_ROUTE)"
+      >
+        Filmy do obejrzenia
+      </TitleTile>
       <UserMovesTile list-type="to-watch"/>
     </section>
     <section class="posts-column">
@@ -63,10 +75,12 @@ function handleClose() {
 .list:hover {
   cursor: pointer;
 }
+
 .list:hover {
   transition: .5s ease all;
   background-color: var(--lighter-main-transparent)
 }
+
 .feed-container {
   flex-direction: row;
   margin: 0;
@@ -80,6 +94,7 @@ function handleClose() {
 }
 
 .posts-column {
+  width: 60%;
   padding: 1em 1em 0 1em;
 }
 
@@ -122,7 +137,7 @@ function handleClose() {
   justify-self: center;
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 1700px) {
   .feed-container {
     flex-direction: column;
   }

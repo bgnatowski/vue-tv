@@ -111,7 +111,23 @@ import paths from "@/router/routerPaths.js";</script>
   margin-right: 1em;
 }
 
-@media screen and (max-width: 1000px){
+.icon-button:hover {
+  background-color: unset;
+  border: none;
+  box-shadow: unset;
+}
+
+@media screen and (max-width: 1100px){
+  .icon-button {
+    margin: 0;
+  }
+  .button-text {
+    transition: .5s ease all;
+    display: none;
+  }
+}
+
+@media screen and (max-width: 600px){
   .icon-button {
     margin: 0;
     height: 28px;
@@ -144,7 +160,7 @@ import paths from "@/router/routerPaths.js";</script>
 
 }
 
-@media screen and (max-width: 600px){
+@media screen and (max-width: 500px){
   .icon-button {
     height: 25px;
     width: 25px;

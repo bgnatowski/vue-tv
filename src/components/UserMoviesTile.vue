@@ -13,16 +13,24 @@ const props = defineProps({
   listType: String,
 })
 
+const emits = defineEmits(['is-loaded'])
+
+// ---------------------------------------------//
+
 const movies = ref([]);
 const isLoaded = ref(false);
+const fetchingMovies = ref(false);
 
-async function fetchMovies(userMovieIds) {
+const fetchMovies = async (userMovieIds) =>{
+  fetchingMovies.value = true;
   const fetchedMovies = [];
   for (const movieId of userMovieIds) {
     const movieDetails = await fetchMovieDetails(movieId);
     fetchedMovies.push(movieDetails);
   }
   movies.value = fetchedMovies;
+  fetchingMovies.value = false;
+  return true;
 }
 
 watchEffect(async () => {
@@ -32,13 +40,9 @@ watchEffect(async () => {
   } else if (props.listType === 'to-watch') {
     userMovieIds = movieStore.getCurrentUserToWatchIds;
   }
-
-  // Trigger fetching only if there are IDs to work with
-  if (userMovieIds.length) {
-    await fetchMovies(userMovieIds);
-  }
-  isLoaded.value = true;
+  isLoaded.value = await fetchMovies(userMovieIds);
 });
+
 
 onMounted(async () => {
   console.log('movies', movies.value)
@@ -47,17 +51,16 @@ onMounted(async () => {
 </script>
 <template>
   <div class="post">
-    <div class="movies" v-if="isLoaded">
-      <div v-if="movies.length" class="movie-poster" v-for="movie in movies" :key="movie">
-        <img :src="movie.posterPath"
-             alt="Movie poster"/>
+    <div class="movies" v-dragscroll.x>
+      <div v-if="!fetchingMovies" class="movie-poster" v-for="movie in movies" :key="movie">
+        <img :src="movie.posterPath" alt="Movie poster"/>
       </div>
-      <div v-else>
-        <p>Brak filmów na liście</p>
+      <div v-else class="loading">
+        <p>Ładowanie...</p>
       </div>
     </div>
-    <div v-else class="loading">
-      <p>Ładowanie...</p>
+    <div v-if="!movies.length && !fetchingMovies && isLoaded">
+      <p style="text-align: center;">Brak filmów na liście</p>
     </div>
   </div>
 </template>
@@ -69,40 +72,40 @@ onMounted(async () => {
   padding: .5em 1em;
 }
 
-.post h2 {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  text-align: center;
-  font-weight: 500;
-  font-size: 1.2em;
-  font-family: "Bruno Ace SC", sans-serif;
-  white-space: nowrap;
-  align-self: center;
-}
-
 .movies {
+  width: inherit;
   display: flex;
+  margin: auto;
   overflow-x: auto;
   overflow-y: hidden;
+  display: flex;
   scrollbar-width: thin;
-  justify-content: center;
+  border-radius: 1.5em;
+  max-width: 460px;
 }
 
 .movies::-webkit-scrollbar {
-  display: none;
+  height: 8px;
+}
+
+.movies::-webkit-scrollbar-thumb {
+  background-color: darkgray;
+  border-radius: 4px;
 }
 
 .movie-poster {
   width: 150px;
-  height: auto;
-  padding: 0 .2em;
+  height: 230px;
+  flex-shrink: 0;
+  padding: 0.2em;
+  cursor: pointer;
 }
 
 .movie-poster img {
   height: 100%;
   width: 100%;
-  object-fit: contain;
-  border-radius: 1.2em;
+  object-fit: cover;
+  border-radius: 1.5em;
 }
 </style>
 
