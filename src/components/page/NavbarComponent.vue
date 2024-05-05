@@ -5,6 +5,7 @@ import {ref, watch} from "vue";
 import {useRouter} from "vue-router";
 import SearchBar from "@/components/page/SearchBar.vue";
 import SearchResults from "@/components/page/SearchResults.vue";
+// ------------------ PROPS AND EMITS ----------------//
 
 const props = defineProps({
   isSidebarVisible: Boolean
@@ -12,12 +13,9 @@ const props = defineProps({
 
 const emits = defineEmits(['toggle-sidebar'])
 
+// ---------------------SCREEN ----------------------//
 const screenWidth = ref(window.innerWidth);
 const mobile = ref(false)
-const profileIconRotate = ref(false)
-const sideBarIconRotate = ref(false)
-const searchIconRotate = ref(false)
-const router = useRouter()
 
 watch(
     () => screenWidth.value,
@@ -30,6 +28,12 @@ watch(
 window.addEventListener('resize', () => {
   screenWidth.value = window.innerWidth;
 });
+
+// --------------------- BUTTON FUNCTIONS ------------------//
+const router = useRouter()
+const profileIconRotate = ref(false)
+const sideBarIconRotate = ref(false)
+const searchIconRotate = ref(false)
 
 function onMenuButtonClick() {
   emits('toggle-sidebar');
@@ -45,12 +49,15 @@ function onSearchIconClick() {
 }
 
 
-const searchedMovies = ref();
-const handleSearchedMovies = (movies) => {
-  if(!movies){
-    searchedMovies.value = [];
-  }else{
-    searchedMovies.value = movies;
+// ----------------------- HANDLE RESULTS -------------------- //
+const searchedResults = ref({ movies: [], users: [] });
+
+const handleSearchedResults = (results) => {
+  // Sprawdź, czy przekazane dane zawierają filmy i użytkowników
+  if (results && results.movies && results.users) {
+    searchedResults.value = results;
+  } else {
+    searchedResults.value = { movies: [], users: [] };
   }
 };
 
@@ -62,7 +69,7 @@ const handleSearchedMovies = (movies) => {
       <div class="branding">
         <h1 @click="router.push(paths.HOME_ROUTE)" class="bruno-ace-regular">VueTV</h1>
       </div>
-      <SearchBar :mobile="mobile" type="movie" placeholder-txt="Szukaj" @searched-movies="handleSearchedMovies"/>
+      <SearchBar :mobile="mobile" placeholder-txt="Szukaj" @searched-results="handleSearchedResults"/>
       <ul class="navigation">
         <li v-if="mobile" class="icon-button" @click="onSearchIconClick" :class="{'rotate360': searchIconRotate}">
           <img src="@/assets/img/search-icon.png" alt="search-icon">
@@ -76,7 +83,7 @@ const handleSearchedMovies = (movies) => {
         </li>
       </ul>
     </nav>
-    <SearchResults :movies="searchedMovies" @hide-results="searchedMovies = null"></SearchResults>
+    <SearchResults :results="searchedResults" @hide-results="searchedResults = { movies: [], users: [] }"></SearchResults>
   </header>
 </template>
 

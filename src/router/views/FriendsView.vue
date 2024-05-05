@@ -10,7 +10,7 @@ const sFriends = sampleFriends
 <template>
   <section class="feed-container">
     <TitleTile>Znajomi</TitleTile>
-    <SearchBar type="friend" placeholder-txt="Filtruj znajomych"></SearchBar>
+<!--    <SearchBar type="friend" placeholder-txt="Filtruj znajomych"></SearchBar>-->
       <div class="friends-container">
         <FriendComponent v-for="friend in sFriends" :key="friend.uid" :friend="friend"/>
       </div>

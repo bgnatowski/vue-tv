@@ -21,7 +21,7 @@ onMounted(() =>{
 <template>
   <section class="feed-container">
     <TitleTile>Zaproszenia do znajomych</TitleTile>
-    <SearchBar type="find-friend" placeholder-txt="Szukaj znajomych"></SearchBar>
+<!--    <SearchBar type="find-friend" placeholder-txt="Szukaj znajomych"></SearchBar>-->
     <div class="friends-container">
 <!--      <InviteFriendComponent v-if="isSearched" @send-invitation></InviteFriendComponent>-->
       <InvitationComponent

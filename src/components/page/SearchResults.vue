@@ -1,10 +1,12 @@
 <script setup>
-import MovieItem from "@/components/page/SearchResultItem.vue";
+import MovieItem from "@/components/page/SearchResultMovieItem.vue";
+import UserItem from "@/components/page/SearchResultUserItem.vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import {ref} from "vue";
 
+// ---------------------- PROPS AND EMITS ----------------- //
 const props = defineProps({
-  movies: Array
+  results: Object
 });
 const emits = defineEmits(['hide-results']);
 
@@ -19,21 +21,35 @@ const handleShowDetails = (movie) => {
   selectedMovie.value = movie;
   showDetails.value = true;
 }
-
 function handleClose() {
   showDetails.value = false;
 }
+
 </script>
 
 <template>
   <ul class="result" @mouseleave="handleMouseOut">
-    <MovieItem
-        v-for="movie in movies"
-        :key="movie.id"
-        :movie="movie"
-        class="movie-item"
-        @show-details="handleShowDetails"
-    />
+    <!-- Sekcja z filmami -->
+    <template v-if="results.movies.length > 0">
+      <h4 class="results-title">Filmy</h4>
+      <MovieItem
+          v-for="movie in results.movies"
+          :key="movie.id"
+          :movie="movie"
+          class="movie-item"
+          @show-details="handleShowDetails"
+      />
+    </template>
+    <!-- Sekcja z użytkownikami -->
+    <template v-if="results.users.length > 0">
+      <h4 class="results-title">Użytkownicy</h4>
+      <UserItem
+          v-for="user in results.users"
+          :key="user.id"
+          :user="user"
+          class="user-item"
+      />
+    </template>
   </ul>
   <MovieDetailsPopup v-if="showDetails"
                      :movie="selectedMovie"
@@ -54,6 +70,10 @@ function handleClose() {
   scrollbar-width: thin;
   max-height: 70vh;
   border-radius: 0 0 1em 1em;
+}
+
+.results-title{
+  margin: 5px;
 }
 
 </style>

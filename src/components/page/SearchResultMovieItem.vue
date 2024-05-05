@@ -37,6 +37,7 @@ const addToWatch = async () => {
     mId: m.id,
     isWatched: false
   });
+  hideDropdown()
 };
 
 const addToWatched = async () => {
@@ -48,6 +49,7 @@ const addToWatched = async () => {
     mId: m.id,
     isWatched: true
   });
+  hideDropdown()
 };
 </script>
 

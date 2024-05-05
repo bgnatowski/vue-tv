@@ -1,4 +1,14 @@
-import {arrayRemove, arrayUnion, deleteDoc, doc, getDoc, setDoc, updateDoc} from 'firebase/firestore';
+import {
+    arrayRemove,
+    arrayUnion,
+    collection,
+    deleteDoc,
+    doc,
+    getDoc, getDocs,
+    query,
+    setDoc,
+    updateDoc, where
+} from 'firebase/firestore';
 import {db} from '@/js/firebase.js';
 
 const createUser = async (userData = {}) => {
@@ -47,41 +57,17 @@ const fetchUserByUid = async (uid) => {
     }
 };
 
-const acceptInvitation = async (invitationId, currentUserId) => {
-    try {
-        // Użytkownik akceptuje zaproszenie
-        const userDocRef = doc(db, `users`, currentUserId);
-        await updateDoc(userDocRef, {
-            friendsIds: arrayUnion(invitationId),
-            invitationsIds: arrayRemove(invitationId)
-        });
-        console.log("Zaakceptowano u siebie")
+const searchUsersByUsername = async (username) => {
+    const usersRef = collection(db, 'users');
+    const q = query(usersRef, where('username', '==', username));
+    const querySnapshot = await getDocs(q);
 
-        // Zapraszający użytkownik powinien otrzymać informację, by dodać Ciebie do friendsIds
-        const friendDocRef = doc(db, `users`, invitationId);
-        await updateDoc(friendDocRef, {
-            friendsIds: arrayUnion(currentUserId)
-        });
-        console.log("Poinformowano znajomego")
+    const users = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+    }));
 
-        console.log(`Zaproszenie zaakceptowane i użytkownicy zostali dodani do znajomych.`);
-    } catch (error) {
-        console.error(`Błąd podczas akceptowania zaproszenia:`, error);
-    }
-}
+    return users;
+};
 
-const declineInvitation = async (invitationId, currentUserId) => {
-    try {
-        const userDocRef = doc(db, `users`, currentUserId);
-        await updateDoc(userDocRef, {
-            invitationsIds: arrayRemove(invitationId)
-        });
-
-        console.log(`Zaproszenie odrzucone i usunięte z listy.`);
-    } catch (error) {
-        console.error(`Błąd podczas odrzucania zaproszenia:`, error);
-    }
-}
-
-
-export {createUser,deleteUser, getUserData, updateUserData, fetchUserByUid, acceptInvitation, declineInvitation };
+export {createUser,deleteUser, getUserData, updateUserData, fetchUserByUid, searchUsersByUsername };

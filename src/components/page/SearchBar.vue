@@ -2,31 +2,32 @@
 
 import {ref, watch} from "vue";
 import {searchMovie} from "@/services/TVDBService.js";
+import {searchUsersByUsername} from "@/services/UserService.js";
 
 const props = defineProps({
   mobile: Boolean,
-  type: String,
   placeholderTxt: String
 })
 
-const emits = defineEmits(['searched-movies'])
+const emits = defineEmits(['searched-results'])
 
 const searchQuery = ref('');
 const searchedMovies = ref([]);
+const searchedUsers = ref([]);
 
 watch(searchQuery, async (newValue) => {
-  if (props.type === 'movie') {
-    searchedMovies.value = await searchMovie(searchQuery.value)
-    emits('searched-movies', searchedMovies.value)
-  } else if (props.type === 'friend') {
-    // logika wyszukiwania znajomych
-  } else if (props.type === 'find-friend') {
-    // logika szukania nowych znajomych
-  }
+  // Pobieranie filmow
+  searchedMovies.value = await searchMovie(searchQuery.value)
+
+  // Pobieranie użytkowników
+  searchedUsers.value = await searchUsersByUsername(searchQuery.value);
+
+  // Emituj filmy i użytkowników jako osobne wartości lub połączone w jedno.
+  emits('searched-results', { movies: searchedMovies.value, users: searchedUsers.value });
 });
 
-async function reloadSearched(){
-  emits('searched-movies', searchedMovies.value)
+async function reloadSearched() {
+  emits('searched-results', { movies: searchedMovies.value, users: searchedUsers.value })
 }
 
 </script>

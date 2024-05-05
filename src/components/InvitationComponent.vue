@@ -22,12 +22,11 @@ function showProfile() {
 }
 
 function handleAccept() {
-  userStore.acceptInvitation(props.invitationId);
+  console.log('wyemitowano handleAccept');
 }
 
 function handleDecline() {
-  console.log('wyemitowano decline-user');
-  userStore.declineInvitation(props.invitationId)
+  console.log('wyemitowano handleDecline');
 }
 
 function sendInvitation() {
