@@ -28,13 +28,14 @@ function showProfile() {
 
 const handleAccept = async () => {
   console.log('wyemitowano handleAccept');
-  await friendRequestStore.acceptRequest(props.friendRequest.id, props.friendRequest.senderId)
-  // userStore.updateUser()
+  await friendRequestStore.acceptRequest(props.friendRequest.id, props.friendRequest.receiverId)
+  await userStore.addFriend(props.friendRequest.senderId);
+  console.log('akceptowano zaproszenie i dodano znajomego!')
 }
 
 const handleDecline= async () => {
   console.log('wyemitowano handleDecline');
-  await friendRequestStore.declineRequest(props.friendRequest.id, props.friendRequest.senderId)
+  await friendRequestStore.declineRequest(props.friendRequest.id, props.friendRequest.receiverId)
 }
 
 // ----------------------------- ZALADOWANIE DANYCH ----------------//
@@ -49,7 +50,7 @@ const isLoaded = ref(false);
 
 onMounted(async () => {
   if (props.friendRequest != undefined) {
-    userProfile.value = await fetchUserByUid(props.friendRequest.receiverId);
+    userProfile.value = await fetchUserByUid(props.friendRequest.senderId);
     isLoaded.value = true;
   } else {
     console.log('BLAD')

@@ -24,14 +24,15 @@ export const useFriendRequestStore = defineStore('friendRequestStore', {
             // Aktualizuj lokalny stan (opcjonalne)
             await this.initFriendRequests(senderId);
         },
-        async acceptRequest(requestId, senderId) {
+        async acceptRequest(requestId, receiverId) {
             await updateFriendRequestStatus(requestId, 'accepted');
             // Tutaj można zaktualizować status znajomych w `UserStore`.
-            await this.initFriendRequests(senderId);
+            await this.initFriendRequests(receiverId);
         },
-        async declineRequest(requestId, senderId) {
+        async declineRequest(requestId, receiverId) {
             await deleteFriendRequest(requestId);
-            await this.initFriendRequests(senderId);
+            await this.initFriendRequests(receiverId);
+            console.log(`Usunieto zaproszenie: ${receiverId}`)
         },
     },
 });

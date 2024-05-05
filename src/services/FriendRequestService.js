@@ -24,7 +24,7 @@ const deleteFriendRequest = async (requestId) => {
 
 const getFriendRequestsForUser = async (userId) => {
     const friendRequestsRef = collection(db, 'friendRequests');
-    const q = query(friendRequestsRef, where('senderId', '==', userId));
+    const q = query(friendRequestsRef, where('receiverId', '==', userId));
     const querySnapshot = await getDocs(q);
 
     return querySnapshot.docs.map((doc) => ({

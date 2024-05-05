@@ -43,6 +43,15 @@ export const useUserStore = defineStore('userStore', {
         async updateUser(data) {
             await updateUserData(this.uid, data);
             this.$patch({...data});
+        },
+        async addFriend(friendId) {
+            if (!this.friendsIds.includes(friendId)) {
+                // Dodaj znajomego do lokalnej listy
+                this.friendsIds.push(friendId);
+
+                // Zaktualizuj użytkownika w bazie danych
+                await updateUserData(this.uid, { friendsIds: this.friendsIds });
+            }
         }
     }
 });

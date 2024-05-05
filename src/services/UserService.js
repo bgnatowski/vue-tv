@@ -1,13 +1,12 @@
 import {
-    arrayRemove,
-    arrayUnion,
     collection,
     deleteDoc,
     doc,
     getDoc, getDocs,
     query,
     setDoc,
-    updateDoc, where
+    updateDoc, orderBy, startAt, endAt
+
 } from 'firebase/firestore';
 import {db} from '@/js/firebase.js';
 
@@ -19,7 +18,6 @@ const createUser = async (userData = {}) => {
         email: userData.email,
         photoUrl: userData.photoUrl,
         friendsIds: [],
-        invitationsIds: [],
         postsIds: [],
     });
 };
@@ -57,9 +55,18 @@ const fetchUserByUid = async (uid) => {
     }
 };
 
-const searchUsersByUsername = async (username) => {
+const searchUsersByUsername = async (usernamePattern) => {
     const usersRef = collection(db, 'users');
-    const q = query(usersRef, where('username', '==', username));
+
+    // Wyszukiwanie z użyciem wzorca
+    const q = query(
+        usersRef,
+        orderBy('username'),
+        startAt(usernamePattern),
+        endAt(usernamePattern + '\uf8ff')
+    );
+
+    // Pobranie danych użytkowników zgodnie z wyszukiwaniem
     const querySnapshot = await getDocs(q);
 
     const users = querySnapshot.docs.map(doc => ({
@@ -70,4 +77,4 @@ const searchUsersByUsername = async (username) => {
     return users;
 };
 
-export {createUser,deleteUser, getUserData, updateUserData, fetchUserByUid, searchUsersByUsername };
+export {createUser, deleteUser, getUserData, updateUserData, fetchUserByUid, searchUsersByUsername};

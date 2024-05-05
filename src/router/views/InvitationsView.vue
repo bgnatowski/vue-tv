@@ -21,25 +21,18 @@ onMounted(() =>{
 <template>
   <section class="feed-container">
     <TitleTile>Zaproszenia do znajomych</TitleTile>
-<!--    <SearchBar type="find-friend" placeholder-txt="Szukaj znajomych"></SearchBar>-->
     <div class="friends-container">
-<!--      <InviteFriendComponent v-if="isSearched" @send-invitation></InviteFriendComponent>-->
       <InvitationComponent
           v-for="friendRequest in friendsRequests"
           :key="friendRequest" :friend-request="friendRequest"/>
     </div>
     <main class="user-content">
-      <h2>---Koniec---</h2>
+      <h1>---BRAK---</h1>
     </main>
   </section>
 </template>
 
 <style scoped>
-.search {
-  width: 50%;
-  align-self: center;
-  margin-bottom: 10px;
-}
 h1 {
   margin-left: 1rem;
 }
@@ -49,6 +42,9 @@ h1 {
   flex-wrap: wrap;
   justify-content: flex-start;
   gap: 5%;
+}
+.user-content {
+  margin: auto;
 }
 
 @media screen and (max-width: 460px) {
