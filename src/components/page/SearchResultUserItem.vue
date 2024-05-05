@@ -1,5 +1,5 @@
 <script setup>
-import {computed, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import {useUserStore} from "@/stores/UserStore.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import {useFriendRequestStore} from "@/stores/FriendRequestStore.js";
@@ -38,6 +38,12 @@ const goToProfile = async () => {
   hideDropdown();
 };
 
+onMounted(() =>{
+  console.log(`${props.user.username} isFriend: ${isFriend.value}`)
+  console.log(`${props.user.username} isMe: ${isMe.value}`)
+  console.log(`${props.user.username} isAlreadySent: ${isAlreadySent.value}`)
+})
+
 
 </script>
 
@@ -59,7 +65,7 @@ const goToProfile = async () => {
       <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
         <ul class="dropdown-list">
           <li @click="goToProfile" class="dropdown-option">Zobacz profil</li>
-          <li @click="sendFriendRequest" v-if="isAlreadySent" class="dropdown-option">Wyślij zaproszenie do znajomych</li>
+          <li @click="sendFriendRequest" v-if="!isAlreadySent" class="dropdown-option">Wyślij zaproszenie do znajomych</li>
         </ul>
       </div>
     </div>
