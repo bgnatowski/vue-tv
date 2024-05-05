@@ -6,6 +6,7 @@ import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import TitleTile from "@/components/TitleTile.vue";
 import {useUserStore} from "@/stores/UserStore.js";
 
+// ----------------- STORES -------------------//
 const userStore = useUserStore();
 const user = reactive({
   username: computed(() => userStore.getUsername),
@@ -38,9 +39,9 @@ function handleClose() {
       </div>
       <p class="user-name">{{ userStore.username }}</p>
       <TitleTile>Filmy obejrzane</TitleTile>
-      <UserMovesTile tileType="Filmy do obejrzenia"/>
-      <TitleTile>Filmy obejrzane</TitleTile>
-      <UserMovesTile tileType="Filmy do obejrzenia"/>
+      <UserMovesTile list-type="watched"/>
+      <TitleTile>Filmy do obejrzenia</TitleTile>
+      <UserMovesTile list-type="to-watch"/>
     </section>
     <section class="posts-column">
       <!--      todo: if-user self -> twoje recenzje else -> recenzje znajomego -->

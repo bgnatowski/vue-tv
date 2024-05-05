@@ -50,15 +50,16 @@ const addToTotalDuration = (duration) => {
     </MovieDetailsPopup>
 
     <MovieTile
+        v-if="moviesToWatchIds.length"
         v-for="(movieId) in moviesToWatchIds"
         :key="movieId"
         :movie-id="movieId"
         @show-details="handleShowDetails"
         @emit-duration="addToTotalDuration"
     />
-    <main class="user-content">
-      <h2>---Koniec---</h2>
-    </main>
+    <div v-else class="user-content">
+      <h2>--- Brak filmów na liście. Wyszukaj i dodaj! ---</h2>
+    </div>
   </section>
 </template>
 

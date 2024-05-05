@@ -56,12 +56,12 @@ onMounted(() => {
 <template>
   <section class="feed-container">
     <TitleTile>Znajomi</TitleTile>
-    <div class="friends-container">
+    <div class="friends-container" v-if="friendsIds.length">
       <FriendComponent v-for="friendId in friendsIds" :key="friendId" :friend-id="friendId"/>
     </div>
-    <main class="user-content">
-      <h2>---Koniec---</h2>
-    </main>
+    <div class="user-content" v-else>
+      <h2>---BRAK ZNAJOMYCH---</h2>
+    </div>
   </section>
 </template>
 

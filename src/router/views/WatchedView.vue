@@ -52,6 +52,7 @@ const addToTotalDuration = (duration) => {
     </MovieDetailsPopup>
 
     <MovieTile
+        v-if="moviesWatchedIds.length"
         watched
         v-for="(movieId) in moviesWatchedIds"
         :key="movieId"
@@ -59,9 +60,9 @@ const addToTotalDuration = (duration) => {
         @show-details="handleShowDetails"
         @emit-duration="addToTotalDuration"
     />
-    <main class="user-content">
-      <h2>---Koniec---</h2>
-    </main>
+    <div v-else class="user-content">
+      <h2>--- Brak filmów na liście. Najpierw dodaj "do obejrzenia" lub dodaj wprost na te listę! ---</h2>
+    </div>
   </section>
 </template>
 

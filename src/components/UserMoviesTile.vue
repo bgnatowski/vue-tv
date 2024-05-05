@@ -1,27 +1,63 @@
 <script setup>
 
+import {computed, onMounted, ref, watchEffect} from "vue";
+import {useMovieStore} from "@/stores/MovieStore.js";
+import {fetchMovieDetails} from "@/services/TVDBService.js";
+
+// ---------------- STORES ---------------------//
+const movieStore = useMovieStore()
+
+// ---------------- PROPS AND EMITS ------------//
+
 const props = defineProps({
-  tileType: String,
-  movieList: String,
+  listType: String,
+})
+
+const movies = ref([]);
+const isLoaded = ref(false);
+
+async function fetchMovies(userMovieIds) {
+  const fetchedMovies = [];
+  for (const movieId of userMovieIds) {
+    const movieDetails = await fetchMovieDetails(movieId);
+    fetchedMovies.push(movieDetails);
+  }
+  movies.value = fetchedMovies;
+  isLoaded.value = true;
+}
+
+watchEffect(() => {
+  let userMovieIds = [];
+  if (props.listType === 'watched') {
+    userMovieIds = movieStore.getCurrentUserWatchedIds;
+  } else if (props.listType === 'to-watch') {
+    userMovieIds = movieStore.getCurrentUserToWatchIds;
+  }
+
+  // Trigger fetching only if there are IDs to work with
+  if (userMovieIds.length) {
+    fetchMovies(userMovieIds);
+  }
+});
+
+onMounted(async () => {
+  console.log('movies', movies.value)
 })
 
 </script>
-
 <template>
   <div class="post">
-    <div class="movies">
-      <div class="movie-poster">
-        <img src="https://static.posters.cz/image/1300/plakaty/diuna-czesc-1-i122815.jpg"
-             alt="Movie poster for Diuna"/>
+    <div class="movies" v-if="isLoaded">
+      <div v-if="movies.length" class="movie-poster" v-for="movie in movies" :key="movie">
+        <img :src="movie.posterPath"
+             alt="Movie poster"/>
       </div>
-      <div class="movie-poster">
-        <img src="https://static.posters.cz/image/1300/plakaty/diuna-czesc-1-i122815.jpg"
-             alt="Movie poster for Diuna"/>
+      <div v-else>
+        <p>Brak filmów na liście</p>
       </div>
-      <div class="movie-poster">
-        <img src="https://static.posters.cz/image/1300/plakaty/diuna-czesc-1-i122815.jpg"
-             alt="Movie poster for Diuna"/>
-      </div>
+    </div>
+    <div v-else class="loading">
+      <p>Ładowanie...</p>
     </div>
   </div>
 </template>
@@ -57,6 +93,8 @@ const props = defineProps({
 }
 
 .movie-poster {
+  width: 150px;
+  height: auto;
   padding: 0 .2em;
 }
 
@@ -66,7 +104,6 @@ const props = defineProps({
   object-fit: contain;
   border-radius: 1.2em;
 }
-
 </style>
 
   
