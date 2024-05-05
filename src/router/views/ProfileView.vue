@@ -5,9 +5,13 @@ import {computed, reactive, ref} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import TitleTile from "@/components/TitleTile.vue";
 import {useUserStore} from "@/stores/UserStore.js";
+import paths from "@/router/routerPaths.js";
+import {useRouter} from "vue-router";
 
 // ----------------- STORES -------------------//
 const userStore = useUserStore();
+const router = useRouter()
+// ------------------  COMPUTED --------------//
 const user = reactive({
   username: computed(() => userStore.getUsername),
   photoUrl: computed(() => userStore.getPhotoUrl),
@@ -38,9 +42,9 @@ function handleClose() {
         <img :src="userStore.photoUrl" alt="profile avatar">
       </div>
       <p class="user-name">{{ userStore.username }}</p>
-      <TitleTile>Filmy obejrzane</TitleTile>
+      <TitleTile class="list" @click="router.push(paths.WATCHED_ROUTE)">Filmy obejrzane</TitleTile>
       <UserMovesTile list-type="watched"/>
-      <TitleTile>Filmy do obejrzenia</TitleTile>
+      <TitleTile class="list" @click="router.push(paths.TO_WATCH_ROUTE)">Filmy do obejrzenia</TitleTile>
       <UserMovesTile list-type="to-watch"/>
     </section>
     <section class="posts-column">
@@ -56,6 +60,13 @@ function handleClose() {
 </template>
 
 <style scoped>
+.list:hover {
+  cursor: pointer;
+}
+.list:hover {
+  transition: .5s ease all;
+  background-color: var(--lighter-main-transparent)
+}
 .feed-container {
   flex-direction: row;
   margin: 0;

@@ -23,10 +23,9 @@ async function fetchMovies(userMovieIds) {
     fetchedMovies.push(movieDetails);
   }
   movies.value = fetchedMovies;
-  isLoaded.value = true;
 }
 
-watchEffect(() => {
+watchEffect(async () => {
   let userMovieIds = [];
   if (props.listType === 'watched') {
     userMovieIds = movieStore.getCurrentUserWatchedIds;
@@ -36,8 +35,9 @@ watchEffect(() => {
 
   // Trigger fetching only if there are IDs to work with
   if (userMovieIds.length) {
-    fetchMovies(userMovieIds);
+    await fetchMovies(userMovieIds);
   }
+  isLoaded.value = true;
 });
 
 onMounted(async () => {

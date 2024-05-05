@@ -152,13 +152,13 @@ function closePopup() {
   box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.50);
 }
 
-.movie-card .icon-button:hover {
+.icon-button:hover {
   background-color: var(--lighter-main);
   border: none;
   box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
 }
 
-.movie-card .icon-button:active {
+.icon-button:active {
   background-color: var(--clicked-button);
 }
 

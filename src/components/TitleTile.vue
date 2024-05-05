@@ -12,7 +12,6 @@
         <strong>
           <slot name="strong"></slot>
         </strong>
-
       </div>
   </div>
 </template>
@@ -26,7 +25,6 @@
   text-align: center;
   white-space: nowrap;
   height: 100%;
-
 }
 .title-tile h1{
   text-align: center;
