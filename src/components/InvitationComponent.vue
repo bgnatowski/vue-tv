@@ -3,35 +3,38 @@
 import {onMounted, ref} from "vue";
 import {fetchUserByUid} from "@/services/UserService.js";
 import {useUserStore} from "@/stores/UserStore.js";
+import {useFriendRequestStore} from "@/stores/FriendRequestStore.js";
 
 // ---------------------- STORE ------------------------//
 const userStore = useUserStore();
+const friendRequestStore = useFriendRequestStore();
 
 // -------------------- PROPS AND EMITS --------------- //
 
 const props = defineProps({
-  invitationId: String
+  friendRequest: {
+    id: '',
+    receiverId: '',
+    senderId: '',
+    status: '',
+    timestamp: ''
+  }
 });
-
-const emit = defineEmits(['show-profile', 'accept-user', 'decline-user']);
 
 // ---------------------- FUNCTIONS --------------- //
 function showProfile() {
-  emit('show-profile');
   console.log('wyemitowano show profile');
 }
 
-function handleAccept() {
+const handleAccept = async () => {
   console.log('wyemitowano handleAccept');
+  await friendRequestStore.acceptRequest(props.friendRequest.id, props.friendRequest.senderId)
+  // userStore.updateUser()
 }
 
-function handleDecline() {
+const handleDecline= async () => {
   console.log('wyemitowano handleDecline');
-}
-
-function sendInvitation() {
-  emit('decline-user');
-  console.log('wyemitowano decline-user');
+  await friendRequestStore.declineRequest(props.friendRequest.id, props.friendRequest.senderId)
 }
 
 // ----------------------------- ZALADOWANIE DANYCH ----------------//
@@ -45,8 +48,8 @@ const userProfile = ref({
 const isLoaded = ref(false);
 
 onMounted(async () => {
-  if (props.invitationId != undefined) {
-    userProfile.value = await fetchUserByUid(props.invitationId);
+  if (props.friendRequest != undefined) {
+    userProfile.value = await fetchUserByUid(props.friendRequest.receiverId);
     isLoaded.value = true;
   } else {
     console.log('BLAD')

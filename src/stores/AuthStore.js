@@ -14,6 +14,7 @@ import {defineStore} from 'pinia';
 import {auth,} from '../js/firebase';
 import {useUserStore} from "@/stores/UserStore.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
+import {useFriendRequestStore} from "@/stores/FriendRequestStore.js";
 
 export const useAuthStore = defineStore('authStore', {
     actions: {
@@ -21,6 +22,7 @@ export const useAuthStore = defineStore('authStore', {
             onAuthStateChanged(auth, async (userDetails) => {
                 const userStore = useUserStore();
                 const movieStore = useMovieStore();
+                const friendsRequestStore = useFriendRequestStore();
                 if (userDetails) {
                     userStore.$patch({
                         uid: userDetails.uid,
@@ -28,8 +30,9 @@ export const useAuthStore = defineStore('authStore', {
                         email: userDetails.email || '',
                         photoUrl: userDetails.photoURL || 'https://cdn-icons-png.flaticon.com/512/4715/4715330.png'
                     });
-                    await userStore.loadUserData(userDetails.uid);
-                    await movieStore.loadCurrentUserMovies(userDetails.uid)
+                    await userStore.initUser(userDetails.uid);
+                    await movieStore.initCurrentUserMovies(userDetails.uid)
+                    await friendsRequestStore.initFriendRequests(userDetails.uid)
                 } else {
                     userStore.resetUser();
                 }
@@ -53,7 +56,7 @@ export const useAuthStore = defineStore('authStore', {
                 }
                 const userStore = useUserStore();
                 await userStore.createUser(userData);
-                await userStore.loadUserData(userData.uid);
+                await userStore.initUser(userData.uid);
             } catch (error) {
                 console.error("Błąd logowania z Google", error);
                 throw this.mapErrorCodeToMessage("Błąd logowania z Google")
@@ -87,7 +90,7 @@ export const useAuthStore = defineStore('authStore', {
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
                 const userStore = useUserStore();
-                await userStore.loadUserData(userCredential.user.uid);
+                await userStore.initUser(userCredential.user.uid);
             } catch (error) {
                 throw this.mapErrorCodeToMessage(error.code)
             }
@@ -162,7 +165,7 @@ export const useAuthStore = defineStore('authStore', {
                 if (user) {
                     await updateProfile(user, {photoURL: newPhotoURL});
                     const userStore = useUserStore();
-                    await userStore.updateUser(user.uid, {photoUrl: newPhotoURL});
+                    await userStore.updateUser({photoUrl: newPhotoURL});
                 }
             } catch (error) {
                 throw this.mapErrorCodeToMessage("auth/delete")

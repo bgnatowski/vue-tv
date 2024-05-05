@@ -1,5 +1,5 @@
 <script setup>
-import {onBeforeMount, onMounted, reactive, ref} from 'vue';
+import {computed, onBeforeMount, onMounted, reactive, ref} from 'vue';
 import routerPaths from "@/router/routerPaths.js";
 import {useRouter} from "vue-router";
 import ActionPopup from "@/components/auth/ActionPopup.vue";
@@ -7,30 +7,30 @@ import changeImageIcon from '@/assets/img/change-image-icon.png';
 import {useAuthStore} from "@/stores/AuthStore.js";
 import {useUserStore} from "@/stores/UserStore.js";
 
+// ---------------------- STORES ----------------- //
+
+const router = useRouter();
+const userStore = useUserStore();
+const authStore = useAuthStore();
+// ----------------- FIELDS/ACTIONS -------------------//
 const showChangePasswordPopup = ref(false);
 const showDeleteAccountPopup = ref(false);
 const showChangeAvatarPopup = ref(false);
 const isGoogleAuth = ref(true);
 
-const router = useRouter();
-const userStore = useUserStore();
-const authStore = useAuthStore();
 const user = reactive({
-  username: String,
-  photoUrl: String,
+  username: computed(() => userStore.getUsername),
+  photoUrl: computed(() => userStore.getPhotoUrl),
+});
+
+isGoogleAuth.value = computed( () => {
+  isGoogleAuth.value = authStore.isGoogleUser()
 })
 
-onBeforeMount(() => {
-      user.username = userStore.username;
-      user.photoUrl = userStore.photoUrl;
-      isGoogleAuth.value = authStore.isGoogleUser()
-    }
-)
-
-const reloadPage = () => {
-  console.log("reloaded")
-  location.reload();
-};
+onMounted( () => {
+  console.log("username: ", user.username)
+  console.log("photoUrl: ", user.photoUrl)
+})
 
 </script>`
 
@@ -52,7 +52,7 @@ const reloadPage = () => {
       <ActionPopup :is-google-user="isGoogleAuth" action-type="delete" v-if="showDeleteAccountPopup"
                    @close="showDeleteAccountPopup=false"></ActionPopup>
       <ActionPopup action-type="changeAvatar" v-if="showChangeAvatarPopup"
-                   @close="showChangeAvatarPopup=false" @changedAvatar="reloadPage"></ActionPopup>
+                   @close="showChangeAvatarPopup=false"></ActionPopup>
     </div>
   </section>
 </template>

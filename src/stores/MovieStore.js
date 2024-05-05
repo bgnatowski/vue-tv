@@ -37,7 +37,7 @@ export const useMovieStore = defineStore('movieStore', {
         },
     },
     actions: {
-        async loadCurrentUserMovies(userId) {
+        async initCurrentUserMovies(userId) {
             this.currentUserMovies = await fetchAllUserMovies(userId);
         },
         async loadOtherUserMovies(userId) {

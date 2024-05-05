@@ -1,22 +1,16 @@
 <script setup>
 import UserMovesTile from "@/components/UserMoviesTile.vue"
 import PostTile from "@/components/PostTile.vue";
-import {onBeforeMount, reactive, ref} from "vue";
+import {computed, reactive, ref} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import TitleTile from "@/components/TitleTile.vue";
 import {useUserStore} from "@/stores/UserStore.js";
 
 const userStore = useUserStore();
 const user = reactive({
-  username: String,
-  photoUrl: String,
-})
-
-onBeforeMount(() => {
-      user.username = userStore.username;
-      user.photoUrl = userStore.photoUrl;
-    }
-)
+  username: computed(() => userStore.getUsername),
+  photoUrl: computed(() => userStore.getPhotoUrl),
+});
 
 // --------------------- POPUP -------------- ///
 const showDetails = ref(false);

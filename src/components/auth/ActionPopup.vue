@@ -109,7 +109,6 @@ async function updateProfilePhotoURL() {
       await authStore.updateUserPhotoURL(defaultUrl);
     }
     changedAvatar.value = true;
-    emits('changedAvatar');
   } catch (error) {
     errorMsg.value = 'Nie udało się przesłać obrazka.';
   }

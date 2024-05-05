@@ -2,11 +2,12 @@
 import {ref} from 'vue';
 import {useUserStore} from "@/stores/UserStore.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
-import {fetchMovieDetails} from "@/services/TVDBService.js";
+import {useFriendRequestStore} from "@/stores/FriendRequestStore.js";
 
 // ----------- STORES ------------------//
 const userStore = useUserStore();
 const movieStore = useMovieStore();
+const friendsRequestStore = useFriendRequestStore();
 
 // ---------- PROPS AND EMITS ---------- //
 const props = defineProps({ user: Object });
@@ -18,7 +19,9 @@ const hideDropdown = () => isShowDropdown.value = false;
 
 // ------------- SEND REQUEST -------------//
 const sendFriendRequest = async () => {
-  console.log('sending request...')
+  console.log('sending request...', friendsRequestStore)
+  await friendsRequestStore.sendRequest(userStore.uid, props.user.id);
+  console.log('friendRequests:', friendsRequestStore.getFriendsRequests)
   hideDropdown();
 };
 

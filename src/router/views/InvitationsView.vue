@@ -1,19 +1,19 @@
 <script setup>
 import TitleTile from "@/components/TitleTile.vue";
 import InvitationComponent from "@/components/InvitationComponent.vue";
-import SearchBar from "@/components/page/SearchBar.vue";
-import {useUserStore} from "@/stores/UserStore.js";
-import {onMounted} from "vue";
+import {computed, onMounted} from "vue";
+import {useFriendRequestStore} from "@/stores/FriendRequestStore.js";
 
 // --------------- STORES ------------------- //
-const userStore = useUserStore();
+const friendRequestStore = useFriendRequestStore();
 
 // ------------- INVITATION ------------------//
-const userInvitationsIds = userStore.invitationsIds;
+const friendsRequests = computed(() => {
+  return friendRequestStore.getPendingFriendsRequests;
+});
 
 onMounted(() =>{
-  console.log("invitationsIds: ", userInvitationsIds)
-  console.log("friendsId: ", userStore.friendsIds)
+  console.log("friendsRequests: ", friendsRequests)
 })
 
 </script>
@@ -25,8 +25,8 @@ onMounted(() =>{
     <div class="friends-container">
 <!--      <InviteFriendComponent v-if="isSearched" @send-invitation></InviteFriendComponent>-->
       <InvitationComponent
-          v-for="invitationId in userInvitationsIds"
-          :key="invitationId" :invitationId="invitationId"/>
+          v-for="friendRequest in friendsRequests"
+          :key="friendRequest" :friend-request="friendRequest"/>
     </div>
     <main class="user-content">
       <h2>---Koniec---</h2>

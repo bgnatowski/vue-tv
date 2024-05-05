@@ -5,34 +5,33 @@ import {
     deleteFriendRequest,
     getFriendRequestsForUser
 } from '@/services/FriendRequestService';
+import {useUserStore} from "@/stores/UserStore.js";
 
 export const useFriendRequestStore = defineStore('friendRequestStore', {
     state: () => ({
         friendRequests: [],
     }),
+    getters: {
+        getPendingFriendsRequests: (state) => state.friendRequests.filter(request => request.status === 'pending'),
+        getAcceptedFriendsRequests: (state) => state.friendRequests.filter(request => request.status === 'accepted'),
+    },
     actions: {
-        async loadFriendRequests(userId) {
+        async initFriendRequests(userId) {
             this.friendRequests = await getFriendRequestsForUser(userId);
         },
         async sendRequest(senderId, receiverId) {
             await sendFriendRequest(senderId, receiverId);
             // Aktualizuj lokalny stan (opcjonalne)
-            await this.loadFriendRequests(receiverId);
+            await this.initFriendRequests(senderId);
         },
-        async acceptRequest(requestId, senderId, receiverId) {
+        async acceptRequest(requestId, senderId) {
             await updateFriendRequestStatus(requestId, 'accepted');
             // Tutaj można zaktualizować status znajomych w `UserStore`.
-            // Przykład:
-            // await useUserStore().addFriend(senderId, receiverId);
-            await this.loadFriendRequests(receiverId);
+            await this.initFriendRequests(senderId);
         },
-        async declineRequest(requestId, receiverId) {
-            await updateFriendRequestStatus(requestId, 'declined');
-            await this.loadFriendRequests(receiverId);
-        },
-        async removeRequest(requestId) {
+        async declineRequest(requestId, senderId) {
             await deleteFriendRequest(requestId);
-            this.friendRequests = this.friendRequests.filter(req => req.id !== requestId);
+            await this.initFriendRequests(senderId);
         },
     },
 });

@@ -8,10 +8,28 @@ export const useUserStore = defineStore('userStore', {
         email: '',
         photoUrl: '',
         friendsIds: [],
-        invitationsIds: [],
         postsIds: [],
     }),
+    getters: {
+        getUid: state => state.uid,
+        getUsername: state => state.username,
+        getEmail: state => state.email,
+        getPhotoUrl: state => state.photoUrl,
+        getFriendsIds: state => state.friendsIds,
+        getPostsIds: state => state.postsIds,
+    },
     actions: {
+        async initUser(uid) {
+            const userData = await getUserData(uid);
+            if (userData) {
+                this.uid = userData.uid;
+                this.username = userData.username;
+                this.email = userData.email;
+                this.photoUrl = userData.photoUrl;
+                this.friendsIds = userData.friendsIds || [];
+                this.postsIds = userData.postsIds || [];
+            }
+        },
         resetUser() {
             this.$reset();
         },
@@ -22,20 +40,8 @@ export const useUserStore = defineStore('userStore', {
             await deleteUser(uid);
             this.resetUser();
         },
-        async loadUserData(uid) {
-            const userData = await getUserData(uid);
-            if (userData) {
-                this.uid = userData.uid;
-                this.username = userData.username;
-                this.email = userData.email;
-                this.photoUrl = userData.photoUrl;
-                this.friendsIds = userData.friendsIds || [];
-                this.invitationsIds = userData.invitationsIds || [];
-                this.postsIds = userData.postsIds || [];
-            }
-        },
-        async updateUser(uid, data) {
-            await updateUserData(uid, data);
+        async updateUser(data) {
+            await updateUserData(this.uid, data);
             this.$patch({...data});
         }
     }
