@@ -55,7 +55,6 @@ function onSearchIconClick() {
 const searchedResults = ref({ movies: [], users: [] });
 
 const handleSearchedResults = (results) => {
-  // Sprawdź, czy przekazane dane zawierają filmy i użytkowników
   if (results && results.movies && results.users) {
     searchedResults.value = results;
   } else {
@@ -76,7 +75,7 @@ const handleSearchedResults = (results) => {
         <li v-if="mobile" class="icon-button" @click="onSearchIconClick" :class="{'rotate360': searchIconRotate}">
           <img src="@/assets/img/search-icon.png" alt="search-icon">
         </li>
-        <li @click="router.push(paths.USER_PROFILE_ROUTE)" class="icon-button"
+        <li @click="router.push(paths.MY_PROFILE_ROUTE)" class="icon-button"
             :class="{'rotate360': profileIconRotate}">
           <img @click="toggleRotate" src="@/assets/img/user.png" alt="User profile icon"/>
         </li>
@@ -85,7 +84,7 @@ const handleSearchedResults = (results) => {
         </li>
       </ul>
     </nav>
-    <SearchResults :results="searchedResults" @hide-results="searchedResults = { movies: [], users: [] }"></SearchResults>
+    <SearchResults :results="searchedResults" @hide-results="searchedResults === { movies: [], users: [] }"></SearchResults>
   </header>
 </template>
 

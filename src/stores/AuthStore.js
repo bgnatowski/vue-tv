@@ -56,7 +56,7 @@ export const useAuthStore = defineStore('authStore', {
                 }
                 const userStore = useUserStore();
                 await userStore.createUser(userData);
-                await userStore.initUser(userData.uid);
+                this.init()
             } catch (error) {
                 console.error("Błąd logowania z Google", error);
                 throw this.mapErrorCodeToMessage("Błąd logowania z Google")
@@ -115,10 +115,9 @@ export const useAuthStore = defineStore('authStore', {
                 const credential = EmailAuthProvider.credential(user.email, password);
                 await reauthenticateWithCredential(user, credential)
 
-                await firebaseDeleteUser(user);
-
                 const userStore = useUserStore();
                 await userStore.removeUser(user.uid)
+                await firebaseDeleteUser(user);
 
                 await this.logoutUser();
                 return true;
@@ -132,10 +131,10 @@ export const useAuthStore = defineStore('authStore', {
                 if (!user || user.displayName !== username) {
                     throw new Error('Invalid user credentials or username does not match.');
                 }
-                await firebaseDeleteUser(user);
 
                 const userStore = useUserStore();
                 await userStore.removeUser(user.uid)
+                await firebaseDeleteUser(user);
 
                 await this.logoutUser();
                 return true;

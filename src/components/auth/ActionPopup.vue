@@ -13,7 +13,6 @@ const props = defineProps({
   isGoogleUser: Boolean
 })
 
-
 const emits = defineEmits(['close', 'changedAvatar']);
 
 const authStore = useAuthStore();

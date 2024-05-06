@@ -1,44 +1,61 @@
 <script setup>
 import UserMovesTile from "@/components/UserMoviesTile.vue"
 import PostTile from "@/components/PostTile.vue";
-import {computed, reactive, ref} from "vue";
+import {onMounted, ref} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import TitleTile from "@/components/TitleTile.vue";
-import {useUserStore} from "@/stores/UserStore.js";
 import paths from "@/router/routerPaths.js";
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
+import {fetchUserByUid} from "@/services/UserService.js";
+import {fetchAllPublicUserMovies} from "@/services/MovieService.js";
 
-// ----------------- STORES -------------------//
-const userStore = useUserStore();
+// ----------------- ZMIENNE -----------------//
+const route = useRoute();
 const router = useRouter()
-// ------------------  COMPUTED --------------//
-const user = reactive({
-  username: computed(() => userStore.getUsername),
-  photoUrl: computed(() => userStore.getPhotoUrl),
-});
 
-// --------------------- POPUP -------------- ///
+const userProfile = ref({});
+const userMovies = ref([]);
+
+// --------------------- POPUP -------------- //
 const showDetails = ref(false);
 const selectedMovie = ref(null);
 const isWatched = ref(null);
 const isToWatch = ref(null);
-
 const handleShowDetails = (showDetailsData) => {
-  console.log('handleShowDetails from profile', showDetailsData)
   isWatched.value = showDetailsData.onWatched
   isToWatch.value = showDetailsData.onToWatch
   selectedMovie.value = showDetailsData.movie;
   showDetails.value = true;
 }
-
 function handleClose() {
   showDetails.value = false;
 }
 
+// ------------------LADOWANIE DANYCH --------//
+const isLoaded = ref(false);
+const toWatchMoviesIds = ref([]);
+const watchedMoviesIds = ref([]);
+onMounted(async () => {
+  const userId = route.params.id;
+  userProfile.value = await fetchUserByUid(userId);
+  userMovies.value = await fetchAllPublicUserMovies(userId);
+  if(userProfile.value && userMovies.value){
+    isLoaded.value = true
+  }
+
+  toWatchMoviesIds.value = userMovies.value.filter(m => !m.isWatched).map(m => m.id)
+  watchedMoviesIds.value = userMovies.value.filter(m => m.isWatched).map(m => m.id)
+});
+
 </script>
 
 <template>
-  <section class="feed-container">
+  <section class="feed-container" v-if="!isLoaded">
+    <div class="loading">
+      <p>Ładowanie...</p>
+    </div>
+  </section>
+  <section v-else class="feed-container">
     <MovieDetailsPopup v-if="showDetails"
                        :movie="selectedMovie"
                        :on-to-watch="isToWatch"
@@ -47,27 +64,29 @@ function handleClose() {
     </MovieDetailsPopup>
     <section class="movies-column">
       <div class="profile-picture">
-        <img :src="userStore.photoUrl" alt="profile avatar">
+        <img :src="userProfile.photoUrl" alt="profile avatar">
       </div>
-      <p class="user-name">{{ userStore.username }}</p>
-      <TitleTile class="list"
-                 @click="router.push(paths.WATCHED_ROUTE)"
-      >
-        Filmy obejrzane
-      </TitleTile>
-      <UserMovesTile list-type="watched" @show-details="handleShowDetails"/>
-      <TitleTile class="list"
-                 @click="router.push(paths.TO_WATCH_ROUTE)"
-      >
-        Filmy do obejrzenia
-      </TitleTile>
-      <UserMovesTile list-type="to-watch" @show-details="handleShowDetails"/>
+      <p class="user-name">{{ userProfile.username }}</p>
+
+      <TitleTile class="list" @click="router.push(paths.WATCHED_ROUTE)">Filmy obejrzane</TitleTile>
+      <UserMovesTile
+          list-type="watched"
+          movies-list="movies"
+          movies-ids="watchedMoviesIds"
+          @show-details="handleShowDetails"
+      />
+
+      <TitleTile class="list" @click="router.push(paths.TO_WATCH_ROUTE)">Filmy do obejrzenia</TitleTile>
+      <UserMovesTile
+          list-type="to-watch"
+          movies-list="movies"
+          movies-ids="toWatchMoviesIds"
+          @show-details="handleShowDetails"
+      />
     </section>
     <section class="posts-column">
-      <!--      todo: if-user self -> twoje recenzje else -> recenzje znajomego -->
-      <TitleTile>Twoje recenzje</TitleTile>
+      <TitleTile>Recenzje {{userProfile.username}}:</TitleTile>
       <div class="posts" v-dragscroll>
-        <PostTile profile @show-details="handleShowDetails"></PostTile>
         <PostTile @show-details="handleShowDetails"></PostTile>
       </div>
     </section>

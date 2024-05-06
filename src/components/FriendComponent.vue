@@ -4,6 +4,7 @@ import {onMounted, ref} from "vue";
 import {fetchUserByUid} from "@/services/UserService.js";
 import {useFriendRequestStore} from "@/stores/FriendRequestStore.js";
 import {useUserStore} from "@/stores/UserStore.js";
+import {useRouter} from "vue-router";
 
 // --------------------- STORES -------------------------//
 const friendRequestStore = useFriendRequestStore();
@@ -21,9 +22,10 @@ const handleDeleteFriend = async () => {
   await userStore.deleteFriend(props.friendId)
 }
 
-function showProfile() {
-  //todo
-}
+const router = useRouter();
+const showProfile = async () => {
+  await router.push({name: 'UserProfile', params: {id: props.friendId}});
+};
 
 // -------------------ZALADOWANIE DANYCH ----------------//
 const friend = ref({

@@ -1,4 +1,4 @@
-import {collection, doc, setDoc, getDocs, updateDoc, getDoc, deleteDoc} from 'firebase/firestore';
+import {collection, doc, setDoc, getDocs, updateDoc, getDoc, deleteDoc, query, where} from 'firebase/firestore';
 import { db } from '@/js/firebase.js';
 
 const fetchAllUserMovies = async (userId) => {
@@ -10,6 +10,23 @@ const fetchAllUserMovies = async (userId) => {
     }));
 
     return userMovies;
+};
+
+const fetchAllPublicUserMovies = async (userId) => {
+    const userMoviesRef = collection(db, 'users', userId, 'movies');
+    const q = query(userMoviesRef, where('isPrivate', '==', false));
+
+    try {
+        const querySnapshot = await getDocs(q);
+        const publicMovies = querySnapshot.docs.map(doc => ({
+            ...doc.data()
+        }));
+
+        return publicMovies;
+    } catch (error) {
+        console.error(`Error fetching public movies for user ${userId}:`, error);
+        return [];
+    }
 };
 
 const addMovieToUser = async (userMovieDetails) => {
@@ -47,4 +64,4 @@ const deleteUserMovie = async (userId, movieId) => {
 }
 
 
-export { addMovieToUser, updateUserMovie, fetchAllUserMovies, deleteUserMovie};
+export { addMovieToUser, updateUserMovie, fetchAllUserMovies, deleteUserMovie, fetchAllPublicUserMovies};

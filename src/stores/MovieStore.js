@@ -4,7 +4,6 @@ import {addMovieToUser, deleteUserMovie, fetchAllUserMovies, updateUserMovie} fr
 export const useMovieStore = defineStore('movieStore', {
     state: () => ({
         currentUserMovies: [],
-        currentViewedUserId: null,
     }),
     getters: {
         getCurrentUserMovies: (state) => state.currentUserMovies,
@@ -44,6 +43,12 @@ export const useMovieStore = defineStore('movieStore', {
     actions: {
         async initCurrentUserMovies(userId) {
             this.currentUserMovies = await fetchAllUserMovies(userId);
+        },
+        async fetchCurrentUserMovies() {
+            if (!this.currentUserMovies.length) {
+                const userId = userStore.getUid; // upewnij się, że użytkownik jest zalogowany
+                this.currentUserMovies = await fetchAllUserMovies(userId);
+            }
         },
         async createCurrentUserMovie(movieDetails) {
             const userMovieObject = {

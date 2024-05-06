@@ -4,6 +4,7 @@ import {onMounted, ref} from "vue";
 import {fetchUserByUid} from "@/services/UserService.js";
 import {useUserStore} from "@/stores/UserStore.js";
 import {useFriendRequestStore} from "@/stores/FriendRequestStore.js";
+import {useRouter} from "vue-router";
 
 // ---------------------- STORE ------------------------//
 const userStore = useUserStore();
@@ -22,9 +23,11 @@ const props = defineProps({
 });
 
 // ---------------------- FUNCTIONS --------------- //
-function showProfile() {
-  //todo
-}
+const router = useRouter();
+
+const showProfile = async () => {
+  await router.push({name: 'UserProfile', params: {id: props.friendRequest.senderId}});
+};
 
 const handleAccept = async () => {
   await friendRequestStore.acceptRequest(props.friendRequest.id, props.friendRequest.receiverId)

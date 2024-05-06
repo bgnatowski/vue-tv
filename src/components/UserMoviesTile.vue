@@ -1,6 +1,6 @@
 <script setup>
 
-import {computed, onMounted, ref, watchEffect} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import {fetchMovieDetails} from "@/services/TVDBService.js";
 
@@ -8,40 +8,26 @@ import {fetchMovieDetails} from "@/services/TVDBService.js";
 const movieStore = useMovieStore()
 
 // ---------------- PROPS AND EMITS ------------//
-
 const props = defineProps({
   listType: String,
+  moviesIds: Array,
 })
 
-const emits = defineEmits(['is-loaded', 'show-details'])
+const emits = defineEmits(['show-details'])
 
-// ---------------------------------------------//
-const movies = ref([]);
-const isLoaded = ref(false);
-const fetchingMovies = ref(false);
+// -------------------LADOWANIE DANYCH----------------------//
+const isFetching = ref(true);
+const movies = ref([])
 
-const fetchMovies = async (userMovieIds) => {
-  fetchingMovies.value = true;
-  const fetchedMovies = [];
-  for (const movieId of userMovieIds) {
-    const movieDetails = await fetchMovieDetails(movieId);
-    fetchedMovies.push(movieDetails);
+onMounted(async () => {
+  if(props.moviesIds.length){
+    for (const id of props.moviesIds) {
+      let details = await fetchMovieDetails(id);
+      movies.value.push(details)
+    }
+    isFetching.value=false;
   }
-  movies.value = fetchedMovies;
-  fetchingMovies.value = false;
-  return true;
-}
-
-watchEffect(async () => {
-  let userMovieIds = [];
-  if (props.listType === 'watched') {
-    userMovieIds = movieStore.getCurrentUserWatchedIds;
-  } else if (props.listType === 'to-watch') {
-    userMovieIds = movieStore.getCurrentUserToWatchIds;
-  }
-  isLoaded.value = await fetchMovies(userMovieIds);
-});
-
+})
 
 // ---------------------------POKAZANIE POPUPU ----------------//
 const showDetails = (m) => {
@@ -54,24 +40,23 @@ const showDetails = (m) => {
 
 </script>
 <template>
-  <div class="post" v-dragscroll.x>
+  <div class="post" v-dragscroll.x v-if="props.moviesIds.length">
+    <div v-if="isFetching">
+      <h1> ŁADOWANIE ...</h1>
+    </div>
     <div
         class="movie-poster"
         v-for="movie in movies"
         :key="movie"
-        v-if="!fetchingMovies"
+        v-else
     >
       <img @click="showDetails(movie)" :src="movie.posterPath" alt="Movie poster"/>
     </div>
-    <div v-if="fetchingMovies" class="loading">
-      <p>Ładowanie...</p>
-    </div>
-    <div v-if="!movies.length && !fetchingMovies && isLoaded">
-      <p style="text-align: center;">Brak filmów na liście</p>
-    </div>
 
   </div>
-
+  <div class="post" v-else>
+    <h1>BRAK FILMOW NA LIŚCIE</h1>
+  </div>
 </template>
 
 <style scoped>

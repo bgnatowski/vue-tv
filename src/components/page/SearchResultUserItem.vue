@@ -3,6 +3,7 @@ import {computed, onMounted, ref} from 'vue';
 import {useUserStore} from "@/stores/UserStore.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import {useFriendRequestStore} from "@/stores/FriendRequestStore.js";
+import {useRouter} from "vue-router";
 
 // ----------- STORES ------------------//
 const userStore = useUserStore();
@@ -31,8 +32,10 @@ const sendFriendRequest = async () => {
 };
 
 // -------------- GO TO PROFILE ---------- //
-const goToProfile = async () => {
-  //todo
+const router = useRouter();
+
+const goToProfile = () => {
+  router.push({name: 'UserProfile', params: {id: props.user.id}});
   hideDropdown();
 };
 

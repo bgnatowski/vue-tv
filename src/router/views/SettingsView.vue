@@ -16,21 +16,12 @@ const authStore = useAuthStore();
 const showChangePasswordPopup = ref(false);
 const showDeleteAccountPopup = ref(false);
 const showChangeAvatarPopup = ref(false);
-const isGoogleAuth = ref(true);
 
 const user = reactive({
   username: computed(() => userStore.getUsername),
   photoUrl: computed(() => userStore.getPhotoUrl),
 });
-
-isGoogleAuth.value = computed( () => {
-  isGoogleAuth.value = authStore.isGoogleUser()
-})
-
-onMounted( () => {
-  console.log("username: ", user.username)
-  console.log("photoUrl: ", user.photoUrl)
-})
+const isGoogleAuth = computed(() => authStore.isGoogleUser())
 
 </script>`
 
