@@ -50,39 +50,13 @@ const post = reactive({
 
 <template>
   <div class="post">
-    <div class="upper-bar" v-if="!profile">
+    <div class="upper-bar">
       <div class="user-info">
         <div class="user-image">
           <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
         </div>
-        <p class="user-name">uzytkownik prowatcher123 polecił film:</p>
-      </div>
-    </div>
-    <div class="movie-card">
-      <div class="movie-poster">
-        <img :src="movie.posterPath"
-             alt="Movie poster for Diuna"/>
-      </div>
-      <div class="movie-details">
-        <h1 class="movie-title">{{movie.title}}</h1>
-        <div>
-          <table class="tg">
-            <thead>
-            <tr>
-              <th class="tg-0pky">Gatunki:</th>
-              <th class="tg-0lax">{{movie.genres.map((genre) => genre.name).join(", ")}}</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td class="tg-0pky">Długość:</td>
-              <td class="tg-0lax">{{ movie.duration }} min</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="post-description" ref="postDescriptionRef" v-dragscroll="isDraggable"> {{post.content}}
-        </p>
+        <p v-if="!profile" class="user-name">uzytkownik prowatcher123 polecił film:</p>
+        <p v-else class="user-name">Poleciłeś film:</p>
       </div>
       <div class="dropdown">
         <div class="icon-button" @click="showDropdown">
@@ -97,11 +71,54 @@ const post = reactive({
         </div>
       </div>
     </div>
+    <div class="movie-card">
+      <div class="movie-poster">
+        <img :src="movie.posterPath"
+             alt="Movie poster for Diuna"/>
+      </div>
+      <div class="movie-details">
+        <h1 class="movie-title">{{movie.title}}</h1>
+        <div>
+          <table class="tg">
+            <thead>
+            <tr>
+              <th class="tg-0pky tg-size">Gatunki:</th>
+              <th class="tg-0lax tg-size">{{movie.genres.map((genre) => genre.name).join(", ")}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tg-0pky tg-size">Długość:</td>
+              <td class="tg-0lax tg-size">{{ movie.duration }} min</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="post-description" ref="postDescriptionRef" v-dragscroll="isDraggable"> {{post.content}}
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
 @import url(@/assets/dropdown.css);
+.dropdown {
+  position: sticky;
+  z-index: 9;
+  transition: .5s ease all;
+}
+
+.dropdown-content {
+  position: absolute;
+  right: 0;
+  top: unset;
+  white-space: nowrap;
+  z-index: 9;
+  background-color: white;
+  transition: .5s ease all;
+}
+
 .user-info {
   display: flex;
   padding: .2rem;
@@ -112,6 +129,7 @@ const post = reactive({
 .user-info p {
   justify-content: center;
   align-content: center;
+  font-size: .8em;
 }
 
 .upper-bar {
@@ -131,16 +149,15 @@ const post = reactive({
 
 .movie-card {
   display: flex;
-  gap: 20px;
   height: 100%;
-  position: relative;
+  justify-content: space-between;
 }
 
 .movie-poster {
-  width: 300px;
-  height:100%;
-  margin: .2em;
-  aspect-ratio: 0.7;
+  width: 200px;
+  height: auto;
+  object-fit: cover;
+  margin-right: 10px;
 }
 
 .movie-poster img {
@@ -154,15 +171,12 @@ const post = reactive({
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  margin: 0.5em 0;
-  padding: 0.5em 0;
   width: 100%;
-  gap: 10px;
 }
 
 .movie-title {
   color: #000;
-  font-size: 2em;
+  font-size: 1em;
 }
 
 .movie-details .post-description {
@@ -172,23 +186,25 @@ const post = reactive({
   scrollbar-width: thin;
   hyphens: auto;
   max-height: 150px;
+  font-size: .8em;
 }
 
-.dropdown-content {
-  position: absolute;
-  right: 0;
-  top: 0; /* Aby dropdown rozkładał się bezpośrednio pod ikoną */
-  white-space: nowrap; /* Zapobiega zawijaniu tekstu */
-  z-index: 9999; /* Zapewnia, że dropdown będzie na wierzchu */
-  background-color: white; /* Tło dla lepszej widoczności */
+.tg-size{
+  font-size: .7em;
 }
+
 
 @media screen and (max-width: 728px) {
+  .movie-poster {
+    width: 100px;
+    height: auto;
+    object-fit: cover;
+  }
+}
+
+@media screen and (max-width: 350px) {
   .movie-poster{
     display: none;
-  }
-  .movie-card {
-    flex-direction: column;
   }
 }
 

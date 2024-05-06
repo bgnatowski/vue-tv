@@ -25,39 +25,47 @@ function closePopup() {
   <div class="overlay">
     <div class="post">
       <div class="movie-card">
-        <div class="close-bar">
-          <div class="icon-button" @click="closePopup">
-            <img src="@/assets/img/close-icon.png" alt="Close icon"/>
-          </div>
-        </div>
         <div class="upper-bar">
           <div class="movie-poster">
             <img :src="movie.posterPath" alt="Movie poster"/>
           </div>
           <div class="movie-details">
             <h1 class="movie-title">{{movie.title}}</h1>
-            <div class="table">
-              <div class="column-1">
-                <p>Premiera:</p>
-                <p>Gatunki:</p>
-                <p>Długość:</p>
-                <p>Ilość ocen:</p>
-              </div>
-              <div class="column-2">
-                <p>{{ movie.releaseDate }}</p>
-                <p>{{ movie.genres.map((genre) => genre.name).join(", ") }}</p>
-                <p>{{ movie.duration }}</p>
-                <p>{{ movie.voteCount }}</p>
-              </div>
-            </div>
-            <RatingStars read-only :rating="movie.rating"></RatingStars>
+            <table class="tg">
+              <thead>
+              <tr>
+                <th class="tg-0pky tg-size">Premiera:</th>
+                <th class="tg-0lax tg-size">{{movie.releaseDate}}</th>
+              </tr>
+              <tr>
+                <th class="tg-0pky tg-size">Gatunki:</th>
+                <th class="tg-0lax tg-size">{{movie.genres.map((genre) => genre.name).join(", ")}}</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td class="tg-0pky tg-size">Długość:</td>
+                <td class="tg-0lax tg-size">{{ movie.duration }} min</td>
+              </tr>
+              <tr>
+                <td class="tg-0pky tg-size">Ilość ocen:</td>
+                <td class="tg-0lax tg-size">{{ movie.voteCount}} </td>
+              </tr>
+              </tbody>
+            </table>
+            <RatingStars class="rating" read-only :rating="movie.rating"></RatingStars>
           </div>
         </div>
         <div class="lower-bar">
           <h2>Opis</h2>
           <div class="movie-description">
-            <p v-text="movie.description" v-dragscroll="true"></p>
+            <p>{{ movie.description }}</p>
           </div>
+        </div>
+      </div>
+      <div class="close-bar">
+        <div class="icon-button" @click="closePopup">
+          <img src="@/assets/img/close-icon.png" alt="Close icon"/>
         </div>
       </div>
     </div>
@@ -65,11 +73,15 @@ function closePopup() {
 </template>
 
 <style scoped>
+.tg {
+  width: fit-content;
+  white-space: nowrap;;
+}
 .post {
   flex-direction: row;
   background-color: white;
-  width: 80vw;
-  height: 80vh;
+  width: 90vw;
+  height: 90vh;
   padding: 1em;
 }
 
@@ -85,41 +97,43 @@ function closePopup() {
   align-items: center;
   z-index: 9999;
 }
+.rating {
+  margin-left: 5px;
+}
 
 .movie-card {
+  overflow-y: auto;
+  scrollbar-width: thin;
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: .5em;
+  padding: 15px;
 }
 
 .upper-bar {
   display: flex;
-  min-height: 40%;
-  max-height: 40%;
+  height: 50%;
   width: 100%;
 }
 
 .lower-bar {
   display: flex;
   flex-direction: column;
-  min-height: 40%;
-  max-height: 40%;
   width: 100%;
+  height: 50%;
 }
 
 .close-bar {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  min-height: 10%;
-  width: 100%;
+  widt: fit-content;
 }
 
 .icon-button {
-  border-radius: 2em;
-  padding: 10px;
+  border-radius: 50%;
+  padding: 5px;
 }
 
 .icon-button img {
@@ -132,16 +146,19 @@ function closePopup() {
   display: flex;
   flex-direction: column;
   min-width: 50%;
-  gap: .3rem;
-  max-height: fit-content;
-  overflow-y: auto;
+  width: 100%;
+  flex-grow: 0;
+  flex-shrink: 1;
+
 }
 
 .movie-poster {
   display: flex;
-  width: auto;
-  height: 100%;
+  width: fit-content;
+  height: auto;
   margin-right: 1em;
+  flex-grow: 0;
+  flex-shrink: 1;
 }
 
 .movie-poster img {
@@ -169,28 +186,17 @@ function closePopup() {
 .movie-description {
   text-align: justify;
   text-justify: inter-word;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  min-height: fit-content;
 }
 
 .movie-details .movie-title {
-  font-size: 2em;
+  font-size: 1.5em;
 }
 
-.table {
-  display: flex;
-  flex-direction: row;
-  white-space: nowrap;
-}
-
-.table p {
+.tg-size{
   font-size: 1em;
 }
-
-.table .column-1 {
-  font-weight: 600;
-  margin-right: 5px;
+.movie-description p {
+  font-size: 1em;
 }
 
 @media (min-width: 2000px){
@@ -203,34 +209,63 @@ function closePopup() {
 }
 
 
-@media screen and (max-width: 737px) {
-  .movie-details .movie-title {
+@media screen and (max-width: 1000px) {
+  .close-bar .icon-button {
+    width: 30px;
+    height: 30px;
+  }
+  .movie-details .movie-title{
     font-size: 1.2em;
   }
-
-  .movie-description p,
-  .table p {
-    font-size: .8em;
+  .tg-size{
+    font-size: 1em;
+  }
+  .movie-description p {
+    font-size: 1em;
   }
 }
+
+@media screen and (max-width: 700px) {
+  .lower-bar,
+  .upper-bar{
+    height: fit-content;
+  }
+  .movie-poster {
+    width: 150px;
+    height: 200px;
+  }
+  .close-bar .icon-button {
+    width: 20px;
+    height: 20px;
+  }
+  .movie-details .movie-title{
+    font-size: 1em;
+  }
+  .tg-size{
+    font-size: .7em;
+  }
+  .movie-description p {
+    font-size: .7em;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .movie-poster {
+    width: 100px;
+    height: 200px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .tg {
+    white-space: break-spaces;
+  }
+}
+
 
 @media screen and (max-width: 300px)  {
   .movie-poster {
     display: none;
-  }
-
-  .lower-bar,
-  .upper-bar{
-    min-height: auto;
-  }
-
-  .movie-details .movie-title {
-    font-size: 1em;
-  }
-
-  .movie-description p,
-  .table p {
-    font-size: .5em;
   }
 }
 </style>

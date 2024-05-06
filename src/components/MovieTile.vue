@@ -33,7 +33,7 @@ const moveToWatched = () => {
   movieStore.modifyCurrentUserMovie(
       userStore.uid,
       props.movieId,
-      { isWatched: true }
+      {isWatched: true}
   );
 };
 
@@ -44,7 +44,7 @@ const updateRating = (newRating) => {
   movieStore.modifyCurrentUserMovie(
       userStore.uid,
       props.movieId,
-      { userRating: newRating }
+      {userRating: newRating}
   );
   userRating.value = newRating;
 };
@@ -56,7 +56,7 @@ function publicMovie() {
   movieStore.modifyCurrentUserMovie(
       userStore.uid,
       props.movieId,
-      { isPrivate: false }
+      {isPrivate: false}
   );
   isPrivate.value = false;
 }
@@ -65,7 +65,7 @@ function unpublicMovie() {
   movieStore.modifyCurrentUserMovie(
       userStore.uid,
       props.movieId,
-      { isPrivate: true }
+      {isPrivate: true}
   );
   isPrivate.value = true;
 }
@@ -76,12 +76,13 @@ watch(
     (newVal) => {
       isPrivate.value = newVal !== undefined ? newVal : true;
     },
-    { immediate: true }
+    {immediate: true}
 );
 
 // ---------------------------POKAZANIE POPUPU ----------------//
 const showDetails = () => {
   emit('show-details', movie.value);
+  console.log('showDetails,',movie.value)
 }
 
 // ----------------------------- ZALADOWANIE DANYCH ----------------//
@@ -94,7 +95,7 @@ onMounted(async () => {
     emit("emit-duration", movie.value.duration)
     isPrivate.value = movieStore.getCurrentUserMovieById(props.movieId).isPrivate;
     isLoaded.value = true;
-  }else{
+  } else {
     console.log('BLAD')
   }
 });
@@ -108,37 +109,15 @@ onMounted(async () => {
         <img :src="movie.posterPath" alt="Movie poster"/>
       </div>
       <div class="movie-details">
-        <div class="movie-text">
-          <div class="movie-header">
+        <div class="movie-center">
+          <div class="movie-text">
             <h2> {{ movie.title }} </h2>
-          </div>
-          <div class="movie-metadata">
-            <p class="metadata-title">Premiera: <span>{{ movie.releaseDate.substring(0, 4) }}</span></p>
-            <p class="metadata-title">Gatunki: <span>{{ movie.genres.map((genre) => genre.name).join(", ") }}</span></p>
-            <p class="metadata-title">Długość: <span>{{ movie.duration }} min</span></p>
-            <p class="metadata-title">Twoja ocena: <span>{{userRating}}/10</span></p>
-            <RatingStars @rating-value="updateRating" v-if="watched"></RatingStars>
-          </div>
-        </div>
-        <div class="buttons">
-          <div class="card-action-buttons">
-<!--            todo: recommend -->
-            <div class="card-action-icon" v-if="!isPrivate && watched" aria-label="Recommend">
-              <img src="@/assets/img/recommend-icon.png" alt="Recommend icon"/>
-            </div>
-<!--            todo: note -->
-            <div class="card-action-icon" aria-label="Note">
-              <img src="@/assets/img/edit-icon.png" alt="Note icon"/>
-            </div>
-            <div @click="showDetails" class="card-action-icon" aria-label="Info">
-              <img src="@/assets/img/info-icon.png" alt="Info icon"/>
-            </div>
-            <div class="card-action-icon" aria-label="Hide">
-              <img src="@/assets/img/hide-icon.png" v-if="isPrivate" alt="Hide icon" @click="publicMovie"/>
-              <img src="@/assets/img/show-icon.png" v-else alt="Show icon" @click="unpublicMovie"/>
-            </div>
-            <div @click="deleteMovie" class="card-action-icon" aria-label="Delete">
-              <img src="@/assets/img/delete-icon.png" alt="Delete icon"/>
+            <div class="movie-metadata">
+              <p class="metadata-title">Premiera: <span>{{ movie.releaseDate.substring(0, 4) }}</span></p>
+              <p class="metadata-title">Gatunki: <span>{{ movie.genres.map((genre) => genre.name).join(", ") }}</span></p>
+              <p class="metadata-title">Długość: <span>{{ movie.duration }} min</span></p>
+              <p class="metadata-title">Twoja ocena: <span>{{ userRating }}/10</span></p>
+              <RatingStars @rating-value="updateRating" v-if="watched"></RatingStars>
             </div>
           </div>
           <div class="movie-action-buttons" v-if="!watched">
@@ -154,6 +133,29 @@ onMounted(async () => {
             </div>
           </div>
         </div>
+        <div class="buttons">
+          <div class="card-action-buttons" :class="watched ? 'cab-min-width' : ''">
+            <!--            todo: recommend -->
+            <div class="card-action-icon" v-if="!isPrivate && watched" aria-label="Recommend">
+              <img src="@/assets/img/recommend-icon.png" alt="Recommend icon"/>
+            </div>
+            <!--            todo: note -->
+            <div class="card-action-icon" aria-label="Note">
+              <img src="@/assets/img/edit-icon.png" alt="Note icon"/>
+            </div>
+            <div @click="showDetails" class="card-action-icon" aria-label="Info">
+              <img src="@/assets/img/info-icon.png" alt="Info icon"/>
+            </div>
+            <div class="card-action-icon" aria-label="Hide">
+              <img src="@/assets/img/hide-icon.png" v-if="isPrivate" alt="Hide icon" @click="publicMovie"/>
+              <img src="@/assets/img/show-icon.png" v-else alt="Show icon" @click="unpublicMovie"/>
+            </div>
+            <div @click="deleteMovie" class="card-action-icon" aria-label="Delete">
+              <img src="@/assets/img/delete-icon.png" alt="Delete icon"/>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
     <div v-else class="loading">
@@ -163,37 +165,42 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-
+.post {
+  min-height: fit-content;
+}
 .movie-card {
   display: flex;
   align-content: center;
   justify-content: center;
   width: 100%;
+  height: auto;
 }
 
 .movie-poster {
-  width: 100px;
-  height: 160px;
+  width: 130px;
+  height: 180px;
   justify-content: center;
   align-items: center;
+  margin: 5px 0;
 }
 
 .movie-poster img {
   height: 100%;
-  object-fit: contain;
-  border-radius: 12px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 1.5em;
 }
 
 .movie-details {
   display: flex;
   flex-direction: row;
   flex-grow: 1;
-  /*justify-content: space-between;*/
   padding: 0 1em;
   width: 100%;
+  /*height: fit-content;*/
 }
 
-.movie-header h2 {
+.movie-text h2 {
   font-size: 1.3em;
   color: #000;
   font-weight: 600;
@@ -225,31 +232,36 @@ onMounted(async () => {
   font-size: .9em;
 }
 
-.movie-text {
+.movie-center {
+  display: flex;
+  flex-direction: column;
   width: 60%;
+  justify-content: space-between;
 }
 
 .buttons {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-content: space-between;
   width: 40%;
+  min-width: fit-content;
 }
 
 .card-action-buttons {
   display: flex;
   align-content: flex-end;
   justify-content: flex-end;
-  padding: .2em;
+}
+
+.cab-min-width {
+  min-width: 250px;
 }
 
 .card-action-icon {
   height: 50px;
   width: 50px;
-  border-radius: 2em;
-  padding: .5em;
-  transition: .5s ease all;
+  border-radius: 50%;
+  padding: 10px;
+  transition: .3s ease all;
   cursor: pointer;
 }
 
@@ -271,17 +283,16 @@ onMounted(async () => {
 
 .movie-action-buttons {
   display: flex;
-  flex-direction: column;
+  position: relative;
   font-weight: 400;
   transition: .5s ease all;
-  justify-content: center;
-  align-items: flex-end;
-  padding-right: 5px;
+  justify-content: flex-start;
 }
 
 .action-switch {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  align-content: center;
   gap: 5px;
 }
 
@@ -368,10 +379,36 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+@media screen and (max-width: 800px) {
+  .movie-center {
+    width: 100%;
+  }
+  .buttons{
+    height: fit-content;
+    width: auto;
+  }
+  .card-action-buttons{
+    min-height: 185px;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    align-self: flex-end;
+    min-width: unset
+  }
+
+  .card-action-icon {
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    padding: 8px;
+  }
+}
+
+
 @media screen and (max-width: 500px) {
   .movie-poster {
-    width: 80px;
-    height: 120px;
+    width: 100px;
+    height: auto;
+    object-fit: cover;
   }
 
   .card-action-buttons {
@@ -381,8 +418,6 @@ input:checked + .slider:before {
   .card-action-icon {
     height: 35px;
     width: 35px;
-    border-radius: 2em;
-    padding: .5em;
   }
 
   .movie-details {
@@ -404,17 +439,17 @@ input:checked + .slider:before {
     -ms-transform: translateX(15px);
     transform: translateX(15px);
   }
-
 }
 
-@media screen and (max-width: 380px) {
+@media screen and (max-width: 420px) {
   .movie-poster {
-    width: 70px;
-    height: 100px;
+    width: 50px;
+    height: auto;
+    object-fit: cover;
   }
 
-  .movie-header h1 {
-    font-size: .8em;
+  .movie-text h2 {
+    font-size: 1em;
   }
 
   .movie-metadata p {
@@ -423,6 +458,11 @@ input:checked + .slider:before {
 
   .movie-metadata .metadata-title {
     font-size: .6em;
+  }
+}
+@media screen and (max-width: 350px) {
+  .movie-poster{
+    display: none;
   }
 }
 </style>

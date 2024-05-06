@@ -50,8 +50,7 @@ onMounted(async () => {
 
 </script>
 <template>
-  <div class="post">
-    <div class="movies" v-dragscroll.x>
+  <div class="post" v-dragscroll.x>
       <div v-if="!fetchingMovies" class="movie-poster" v-for="movie in movies" :key="movie">
         <img :src="movie.posterPath" alt="Movie poster"/>
       </div>
@@ -62,40 +61,55 @@ onMounted(async () => {
     <div v-if="!movies.length && !fetchingMovies && isLoaded">
       <p style="text-align: center;">Brak filmów na liście</p>
     </div>
-  </div>
 </template>
 
 <style scoped>
 .post {
+  flex-direction: row;
+  overflow-y: clip;
   overflow-x: hidden;
-  width: 100%;
-  padding: .5em 1em;
-}
-
-.movies {
-  width: inherit;
-  display: flex;
-  margin: auto;
-  overflow-x: auto;
-  overflow-y: hidden;
-  display: flex;
   scrollbar-width: thin;
-  border-radius: 1.5em;
-  max-width: 460px;
+  width: 100%;
+  max-width: 400px;
+  align-self: center;
 }
 
-.movies::-webkit-scrollbar {
+@media screen and (max-width: 1000px){
+  .post {
+    max-width: 300px;
+  }
+}
+
+@media screen and (max-width: 850px){
+  .post {
+    max-width: 250px;
+  }
+}
+
+@media screen and (max-width: 800px){
+  .post {
+    max-width: 400px;
+  }
+}
+
+@media screen and (max-width: 600px){
+  .post {
+    max-width: inherit;
+  }
+}
+
+.post::-webkit-scrollbar {
   height: 8px;
 }
 
-.movies::-webkit-scrollbar-thumb {
+.post::-webkit-scrollbar-thumb {
   background-color: darkgray;
   border-radius: 4px;
 }
 
 .movie-poster {
-  width: 150px;
-  height: 230px;
+  width: 130px;
+  height: 200px;
   flex-shrink: 0;
   padding: 0.2em;
   cursor: pointer;

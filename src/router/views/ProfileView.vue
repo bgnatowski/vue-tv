@@ -30,9 +30,6 @@ function handleClose() {
   showDetails.value = false;
 }
 
-
-
-
 </script>
 
 <template>
@@ -64,8 +61,7 @@ function handleClose() {
       <TitleTile>Twoje recenzje</TitleTile>
       <div class="posts" v-dragscroll>
         <PostTile profile @show-details="handleShowDetails"></PostTile>
-        <PostTile profile @show-details="handleShowDetails"></PostTile>
-        <PostTile profile @show-details="handleShowDetails"></PostTile>
+        <PostTile @show-details="handleShowDetails"></PostTile>
       </div>
     </section>
   </section>
@@ -83,19 +79,18 @@ function handleClose() {
 
 .feed-container {
   flex-direction: row;
-  margin: 0;
 }
 
 .movies-column {
   display: flex;
   flex-direction: column;
   width: 40%;
-  padding: 1em;
 }
 
 .posts-column {
+  display: flex;
+  flex-direction: column;
   width: 60%;
-  padding: 1em 1em 0 1em;
 }
 
 .posts {
@@ -113,12 +108,10 @@ function handleClose() {
   position: relative;
   overflow: hidden;
   padding: 1em;
-  align-items: center;
-  justify-content: center;
   flex-direction: column;
   width: 200px;
   height: 200px;
-  margin: .5em auto 0 auto;
+  align-self: center;
 }
 
 .profile-picture img {
@@ -132,29 +125,23 @@ function handleClose() {
 
 .user-name {
   font-size: 1.5rem;
-  margin: .5rem;
   text-align: center;
   justify-self: center;
 }
 
-@media (max-width: 1700px) {
+@media (max-width: 800px) {
   .feed-container {
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
-
+  .posts-column,
   .movies-column {
     align-self: center;
     width: 100%
   }
 }
 
-
-@media (max-width: 600px) {
-  .feed-container {
-    margin: 0;
-    padding: 0;
-  }
-}
 
 
 </style>

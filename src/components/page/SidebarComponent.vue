@@ -109,6 +109,7 @@ import paths from "@/router/routerPaths.js";</script>
 
 .icon-button {
   margin-right: 1em;
+  border-radius: unset;
 }
 
 .icon-button:hover {
@@ -117,7 +118,7 @@ import paths from "@/router/routerPaths.js";</script>
   box-shadow: unset;
 }
 
-@media screen and (max-width: 1100px){
+@media screen and (max-width: 1200px){
   .icon-button {
     margin: 0;
   }

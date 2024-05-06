@@ -8,7 +8,7 @@
 
 .dropdown-content {
     transition: .5s ease all;
-    position: static;
+    position: absolute;
     background-color: #f9f9f9;
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
     white-space: nowrap;

@@ -5,7 +5,6 @@ import {searchMovie} from "@/services/TVDBService.js";
 import {searchUsersByUsername} from "@/services/UserService.js";
 
 const props = defineProps({
-  mobile: Boolean,
   placeholderTxt: String
 })
 
@@ -16,13 +15,10 @@ const searchedMovies = ref([]);
 const searchedUsers = ref([]);
 
 watch(searchQuery, async (newValue) => {
-  // Pobieranie filmow
   searchedMovies.value = await searchMovie(searchQuery.value)
 
-  // Pobieranie użytkowników
   searchedUsers.value = await searchUsersByUsername(searchQuery.value);
 
-  // Emituj filmy i użytkowników jako osobne wartości lub połączone w jedno.
   emits('searched-results', { movies: searchedMovies.value, users: searchedUsers.value });
 });
 
@@ -34,7 +30,7 @@ async function reloadSearched() {
 <template>
   <div class="search">
     <form @submit.prevent class="search-form">
-      <input v-if="!mobile" :placeholder="placeholderTxt" v-model="searchQuery" @click="reloadSearched">
+      <input :placeholder="placeholderTxt" v-model="searchQuery" @click="reloadSearched">
     </form>
   </div>
 </template>
@@ -46,6 +42,12 @@ async function reloadSearched() {
   justify-content: space-between;
   width: 20%;
   transition: .4s ease all;
+}
+
+@media screen and (max-width: 600px){
+  .search {
+    width: 100%;
+  }
 }
 
 .search-form {

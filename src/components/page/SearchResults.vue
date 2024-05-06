@@ -2,7 +2,7 @@
 import MovieItem from "@/components/page/SearchResultMovieItem.vue";
 import UserItem from "@/components/page/SearchResultUserItem.vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 
 // ---------------------- PROPS AND EMITS ----------------- //
 const props = defineProps({
@@ -25,10 +25,14 @@ function handleClose() {
   showDetails.value = false;
 }
 
+const isResult = computed(() => {
+  return props.results.movies.length || props.results.users.length;
+})
+
 </script>
 
 <template>
-  <ul class="result" @mouseleave="handleMouseOut">
+  <ul class="result" :class="isResult ? 'shadow' : ''" @mouseleave="handleMouseOut">
     <!-- Sekcja z filmami -->
     <template v-if="results.movies.length > 0">
       <h4 class="results-title">Filmy</h4>
@@ -65,15 +69,23 @@ function handleClose() {
   transform: translate(-50%, 0);
   z-index: -1;
   width: 50%;
-  box-shadow: 0 4px 15px 4px rgba(0, 0, 0, 0.25);
   overflow-y: auto;
   scrollbar-width: thin;
   max-height: 70vh;
   border-radius: 0 0 1em 1em;
 }
+.shadow {
+  box-shadow: 0 4px 15px 4px rgba(0, 0, 0, 0.25);
+}
 
 .results-title{
   margin: 5px;
+}
+
+@media screen and (max-width: 600px){
+  .result {
+    width: 80%;
+  }
 }
 
 </style>

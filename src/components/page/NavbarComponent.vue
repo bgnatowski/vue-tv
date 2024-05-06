@@ -20,7 +20,7 @@ const mobile = ref(false)
 watch(
     () => screenWidth.value,
     (newWidth) => {
-      mobile.value = newWidth < 1000;
+      mobile.value = newWidth < 600;
     },
     {immediate: true}
 );
@@ -34,6 +34,7 @@ const router = useRouter()
 const profileIconRotate = ref(false)
 const sideBarIconRotate = ref(false)
 const searchIconRotate = ref(false)
+const hideBranding = ref(false)
 
 function onMenuButtonClick() {
   emits('toggle-sidebar');
@@ -46,6 +47,7 @@ function toggleRotate() {
 
 function onSearchIconClick() {
   searchIconRotate.value = !searchIconRotate.value
+  hideBranding.value = !hideBranding.value;
 }
 
 
@@ -66,10 +68,10 @@ const handleSearchedResults = (results) => {
 <template>
   <header>
     <nav class="header-nav">
-      <div class="branding">
+      <div class="branding" v-if="!mobile || !hideBranding">
         <h1 @click="router.push(paths.HOME_ROUTE)" class="bruno-ace-regular">VueTV</h1>
       </div>
-      <SearchBar :mobile="mobile" placeholder-txt="Szukaj" @searched-results="handleSearchedResults"/>
+      <SearchBar v-if="!mobile || hideBranding" placeholder-txt="Szukaj" @searched-results="handleSearchedResults"/>
       <ul class="navigation">
         <li v-if="mobile" class="icon-button" @click="onSearchIconClick" :class="{'rotate360': searchIconRotate}">
           <img src="@/assets/img/search-icon.png" alt="search-icon">
@@ -93,7 +95,7 @@ header {
   top: 0;
   left: 0;
   z-index: 99;
-  width: 100%;
+  width: 100vw;
   position: sticky;
   border: none;
   box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
@@ -104,11 +106,9 @@ header {
   background: white;
   flex-direction: row;
   transition: .5s ease all;
-  align-content: space-around;
-  justify-content: space-around;
+  justify-content: space-between;
   width: 100vw;
   padding: 0.4em;
-  gap: 20%;
 }
 
 .navigation {
@@ -119,17 +119,18 @@ header {
   display: flex;
   height: min-content;
   align-self: center;
-  gap: 8%;
+  margin-right: 10px;
 }
 
 .navigation .icon-button {
   display: flex;
   align-self: center;
   transition: .5s ease all;
-  width: 60px;
+  width: 55px;
   height: 55px;
-  border-radius: 2em;
-  padding: .5em
+  border-radius: 50%;
+  padding: .5em;
+  margin: 0 5px;
 }
 
 .navigation .icon-button img {
@@ -150,6 +151,7 @@ header {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  margin-left: 10px;
 }
 
 .branding h1 {
@@ -164,40 +166,20 @@ header {
 
 @media screen and (min-width: 3000px) {
   .navigation .icon-button {
-    width: 80px;
-    height: 80px;
-    border-radius: 2em;
-    padding: .1em
+    width: 100px;
+    height: 100px;
   }
 }
 
-@media screen and (min-width: 1916px) {
-  .navigation .icon-button {
-    width: 70px;
-    height: 65px;
-    border-radius: 2em;
-    padding: .5em
-  }
-}
 
 @media screen and (max-width: 1000px) {
   .search input {
     display: none;
   }
-
-  .header-nav {
-    gap: 10%
-  }
-
-  .navigation .icon-button {
-    width: 65px;
-    height: 55px;
-  }
 }
 
 @media screen and (max-width: 600px){
   .navigation {
-    gap: 5px;
     height: 100%;
   }
   .header-nav {
@@ -207,14 +189,17 @@ header {
   .navigation .icon-button {
     width: 45px;
     height: 45px;
-    padding: .5em
+  }
+  .branding{
+    width: 100%;
+    justify-content: flex-start;
+    cursor: pointer;
   }
 }
 
 
 @media screen and (max-width: 320px){
   .navigation {
-    gap: 10px;
     height: 100%;
 
   }
@@ -225,7 +210,6 @@ header {
   .navigation .icon-button {
     width: 35px;
     height: 35px;
-    padding: .4em
   }
 }
 

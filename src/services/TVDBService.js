@@ -37,14 +37,14 @@ async function fetchMovieDetails(id){
         const movieData = await response.json()
         movie = {
             id: movieData.id,
-            title: movieData.title,
-            genres: movieData.genres,
-            duration: movieData.runtime,
-            releaseDate: movieData.release_date,
-            posterPath: `https://image.tmdb.org/t/p/w500${movieData.poster_path}`,
-            description: movieData.overview,
-            rating: movieData.vote_average,
-            voteCount: movieData.vote_count,
+            title: movieData.title || '',
+            genres: movieData.genres || [],
+            duration: movieData.runtime || 0,
+            releaseDate: movieData.release_date || 'brak informacji',
+            posterPath: `https://image.tmdb.org/t/p/w500${movieData.poster_path}` || 'https://motivatevalmorgan.com/wp-content/uploads/2016/06/default-movie-1-3-696x1024.jpg',
+            description: movieData.overview || 'brak informacji',
+            rating: movieData.vote_average || 0,
+            voteCount: movieData.vote_count || 'brak informacji',
         }
     } catch {
         console.log('Błąd w czasie pobierania danych')

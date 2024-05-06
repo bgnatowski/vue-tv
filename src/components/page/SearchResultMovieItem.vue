@@ -42,8 +42,6 @@ const addToWatch = async () => {
 
 const addToWatched = async () => {
   let m = props.movie;
-  // console.log("addToWatched, movie id: ", m.id);
-  // console.log("addToWatched, user: ", userStore.uid);
   await movieStore.createCurrentUserMovie({
     uId: userStore.uid,
     mId: m.id,
@@ -57,6 +55,24 @@ const isOnWatched = computed(() => movieStore.isOnWatched(props.movie.id))
 const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movie.id))
 const isOnAnyList = computed(() => movieStore.isOnAnyList(props.movie.id))
 
+// ------------------ CAN BE ON WATCHED --------- //
+const canBeOnWatched = computed(() => {
+  const releaseDateString = props.movie.releaseDate;
+  if (!releaseDateString || releaseDateString === 'brak informacji') {
+    return false;
+  }
+
+  const releaseDate = new Date(releaseDateString);
+  const today = new Date();
+  return releaseDate <= today;
+});
+
+const formattedReleaseDate = computed(() => {
+  if (!props.movie.releaseDate || props.movie.releaseDate === 'brak informacji') {
+    return 'Brak informacji';
+  }
+  return props.movie.releaseDate.substring(0, 4); // Show only the year
+});
 </script>
 
 <template>
@@ -64,7 +80,7 @@ const isOnAnyList = computed(() => movieStore.isOnAnyList(props.movie.id))
     <img :src="movie.posterPath" alt="Film Poster" class="movie-poster">
     <div class="movie-info">
       <h3>{{ movie.title }}</h3>
-      <span>Premiera: {{ movie.releaseDate.substring(0, 4) }}</span>
+      <span>Premiera: {{ formattedReleaseDate }}</span>
       <span>Gatunki: {{ movie.genres.join(', ') }}</span>
       <span class="on-list" v-if="isOnWatched">Na liście: obejrzane</span>
       <span class="on-list" v-else-if="isOnToWatch">Na liście: do obejrzenia</span>
@@ -77,7 +93,7 @@ const isOnAnyList = computed(() => movieStore.isOnAnyList(props.movie.id))
         <ul class="dropdown-list">
           <li @click="showDetails" class="dropdown-option">Zobacz więcej</li>
           <li @click="addToWatch" v-if="!isOnAnyList" class="dropdown-option">Dodaj do obejrzenia</li>
-          <li @click="addToWatched" v-if="!isOnAnyList" class="dropdown-option">Dodaj do obejrzanych</li>
+          <li @click="addToWatched" v-if="!isOnAnyList && canBeOnWatched" class="dropdown-option">Dodaj do obejrzanych</li>
         </ul>
       </div>
     </div>
@@ -137,22 +153,32 @@ const isOnAnyList = computed(() => movieStore.isOnAnyList(props.movie.id))
 }
 
 .dropdown {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
-  z-index: 999;
+  position: sticky;
+  z-index: 9;
   transition: .5s ease all;
 }
 
 .dropdown-content {
   position: absolute;
   right: 0;
-  top: 0;
+  top: unset;
   white-space: nowrap;
-  z-index: 999;
+  z-index: 9;
   background-color: white;
   transition: .5s ease all;
+}
+
+@media screen and (max-width: 600px){
+  .movie-poster {
+    width: 50px;
+    height: auto;
+    border-radius: 1em;
+  }
+}
+@media screen and (max-width: 350px) {
+  .movie-poster{
+    display: none;
+  }
 }
 
 </style>
