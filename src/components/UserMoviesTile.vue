@@ -13,15 +13,14 @@ const props = defineProps({
   listType: String,
 })
 
-const emits = defineEmits(['is-loaded'])
+const emits = defineEmits(['is-loaded', 'show-details'])
 
 // ---------------------------------------------//
-
 const movies = ref([]);
 const isLoaded = ref(false);
 const fetchingMovies = ref(false);
 
-const fetchMovies = async (userMovieIds) =>{
+const fetchMovies = async (userMovieIds) => {
   fetchingMovies.value = true;
   const fetchedMovies = [];
   for (const movieId of userMovieIds) {
@@ -43,19 +42,36 @@ watchEffect(async () => {
   isLoaded.value = await fetchMovies(userMovieIds);
 });
 
+
+// ---------------------------POKAZANIE POPUPU ----------------//
+const showDetails = (m) => {
+  emits('show-details', {
+    movie: m,
+    onWatched: props.listType === 'watched',
+    onToWatch: props.listType === 'to-watch'
+  });
+}
+
 </script>
 <template>
   <div class="post" v-dragscroll.x>
-      <div v-if="!fetchingMovies" class="movie-poster" v-for="movie in movies" :key="movie">
-        <img :src="movie.posterPath" alt="Movie poster"/>
-      </div>
-      <div v-else class="loading">
-        <p>Ładowanie...</p>
-      </div>
+    <div
+        class="movie-poster"
+        v-for="movie in movies"
+        :key="movie"
+        v-if="!fetchingMovies"
+    >
+      <img @click="showDetails(movie)" :src="movie.posterPath" alt="Movie poster"/>
+    </div>
+    <div v-if="fetchingMovies" class="loading">
+      <p>Ładowanie...</p>
     </div>
     <div v-if="!movies.length && !fetchingMovies && isLoaded">
       <p style="text-align: center;">Brak filmów na liście</p>
     </div>
+
+  </div>
+
 </template>
 
 <style scoped>
@@ -69,25 +85,25 @@ watchEffect(async () => {
   align-self: center;
 }
 
-@media screen and (max-width: 1000px){
+@media screen and (max-width: 1000px) {
   .post {
     max-width: 300px;
   }
 }
 
-@media screen and (max-width: 850px){
+@media screen and (max-width: 850px) {
   .post {
     max-width: 250px;
   }
 }
 
-@media screen and (max-width: 800px){
+@media screen and (max-width: 800px) {
   .post {
     max-width: 400px;
   }
 }
 
-@media screen and (max-width: 600px){
+@media screen and (max-width: 600px) {
   .post {
     max-width: inherit;
   }

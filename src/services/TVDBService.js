@@ -69,74 +69,20 @@ async function fetchGenres() {
     }
 }
 
-// Przykład odpowiedzi z API
-const sampleMovieData = {
-    "id": 671,
-    "title": "Harry Potter i Kamień Filozoficzny",
-    "genres": [
-        { "id": 12, "name": "Przygodowy" },
-        { "id": 14, "name": "Fantasy" }
-    ],
-    "runtime": 153,
-    "release_date": "2001-11-16",
-    "poster_path": "/wNRk1vec98vfAQa2YdZOt7h0DGe.jpg",
-    "overview": "Harry Potter dowiaduje się, w dniu swoich 11-tych urodzin, że jest osieroconym dzieckiem dwojga potężnych czarodziejów i sam posiada magiczne zdolności. W Szkole Magii i Czarodziejstwa w Hogwarcie przeżywa największą przygodę swojego życia. Uczy się latania na miotle i różnych pożytecznych zaklęć. Przeżywa także chwile grozy rozwiązując zagadkę tajemniczego kamienia filozoficznego i tocząc walkę z potężnym i złym czarodziejem-Lordem Voldermort.",
-    "vote_average": 7.914
-};
-
 // Przekształcanie danych do struktury `movie`
 const sampleMovie = {
-    id: sampleMovieData.id,
-    title: sampleMovieData.title,
-    genres: sampleMovieData.genres, // Zwraca tylko nazwy gatunków
-    duration: sampleMovieData.runtime,
-    releaseDate: sampleMovieData.release_date,
-    posterPath: `https://image.tmdb.org/t/p/w500${sampleMovieData.poster_path}`,
-    description: sampleMovieData.overview,
-    rating: sampleMovieData.vote_average
+    id: 693134,
+    title: "Test",
+    genres: [{id: 878, name: 'Sci-Fi'}],
+    duration: 167,
+    releaseDate: "2024-02-27",
+    posterPath: "https://image.tmdb.org/t/p/w500/xdfO6EB9e59qZpzmHxezTdPfTxZ.jpg",
+    description: "test description",
+    rating: 8.217,
+    voteCount: 3675,
 };
-
-const sampleFriends = ref([
-    {
-        uid: 1,
-        username: "johndoe1",
-        photoUrl: "https://randomuser.me/api/portraits/men/1.jpg",
-        friendsIds: [],
-        postsIds: []
-    },
-    {
-        uid: 2,
-        username: "johndoe2",
-        photoUrl: "https://randomuser.me/api/portraits/men/2.jpg",
-        friendsIds: [],
-        postsIds: []
-    },
-    {
-        uid: 3,
-        username: "johndoe3",
-        photoUrl: "https://randomuser.me/api/portraits/men/3.jpg",
-        friendsIds: [],
-        postsIds: []
-    },
-    {
-        uid: 4,
-        username: "johndoe4",
-        photoUrl: "https://randomuser.me/api/portraits/men/4.jpg",
-        friendsIds: [],
-        postsIds: []
-    },
-    {
-        uid: 5,
-        username: "johndoe1",
-        photoUrl: "https://randomuser.me/api/portraits/men/5.jpg",
-        friendsIds: [],
-        postsIds: []
-    },
-])
-
 export {
     searchMovie,
     fetchMovieDetails,
     sampleMovie,
-    sampleFriends
 }

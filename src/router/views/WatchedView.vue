@@ -14,8 +14,13 @@ const movieStore = useMovieStore();
 // --------------------- POPUP -------------- ///
 const showDetails = ref(false);
 const selectedMovie = ref(null);
-const handleShowDetails = (movie) => {
-  selectedMovie.value = movie;
+const isAnyList = ref(null);
+const isWatched = ref(true);
+const isToWatch = ref(false);
+
+const handleShowDetails = (showDetailsData) => {
+  selectedMovie.value = showDetailsData.movie;
+  console.log(selectedMovie.value)
   showDetails.value = true;
 }
 
@@ -47,6 +52,9 @@ const addToTotalDuration = (duration) => {
 
     <MovieDetailsPopup v-if="showDetails"
                        :movie="selectedMovie"
+                       :on-any-list="isAnyList"
+                       :on-to-watch="isToWatch"
+                       :on-watched="isWatched"
                        @close="handleClose">
     </MovieDetailsPopup>
 

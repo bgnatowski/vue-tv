@@ -20,9 +20,14 @@ const user = reactive({
 // --------------------- POPUP -------------- ///
 const showDetails = ref(false);
 const selectedMovie = ref(null);
-const handleShowDetails = (movie) => {
-  console.log("handleShowDetails for movie: ", movie);
-  selectedMovie.value = movie;
+const isWatched = ref(null);
+const isToWatch = ref(null);
+
+const handleShowDetails = (showDetailsData) => {
+  console.log('handleShowDetails from profile', showDetailsData)
+  isWatched.value = showDetailsData.onWatched
+  isToWatch.value = showDetailsData.onToWatch
+  selectedMovie.value = showDetailsData.movie;
   showDetails.value = true;
 }
 
@@ -36,6 +41,8 @@ function handleClose() {
   <section class="feed-container">
     <MovieDetailsPopup v-if="showDetails"
                        :movie="selectedMovie"
+                       :on-to-watch="isToWatch"
+                       :on-watched="isWatched"
                        @close="handleClose">
     </MovieDetailsPopup>
     <section class="movies-column">
@@ -48,13 +55,13 @@ function handleClose() {
       >
         Filmy obejrzane
       </TitleTile>
-      <UserMovesTile list-type="watched"/>
+      <UserMovesTile list-type="watched" @show-details="handleShowDetails"/>
       <TitleTile class="list"
                  @click="router.push(paths.TO_WATCH_ROUTE)"
       >
         Filmy do obejrzenia
       </TitleTile>
-      <UserMovesTile list-type="to-watch"/>
+      <UserMovesTile list-type="to-watch" @show-details="handleShowDetails"/>
     </section>
     <section class="posts-column">
       <!--      todo: if-user self -> twoje recenzje else -> recenzje znajomego -->

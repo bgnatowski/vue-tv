@@ -24,7 +24,11 @@ const hideDropdown = () => {
 // ------------- POPUP -------------//
 const showDetails = async () => {
   const movieDetails = await fetchMovieDetails(props.movie.id)
-  emit('show-details', movieDetails);
+  emit('show-details', {
+    movie: movieDetails,
+    onWatched: isOnWatched.value,
+    onToWatch: isOnToWatch.value
+  });
 }
 
 // -------------- TO LISTS ---------- //
@@ -51,7 +55,6 @@ const addToWatched = async () => {
 // ---------------------- IS ON LIST? --------- //
 const isOnWatched = computed(() => movieStore.isOnWatched(props.movie.id))
 const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movie.id))
-const isOnAnyList = computed(() => movieStore.isOnAnyList(props.movie.id))
 
 // ------------------ CAN BE ON WATCHED --------- //
 const canBeOnWatched = computed(() => {
@@ -90,8 +93,8 @@ const formattedReleaseDate = computed(() => {
       <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
         <ul class="dropdown-list">
           <li @click="showDetails" class="dropdown-option">Zobacz więcej</li>
-          <li @click="addToWatch" v-if="!isOnAnyList" class="dropdown-option">Dodaj do obejrzenia</li>
-          <li @click="addToWatched" v-if="!isOnAnyList && canBeOnWatched" class="dropdown-option">Dodaj do obejrzanych</li>
+          <li @click="addToWatch" v-if="!(isOnToWatch || isOnWatched)" class="dropdown-option">Dodaj do obejrzenia</li>
+          <li @click="addToWatched" v-if="!(isOnToWatch || isOnWatched) && canBeOnWatched" class="dropdown-option">Dodaj do obejrzanych</li>
         </ul>
       </div>
     </div>
@@ -159,9 +162,9 @@ const formattedReleaseDate = computed(() => {
 .dropdown-content {
   position: absolute;
   right: 0;
-  top: unset;
+  top: 0;
   white-space: nowrap;
-  z-index: 9;
+  z-index: 999999;
   background-color: white;
   transition: .5s ease all;
 }

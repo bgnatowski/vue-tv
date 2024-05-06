@@ -1,7 +1,17 @@
 <script setup>
 import RatingStars from "@/components/RatingStars.vue";
+import {ref} from "vue";
+import {useUserStore} from "@/stores/UserStore.js";
+import {useMovieStore} from "@/stores/MovieStore.js";
 
+// ------------------------ STORES ------------------------------//
+const userStore = useUserStore();
+const movieStore = useMovieStore();
+
+// ------------------------ PROPS AND EMITS --------------------//
 const props = defineProps({
+  onWatched: Boolean,
+  onToWatch: Boolean,
   movie: {
     id: '',
     title: '',
@@ -12,13 +22,44 @@ const props = defineProps({
     description: '',
     rating: '',
     voteCount: ''
-  }
+  },
 });
 
 const emits = defineEmits(['close']);
+
 function closePopup() {
   emits('close');
 }
+
+// ----------- DROPDOWN --------------//
+const isShowDropdown = ref(false);
+const showDropdown = () => {
+  isShowDropdown.value = true;
+};
+const hideDropdown = () => {
+  isShowDropdown.value = false;
+};
+
+// -------------- TO LISTS ---------- //
+const addToWatch = async () => {
+  let m = props.movie;
+  await movieStore.createCurrentUserMovie({
+    uId: userStore.uid,
+    mId: m.id,
+    isWatched: false
+  });
+  hideDropdown()
+};
+
+const addToWatched = async () => {
+  let m = props.movie;
+  await movieStore.createCurrentUserMovie({
+    uId: userStore.uid,
+    mId: m.id,
+    isWatched: true
+  });
+  hideDropdown()
+};
 
 </script>
 <template>
@@ -30,16 +71,16 @@ function closePopup() {
             <img :src="movie.posterPath" alt="Movie poster"/>
           </div>
           <div class="movie-details">
-            <h1 class="movie-title">{{movie.title}}</h1>
+            <h1 class="movie-title">{{ movie.title }}</h1>
             <table class="tg">
               <thead>
               <tr>
                 <th class="tg-0pky tg-size">Premiera:</th>
-                <th class="tg-0lax tg-size">{{movie.releaseDate}}</th>
+                <th class="tg-0lax tg-size">{{ movie.releaseDate }}</th>
               </tr>
               <tr>
                 <th class="tg-0pky tg-size">Gatunki:</th>
-                <th class="tg-0lax tg-size">{{movie.genres.map((genre) => genre.name).join(", ")}}</th>
+                <th class="tg-0lax tg-size">{{ movie.genres.map((genre) => genre.name).join(", ") }}</th>
               </tr>
               </thead>
               <tbody>
@@ -49,11 +90,13 @@ function closePopup() {
               </tr>
               <tr>
                 <td class="tg-0pky tg-size">Ilość ocen:</td>
-                <td class="tg-0lax tg-size">{{ movie.voteCount}} </td>
+                <td class="tg-0lax tg-size">{{ movie.voteCount }}</td>
               </tr>
               </tbody>
             </table>
             <RatingStars class="rating" read-only :rating="movie.rating"></RatingStars>
+            <span class="on-list" v-if="onWatched">Na liście: obejrzane</span>
+            <span class="on-list" v-else-if="onToWatch">Na liście: do obejrzenia</span>
           </div>
         </div>
         <div class="lower-bar">
@@ -67,16 +110,51 @@ function closePopup() {
         <div class="icon-button" @click="closePopup">
           <img src="@/assets/img/close-icon.png" alt="Close icon"/>
         </div>
+        <div class="dropdown" v-if="!(onToWatch || onWatched)">
+          <div class="icon-button" @click="showDropdown">
+            <img src="@/assets/img/dots-icon.png" alt="Movie Options"/>
+          </div>
+          <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
+            <ul class="dropdown-list">
+              <li @click="addToWatch" class="dropdown-option">Dodaj do obejrzenia</li>
+              <li @click="addToWatched" class="dropdown-option">Dodaj do obejrzanych</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+@import url(@/assets/dropdown.css);
+.on-list{
+  font-size: 0.7em;
+  font-weight: 600;
+  color: var(--main-color);
+}
+
+.dropdown {
+  position: sticky;
+  z-index: 9;
+  transition: .5s ease all;
+}
+
+.dropdown-content {
+  position: absolute;
+  right: 0;
+  top: 0;
+  white-space: nowrap;
+  z-index: 9;
+  background-color: white;
+  transition: .5s ease all;
+}
+
 .tg {
   width: fit-content;
   white-space: nowrap;;
 }
+
 .post {
   flex-direction: row;
   background-color: white;
@@ -97,6 +175,7 @@ function closePopup() {
   align-items: center;
   z-index: 9999;
 }
+
 .rating {
   margin-left: 5px;
 }
@@ -192,14 +271,15 @@ function closePopup() {
   font-size: 1.5em;
 }
 
-.tg-size{
+.tg-size {
   font-size: 1em;
 }
+
 .movie-description p {
   font-size: 1em;
 }
 
-@media (min-width: 2000px){
+@media (min-width: 2000px) {
   .icon-button {
     border-radius: 2em;
     padding: 10px;
@@ -214,12 +294,15 @@ function closePopup() {
     width: 30px;
     height: 30px;
   }
-  .movie-details .movie-title{
+
+  .movie-details .movie-title {
     font-size: 1.2em;
   }
-  .tg-size{
+
+  .tg-size {
     font-size: 1em;
   }
+
   .movie-description p {
     font-size: 1em;
   }
@@ -227,23 +310,28 @@ function closePopup() {
 
 @media screen and (max-width: 700px) {
   .lower-bar,
-  .upper-bar{
+  .upper-bar {
     height: fit-content;
   }
+
   .movie-poster {
     width: 150px;
     height: 200px;
   }
+
   .close-bar .icon-button {
     width: 20px;
     height: 20px;
   }
-  .movie-details .movie-title{
+
+  .movie-details .movie-title {
     font-size: 1em;
   }
-  .tg-size{
+
+  .tg-size {
     font-size: .7em;
   }
+
   .movie-description p {
     font-size: .7em;
   }
@@ -263,7 +351,7 @@ function closePopup() {
 }
 
 
-@media screen and (max-width: 300px)  {
+@media screen and (max-width: 300px) {
   .movie-poster {
     display: none;
   }

@@ -17,10 +17,16 @@ const handleMouseOut = () => {
 // --------------------- POPUP -------------- ///
 const showDetails = ref(false);
 const selectedMovie = ref(null);
-const handleShowDetails = (movie) => {
-  selectedMovie.value = movie;
+const isWatched = ref(null);
+const isToWatch = ref(null);
+
+const handleShowDetails = (showDetailsData) => {
+  isWatched.value = showDetailsData.onWatched
+  isToWatch.value = showDetailsData.onToWatch
+  selectedMovie.value = showDetailsData.movie;
   showDetails.value = true;
 }
+
 function handleClose() {
   showDetails.value = false;
 }
@@ -57,6 +63,8 @@ const isResult = computed(() => {
   </ul>
   <MovieDetailsPopup v-if="showDetails"
                      :movie="selectedMovie"
+                     :on-to-watch="isToWatch"
+                     :on-watched="isWatched"
                      @close="handleClose">
   </MovieDetailsPopup>
 </template>

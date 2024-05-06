@@ -1,6 +1,6 @@
 <script setup>
 import {nextTick, onMounted, reactive, ref} from "vue";
-import {sampleMovie} from "@/services/TVDBService.js";
+import {sampleMovie as sampleMovie1} from "@/services/TVDBService.js";
 
 const isShowDropdown = ref(false)
 
@@ -27,15 +27,23 @@ onMounted(async () => {
   }
 });
 
-const emit = defineEmits(['show-details']);
+const emits = defineEmits(['show-details']);
 
-const movie = sampleMovie;
+const sampleMovie = sampleMovie1;
 // ---------------------------POKAZANIE POPUPU ----------------//
-const showDetails = () => {
-  emit('show-details', movie);
+const showDetails = (movie) => {
+  emits('show-details', {
+    movie: movie,
+    onWatched: false,
+    onToWatch: true
+  });
 }
 
 const post = reactive({
+  id: 1,
+  author: 'userId',
+  movie: 'movieID? movie? wgle?',
+  timestamp: 'timestamp',
   content: "Film świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman\n" +
       "          dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił\n" +
       "          samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem\n" +
@@ -63,7 +71,7 @@ const post = reactive({
         </div>
         <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
           <ul class="dropdown-list">
-            <li @click="showDetails" class="dropdown-option">Więcej o filmie</li>
+            <li @click="showDetails(sampleMovie)" class="dropdown-option">Więcej o filmie</li>
             <li v-if="!profile" class="dropdown-option">Dodaj do obejrzenia (jesli nie jest jeszcze obejrzany)</li>
             <li v-else class="dropdown-option">Usuń post</li>
           </ul>
@@ -72,23 +80,23 @@ const post = reactive({
     </div>
     <div class="movie-card">
       <div class="movie-poster">
-        <img :src="movie.posterPath"
+        <img :src="sampleMovie.posterPath"
              alt="Movie poster for Diuna"/>
       </div>
       <div class="movie-details">
-        <h1 class="movie-title">{{movie.title}}</h1>
+        <h1 class="movie-title">{{ sampleMovie.title }}</h1>
         <div>
           <table class="tg">
             <thead>
             <tr>
               <th class="tg-0pky tg-size">Gatunki:</th>
-              <th class="tg-0lax tg-size">{{movie.genres.map((genre) => genre.name).join(", ")}}</th>
+              <th class="tg-0lax tg-size">{{ sampleMovie.genres.map((genre) => genre.name).join(", ") }}</th>
             </tr>
             </thead>
             <tbody>
             <tr>
               <td class="tg-0pky tg-size">Długość:</td>
-              <td class="tg-0lax tg-size">{{ movie.duration }} min</td>
+              <td class="tg-0lax tg-size">{{ sampleMovie.duration }} min</td>
             </tr>
             </tbody>
           </table>
@@ -111,7 +119,7 @@ const post = reactive({
 .dropdown-content {
   position: absolute;
   right: 0;
-  top: unset;
+  top: 0;
   white-space: nowrap;
   z-index: 9;
   background-color: white;

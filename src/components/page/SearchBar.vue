@@ -14,9 +14,8 @@ const searchQuery = ref('');
 const searchedMovies = ref([]);
 const searchedUsers = ref([]);
 
-watch(searchQuery, async (newValue) => {
+watch(searchQuery, async () => {
   searchedMovies.value = await searchMovie(searchQuery.value)
-
   searchedUsers.value = await searchUsersByUsername(searchQuery.value);
 
   emits('searched-results', { movies: searchedMovies.value, users: searchedUsers.value });

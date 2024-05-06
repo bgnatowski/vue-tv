@@ -1,6 +1,6 @@
 <script setup>
 
-import {onMounted, ref, watch} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import {fetchMovieDetails} from "@/services/TVDBService.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import {useUserStore} from "@/stores/UserStore.js";
@@ -74,9 +74,17 @@ const unpublicMovie = () => {
   isPrivate.value = true;
 }
 
+// ---------------------- IS ON LIST? --------- //
+const isOnWatched = computed(() => movieStore.isOnWatched(movie.value.id))
+const isOnToWatch = computed(() => movieStore.isOnToWatch(movie.value.id))
+
 // ---------------------------POKAZANIE POPUPU ----------------//
 const showDetails = () => {
-  emit('show-details', movie.value);
+  emit('show-details', {
+    movie: movie.value,
+    onWatched: isOnWatched.value,
+    onToWatch: isOnToWatch.value
+  });
 }
 
 // ----------------------------- ZALADOWANIE DANYCH ----------------//
