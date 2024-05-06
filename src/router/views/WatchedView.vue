@@ -1,6 +1,6 @@
 <script setup>
 import TitleTile from "@/components/TitleTile.vue";
-import {computed, ref} from "vue";
+import {computed, onMounted, ref, watch, watchEffect} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import {minutesToText} from "@/js/TimeUtils";
 import {useUserStore} from "@/stores/UserStore.js";
@@ -10,7 +10,6 @@ import {useMovieStore} from "@/stores/MovieStore.js";
 // --------------- STORES ------------------- //
 const userStore = useUserStore();
 const movieStore = useMovieStore();
-
 
 // --------------------- POPUP -------------- ///
 const showDetails = ref(false);

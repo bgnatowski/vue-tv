@@ -40,7 +40,6 @@ const isCompletedDeleteGoogleForm = computed(() => {
 
 async function confirmDeleteAccount(password) {
   try {
-    console.log("deleting account with password", userStore.username, password)
     let isDeleted = await authStore.deleteUser(password);
     if (isDeleted)
       await router.push(paths.DELETE_ROUTE);
@@ -51,7 +50,6 @@ async function confirmDeleteAccount(password) {
 
 async function confirmDeleteGoogleAccount(username) {
   try {
-    console.log("confirmDelete: ", username)
     let isDeleted = await authStore.deleteGoogleUser(username);
     if (isDeleted)
       await router.push(paths.DELETE_ROUTE);

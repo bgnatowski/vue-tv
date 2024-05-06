@@ -25,13 +25,11 @@ const hideDropdown = () => {
 const showDetails = async () => {
   const movieDetails = await fetchMovieDetails(props.movie.id)
   emit('show-details', movieDetails);
-  console.log('MovieTile: wyemitowano show details', props.movie);
 }
 
 // -------------- TO LISTS ---------- //
 const addToWatch = async () => {
   let m = props.movie;
-  // console.log("addToWatch, movie id: ", m.id);
   await movieStore.createCurrentUserMovie({
     uId: userStore.uid,
     mId: m.id,

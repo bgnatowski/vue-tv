@@ -23,18 +23,15 @@ const props = defineProps({
 
 // ---------------------- FUNCTIONS --------------- //
 function showProfile() {
-  console.log('wyemitowano show profile');
+  //todo
 }
 
 const handleAccept = async () => {
-  console.log('wyemitowano handleAccept');
   await friendRequestStore.acceptRequest(props.friendRequest.id, props.friendRequest.receiverId)
   await userStore.addFriend(props.friendRequest.senderId);
-  console.log('akceptowano zaproszenie i dodano znajomego!')
 }
 
 const handleDecline= async () => {
-  console.log('wyemitowano handleDecline');
   await friendRequestStore.declineRequest(props.friendRequest.id, props.friendRequest.receiverId)
 }
 

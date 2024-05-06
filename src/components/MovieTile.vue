@@ -20,12 +20,19 @@ const emit = defineEmits([
 const movieStore = useMovieStore();
 const userStore = useUserStore();
 
+// --------------------- ZMIENNE -------------------------//
+const movie = ref({});
+const isLoaded = ref(false);
+const isPrivate = ref();
+const userRating = ref(0)
+
 // ------------------- DELETE FROM LIST -------------------//
 const deleteMovie = () => {
   movieStore.removeCurrentUserMovie(
       userStore.uid,
       props.movieId,
   );
+  emit("emit-duration", -movie.value.duration)
 };
 
 // ------------------- MOVE TO WATCHED ----------------------//
@@ -35,11 +42,10 @@ const moveToWatched = () => {
       props.movieId,
       {isWatched: true}
   );
+  emit("emit-duration", -movie.value.duration)
 };
 
 // ------------------- RATING UPDATE ----------------------//
-const userRating = ref('');
-
 const updateRating = (newRating) => {
   movieStore.modifyCurrentUserMovie(
       userStore.uid,
@@ -50,9 +56,7 @@ const updateRating = (newRating) => {
 };
 
 // ------------------- CHANGE VISIBLE/PUBLIKACJA -----------//
-const isPrivate = ref();
-
-function publicMovie() {
+const publicMovie = () => {
   movieStore.modifyCurrentUserMovie(
       userStore.uid,
       props.movieId,
@@ -61,7 +65,7 @@ function publicMovie() {
   isPrivate.value = false;
 }
 
-function unpublicMovie() {
+const unpublicMovie = () => {
   movieStore.modifyCurrentUserMovie(
       userStore.uid,
       props.movieId,
@@ -70,30 +74,21 @@ function unpublicMovie() {
   isPrivate.value = true;
 }
 
-// ------------------- WATCHER NA AKTUALIZACJE W STORE --------//
-watch(
-    () => isPrivate.value,
-    (newVal) => {
-      isPrivate.value = newVal !== undefined ? newVal : true;
-    },
-    {immediate: true}
-);
-
 // ---------------------------POKAZANIE POPUPU ----------------//
 const showDetails = () => {
   emit('show-details', movie.value);
-  console.log('showDetails,',movie.value)
 }
 
 // ----------------------------- ZALADOWANIE DANYCH ----------------//
-const movie = ref({});
-const isLoaded = ref(false);
-
 onMounted(async () => {
   if (props.movieId != undefined) {
     movie.value = await fetchMovieDetails(props.movieId);
     emit("emit-duration", movie.value.duration)
-    isPrivate.value = movieStore.getCurrentUserMovieById(props.movieId).isPrivate;
+
+    let userMovie = movieStore.getCurrentUserMovieById(props.movieId);
+    isPrivate.value = userMovie.isPrivate
+    userRating.value = userMovie.userRating
+
     isLoaded.value = true;
   } else {
     console.log('BLAD')
@@ -114,10 +109,11 @@ onMounted(async () => {
             <h2> {{ movie.title }} </h2>
             <div class="movie-metadata">
               <p class="metadata-title">Premiera: <span>{{ movie.releaseDate.substring(0, 4) }}</span></p>
-              <p class="metadata-title">Gatunki: <span>{{ movie.genres.map((genre) => genre.name).join(", ") }}</span></p>
+              <p class="metadata-title">Gatunki: <span>{{ movie.genres.map((genre) => genre.name).join(", ") }}</span>
+              </p>
               <p class="metadata-title">Długość: <span>{{ movie.duration }} min</span></p>
-              <p class="metadata-title">Twoja ocena: <span>{{ userRating }}/10</span></p>
-              <RatingStars @rating-value="updateRating" v-if="watched"></RatingStars>
+              <p class="metadata-title" v-if="watched">Twoja ocena: <span>{{ userRating }}/10</span></p>
+              <RatingStars @rating-value="updateRating" :rating="userRating" v-if="watched"></RatingStars>
             </div>
           </div>
           <div class="movie-action-buttons" v-if="!watched">
@@ -168,6 +164,7 @@ onMounted(async () => {
 .post {
   min-height: fit-content;
 }
+
 .movie-card {
   display: flex;
   align-content: center;
@@ -383,11 +380,13 @@ input:checked + .slider:before {
   .movie-center {
     width: 100%;
   }
-  .buttons{
+
+  .buttons {
     height: fit-content;
     width: auto;
   }
-  .card-action-buttons{
+
+  .card-action-buttons {
     min-height: 185px;
     flex-direction: column-reverse;
     justify-content: flex-end;
@@ -460,8 +459,9 @@ input:checked + .slider:before {
     font-size: .6em;
   }
 }
+
 @media screen and (max-width: 350px) {
-  .movie-poster{
+  .movie-poster {
     display: none;
   }
 }

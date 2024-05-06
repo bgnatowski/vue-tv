@@ -11,12 +11,11 @@ const props = defineProps({
 
 const emits = defineEmits(['rating-value'])
 const isPointer = ref(props.readOnly ? 'default' : 'pointer');
-const stars = ref();
+const stars = ref(0);
 
-// Emituj wartość tylko, gdy nie jest read-only
 watch(stars, (newValue) => {
   if (!props.readOnly) {
-    emits("rating-value", newValue);
+    emits("rating-value", stars.value);
   }
 });
 

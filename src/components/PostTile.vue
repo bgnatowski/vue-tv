@@ -33,7 +33,6 @@ const movie = sampleMovie;
 // ---------------------------POKAZANIE POPUPU ----------------//
 const showDetails = () => {
   emit('show-details', movie);
-  console.log('MovieTile: wyemitowano show details', movie);
 }
 
 const post = reactive({

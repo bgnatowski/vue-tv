@@ -37,7 +37,6 @@ const deleteFriendRequest = async (requestId) => {
 const getFriendRequestsForUser = async (userId) => {
     const friendRequestsRef = collection(db, 'friendRequests');
 
-    // Pobieranie zaproszeń, gdzie użytkownik jest odbiorcą
     const receivedRequestsQuery = query(friendRequestsRef, where('receiverId', '==', userId));
     const receivedSnapshot = await getDocs(receivedRequestsQuery);
     const receivedRequests = receivedSnapshot.docs.map((doc) => ({
@@ -45,7 +44,6 @@ const getFriendRequestsForUser = async (userId) => {
         ...doc.data(),
     }));
 
-    // Pobieranie zaproszeń, gdzie użytkownik jest nadawcą
     const sentRequestsQuery = query(friendRequestsRef, where('senderId', '==', userId));
     const sentSnapshot = await getDocs(sentRequestsQuery);
     const sentRequests = sentSnapshot.docs.map((doc) => ({
@@ -53,7 +51,6 @@ const getFriendRequestsForUser = async (userId) => {
         ...doc.data(),
     }));
 
-    // Łączenie wyników
     const allRequests = [...receivedRequests, ...sentRequests];
 
     return allRequests;

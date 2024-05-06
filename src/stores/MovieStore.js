@@ -7,6 +7,7 @@ export const useMovieStore = defineStore('movieStore', {
         currentViewedUserId: null,
     }),
     getters: {
+        getCurrentUserMovies: (state) => state.currentUserMovies,
         getCurrentUserMovieById: (state) => (movieId) => {
             return state.currentUserMovies.find((movie) => movie.movieId === movieId);
         },
@@ -14,7 +15,7 @@ export const useMovieStore = defineStore('movieStore', {
             return state.otherUserMovies.find((movie) => movie.movieId === movieId);
         },
         getCurrentUserWatchedIds: (state) => {
-            console.log('store Watched', state.currentUserMovies)
+            // console.log('currentWatched: ', state.currentUserMovies.filter((movie) => movie.isWatched))
             return state.currentUserMovies.filter((movie) => movie.isWatched).map(m => {
                 if(m){
                     return m.movieId
@@ -22,7 +23,6 @@ export const useMovieStore = defineStore('movieStore', {
             });
         },
         getCurrentUserToWatchIds: (state) => {
-            console.log('store toWatch', state.currentUserMovies);
             return state.currentUserMovies.filter((movie) => !movie.isWatched).map(m => {
                 if(m){
                     return m.movieId
@@ -79,13 +79,10 @@ export const useMovieStore = defineStore('movieStore', {
             await this.initCurrentUserMovies(userId);
         },
         async removeCurrentUserMovie(userId, movieId) {
-            // Usuń dokument filmu z bazy danych
             await deleteUserMovie(userId, movieId);
 
-            // Usuń film z lokalnego stanu
             const index = this.currentUserMovies.findIndex((movie) => movie.movieId === movieId);
 
-            // Jeśli film istnieje w lokalnym stanie, usuń go
             if (index !== -1) {
                 this.currentUserMovies.splice(index, 1);
                 console.log(`Film o ID ${movieId} został usunięty z lokalnego stanu.`);

@@ -17,14 +17,12 @@ const props = defineProps({
 // -------------------- FUNKCJE -----------------------//
 
 const handleDeleteFriend = async () => {
-  console.log('wyemitowano handleDeleteFriend');
   await friendRequestStore.sendDeleteRequest(userStore.uid, props.friendId)
   await userStore.deleteFriend(props.friendId)
-  console.log(`Usunieto znajomego ${props.friendId}`);
 }
 
 function showProfile() {
-  console.log('wyemitowano show profile');
+  //todo
 }
 
 // -------------------ZALADOWANIE DANYCH ----------------//

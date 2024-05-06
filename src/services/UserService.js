@@ -42,7 +42,6 @@ const updateUserData = async (userId, data) => {
     await updateDoc(userRef, data);
 };
 
-// Nowa funkcja do pobrania użytkownika po UID
 const fetchUserByUid = async (uid) => {
     const userDocRef = doc(db, "users", uid);
     const userDocSnap = await getDoc(userDocRef);
@@ -58,7 +57,6 @@ const fetchUserByUid = async (uid) => {
 const searchUsersByUsername = async (usernamePattern) => {
     const usersRef = collection(db, 'users');
 
-    // Wyszukiwanie z użyciem wzorca
     const q = query(
         usersRef,
         orderBy('username'),
@@ -66,7 +64,6 @@ const searchUsersByUsername = async (usernamePattern) => {
         endAt(usernamePattern + '\uf8ff')
     );
 
-    // Pobranie danych użytkowników zgodnie z wyszukiwaniem
     const querySnapshot = await getDocs(q);
 
     const users = querySnapshot.docs.map(doc => ({

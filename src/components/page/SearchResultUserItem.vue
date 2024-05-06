@@ -24,27 +24,17 @@ const isAlreadySent = computed(() => friendsRequestStore.isPendingFor(userStore.
 
 // ------------- SEND REQUEST -------------//
 const sendFriendRequest = async () => {
-  console.log('sending?')
   if(!isAlreadySent.value && !isFriend.value){
-    console.log('sending request...');
     await friendsRequestStore.sendInvitationRequest(userStore.uid, props.user.id);
-    console.log('friendRequests:', friendsRequestStore.getFriendsRequests)
     hideDropdown();
   }
 };
 
 // -------------- GO TO PROFILE ---------- //
 const goToProfile = async () => {
-  console.log('go to watch profile')
+  //todo
   hideDropdown();
 };
-
-onMounted(() =>{
-  console.log(`${props.user.username} isFriend: ${isFriend.value}`)
-  console.log(`${props.user.username} isMe: ${isMe.value}`)
-  console.log(`${props.user.username} isAlreadySent: ${isAlreadySent.value}`)
-})
-
 
 </script>
 

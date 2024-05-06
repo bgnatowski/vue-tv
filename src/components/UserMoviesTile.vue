@@ -43,11 +43,6 @@ watchEffect(async () => {
   isLoaded.value = await fetchMovies(userMovieIds);
 });
 
-
-onMounted(async () => {
-  console.log('movies', movies.value)
-})
-
 </script>
 <template>
   <div class="post" v-dragscroll.x>
