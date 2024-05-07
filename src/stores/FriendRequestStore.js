@@ -3,14 +3,17 @@ import {
     sendInvitationFriendRequest,
     updateFriendRequestStatus,
     deleteFriendRequest,
-    getFriendRequestsForUser, sendDeleteFriendRequest
+    getFriendRequestsForUser, sendDeleteFriendRequest, listenToFriendRequests
 } from '@/services/FriendRequestService';
+import {useUserStore} from "@/stores/UserStore.js";
 
 export const useFriendRequestStore = defineStore('friendRequestStore', {
     state: () => ({
         friendRequests: [],
+        pending: false
     }),
     getters: {
+        isPendingFriendsRequestsForCurrentUser: (state) => state.friendRequests.some(r => r.receiverId === useUserStore().uid),
         getPendingFriendsRequests: (state) => state.friendRequests.filter(request => request.status === 'pending'),
         getAcceptedFriendsRequests: (state) => state.friendRequests.filter(request => request.status === 'accepted'),
         getToDeleteFriendsRequests: (state) => state.friendRequests.filter(request => request.status === 'to-delete'),
@@ -28,6 +31,12 @@ export const useFriendRequestStore = defineStore('friendRequestStore', {
         async initFriendRequests(userId) {
             this.friendRequests = await getFriendRequestsForUser(userId);
         },
+        startListeningToFriendRequests(userId) {
+            return listenToFriendRequests(userId, (requests) => {
+                this.friendRequests = requests;
+                this.pending = requests.length > 0;
+            });
+        },
         async sendInvitationRequest(senderId, receiverId) {
             await sendInvitationFriendRequest(senderId, receiverId);
             await this.initFriendRequests(senderId);
@@ -43,11 +52,9 @@ export const useFriendRequestStore = defineStore('friendRequestStore', {
         async declineRequest(requestId, receiverId) {
             await deleteFriendRequest(requestId);
             await this.initFriendRequests(receiverId);
-            console.log(`Usunieto zaproszenie: ${receiverId}`)
         },
         async deleteOldRequest(requestId){
             await deleteFriendRequest(requestId);
-            console.log(`Usunieto uzyte invite/delete request`)
         }
     },
 });

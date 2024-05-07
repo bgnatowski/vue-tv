@@ -1,5 +1,10 @@
 <script setup>
-import paths from "@/router/routerPaths.js";</script>
+import paths from "@/router/routerPaths.js";
+import {hasPendingInvitations} from "@/router/index.js";
+import {computed} from "vue";
+
+const showNotification = computed(() => hasPendingInvitations.value)
+</script>
 <template>
   <div class="sidebar">
     <router-link :to="paths.MAIN_ROUTE" class="router-link-custom">
@@ -37,6 +42,9 @@ import paths from "@/router/routerPaths.js";</script>
     <router-link :to="paths.INVITATIONS_ROUTE" class="router-link-custom">
       <div class="sidebar-button">
         <div class="icon-button">
+          <div class="notification" v-if="showNotification">
+            <img src="@/assets/img/notification-icon.png">
+          </div>
           <img src="@/assets/img/invitation.png" alt="Zaproszenia do znajomych">
         </div>
         <span class="button-text">Zaproszenia do znajomych</span>
@@ -117,6 +125,25 @@ import paths from "@/router/routerPaths.js";</script>
   border: none;
   box-shadow: unset;
 }
+
+.notification {
+  margin: 0;
+  width: 30px;
+  height: 30px;
+  background-color: #e31d1d;
+  border-radius: 50%;
+  display: block;
+  padding: 4px;
+  position: absolute;
+  z-index: 999;
+  transform: translateY(-50%) translateX(60%);
+}
+.notification img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 
 @media screen and (max-width: 1200px){
   .icon-button {

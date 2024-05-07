@@ -1,5 +1,6 @@
 import {defineStore} from 'pinia';
 import {createUser, deleteUser, getUserData, updateUserData} from "@/services/UserService.js";
+import {useFriendRequestStore} from "@/stores/FriendRequestStore.js";
 
 export const useUserStore = defineStore('userStore', {
     state: () => ({
@@ -9,6 +10,7 @@ export const useUserStore = defineStore('userStore', {
         photoUrl: '',
         friendsIds: [],
         postsIds: [],
+        unsubscribeFriendRequests: null,
     }),
     getters: {
         getUid: state => state.uid,
@@ -28,10 +30,24 @@ export const useUserStore = defineStore('userStore', {
                 this.photoUrl = userData.photoUrl;
                 this.friendsIds = userData.friendsIds || [];
                 this.postsIds = userData.postsIds || [];
+                this.startListeningToFriendRequests();
             }
         },
         resetUser() {
+            this.stopListeningToFriendRequests();
             this.$reset();
+        },
+        startListeningToFriendRequests() {
+            if (this.uid && !this.unsubscribeFriendRequests) {
+                const friendRequestStore = useFriendRequestStore();
+                this.unsubscribeFriendRequests = friendRequestStore.startListeningToFriendRequests(this.uid);
+            }
+        },
+        stopListeningToFriendRequests() {
+            if (this.unsubscribeFriendRequests) {
+                this.unsubscribeFriendRequests();
+                this.unsubscribeFriendRequests = null;
+            }
         },
         async createUser(userInfo) {
             await createUser(userInfo);

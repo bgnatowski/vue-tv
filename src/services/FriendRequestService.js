@@ -1,4 +1,4 @@
-import { collection, addDoc, doc, updateDoc, getDocs, query, where, deleteDoc, Timestamp } from 'firebase/firestore';
+import { collection, addDoc, doc, updateDoc, getDocs, query, where, deleteDoc, onSnapshot, Timestamp } from 'firebase/firestore';
 import { db } from '@/js/firebase';
 
 const sendInvitationFriendRequest = async (senderId, receiverId) => {
@@ -56,4 +56,26 @@ const getFriendRequestsForUser = async (userId) => {
     return allRequests;
 };
 
-export { sendInvitationFriendRequest, sendDeleteFriendRequest, updateFriendRequestStatus, deleteFriendRequest, getFriendRequestsForUser };
+const listenToFriendRequests = (userId, callback) => {
+    const friendRequestsRef = collection(db, 'friendRequests');
+    const q = query(friendRequestsRef, where("receiverId", "==", userId), where("status", "==", "pending"));
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const requests = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+        callback(requests);
+    });
+
+    return unsubscribe;
+};
+
+export {
+    sendInvitationFriendRequest,
+    sendDeleteFriendRequest,
+    updateFriendRequestStatus,
+    deleteFriendRequest,
+    getFriendRequestsForUser,
+    listenToFriendRequests
+};

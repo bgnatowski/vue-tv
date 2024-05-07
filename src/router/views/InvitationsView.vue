@@ -14,10 +14,6 @@ const friendsRequests = computed(() => {
   return friendRequestStore.getPendingFriendsRequests.filter(r => r.receiverId === userStore.uid);
 });
 
-onMounted(() =>{
-  console.log("friendsRequests: ", friendsRequests)
-})
-
 </script>
 
 <template>
@@ -28,7 +24,7 @@ onMounted(() =>{
           v-for="friendRequest in friendsRequests"
           :key="friendRequest" :friend-request="friendRequest"/>
     </div>
-    <main class="user-content">
+    <main v-if="!friendsRequests" class="user-content">
       <h1>---BRAK---</h1>
     </main>
   </section>

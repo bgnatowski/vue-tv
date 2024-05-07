@@ -1,5 +1,5 @@
 <script setup>
-import {nextTick, onMounted, ref, watch} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {useRoute} from "vue-router";
 import paths from "@/router/routerPaths.js";
 import NavbarComponent from "@/components/page/NavbarComponent.vue";

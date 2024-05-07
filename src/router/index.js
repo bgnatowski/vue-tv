@@ -2,6 +2,8 @@ import {createRouter, createWebHistory} from "vue-router";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import paths from "@/router/routerPaths.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
+import {computed, ref} from "vue";
+import {useFriendRequestStore} from "@/stores/FriendRequestStore.js";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -153,9 +155,13 @@ const getCurrentUser = () => {
     })
 }
 
+const hasPendingInvitations = ref(false);
 router.beforeEach(async (to, from, next) => {
     const currentUser = await getCurrentUser();
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+
+    const friendRequestStore = useFriendRequestStore();
+    hasPendingInvitations.value = friendRequestStore.isPendingFriendsRequestsForCurrentUser;
 
     if ((to.path === paths.HOME_ROUTE || to.path === paths.REGISTER_ROUTE || to.path === paths.LOGIN_ROUTE) && currentUser) {
         next(paths.MAIN_ROUTE);
@@ -166,5 +172,5 @@ router.beforeEach(async (to, from, next) => {
         next();
     }
 });
-
 export default router;
+export {hasPendingInvitations};
