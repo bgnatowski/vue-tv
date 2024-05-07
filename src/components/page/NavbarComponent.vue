@@ -50,7 +50,6 @@ function onSearchIconClick() {
   hideBranding.value = !hideBranding.value;
 }
 
-
 // ----------------------- HANDLE RESULTS -------------------- //
 const searchedResults = ref({ movies: [], users: [] });
 
@@ -61,6 +60,10 @@ const handleSearchedResults = (results) => {
     searchedResults.value = { movies: [], users: [] };
   }
 };
+
+const handleHideResults = () => {
+  searchedResults.value = { movies: [], users: [] }
+}
 
 </script>
 
@@ -84,7 +87,7 @@ const handleSearchedResults = (results) => {
         </li>
       </ul>
     </nav>
-    <SearchResults :results="searchedResults" @hide-results="searchedResults === { movies: [], users: [] }"></SearchResults>
+    <SearchResults :results="searchedResults" @hide-results="handleHideResults"></SearchResults>
   </header>
 </template>
 

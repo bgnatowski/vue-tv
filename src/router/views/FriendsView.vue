@@ -3,7 +3,7 @@ import TitleTile from "@/components/TitleTile.vue";
 import {useFriendRequestStore} from "@/stores/FriendRequestStore.js";
 import {computed, onMounted, watch} from "vue";
 import {useUserStore} from "@/stores/UserStore.js";
-import FriendComponent from "@/components/FriendComponent.vue";
+import FriendTile from "@/components/FriendTile.vue";
 
 // --------------- STORES ------------------- //
 const friendRequestStore = useFriendRequestStore();
@@ -21,7 +21,7 @@ const friendsToDeleteRequests = computed(() => {
 const friendsIds = computed( () => userStore.getFriendsIds)
 
 function updateFriendsFromRequests() {
-  if(friendsAcceptedRequests.value != undefined){
+  if(friendsAcceptedRequests.value !== undefined){
     friendsAcceptedRequests.value.forEach((request) => {
       if (!friendsIds.value.includes(request.receiverId)) {
         userStore.addFriend(request.receiverId);
@@ -57,7 +57,7 @@ onMounted(() => {
   <section class="feed-container">
     <TitleTile>Znajomi</TitleTile>
     <div class="friends-container" v-if="friendsIds.length">
-      <FriendComponent v-for="friendId in friendsIds" :key="friendId" :friend-id="friendId"/>
+      <FriendTile v-for="friendId in friendsIds" :key="friendId" :friend-id="friendId"/>
     </div>
     <div class="user-content" v-else>
       <h2>---BRAK ZNAJOMYCH---</h2>

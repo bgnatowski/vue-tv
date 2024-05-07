@@ -1,6 +1,6 @@
 <script setup>
 
-import {computed, onMounted, ref} from "vue";
+import {onMounted, ref} from "vue";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import {fetchMovieDetails} from "@/services/TVDBService.js";
 
@@ -20,23 +20,32 @@ const isFetching = ref(true);
 const movies = ref([])
 
 onMounted(async () => {
-  console.log("moviesIds?: ", props.moviesIds)
-  if(props.moviesIds.length){
+  if (props.moviesIds.length) {
     for (const id of props.moviesIds) {
       let details = await fetchMovieDetails(id);
       movies.value.push(details)
     }
-    isFetching.value=false;
+    isFetching.value = false;
   }
 })
 
 // ---------------------------POKAZANIE POPUPU ----------------//
 const showDetails = (m) => {
-  emits('show-details', {
-    movie: m,
-    onWatched: props.listType === 'watched',
-    onToWatch: props.listType === 'to-watch'
-  });
+  if (props.self) {
+    emits('show-details', {
+      movie: m,
+      onWatched: props.listType === 'watched',
+      onToWatch: props.listType === 'to-watch'
+    });
+  } else {
+    let isOnToWatch = movieStore.isOnToWatch(m.id)
+    let isOnWatched = movieStore.isOnWatched(m.id)
+    emits('show-details', {
+      movie: m,
+      onWatched: isOnToWatch,
+      onToWatch: isOnWatched,
+    });
+  }
 }
 
 </script>

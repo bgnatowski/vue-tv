@@ -1,6 +1,6 @@
 <script setup>
 import TitleTile from "@/components/TitleTile.vue";
-import InvitationComponent from "@/components/InvitationComponent.vue";
+import InvitationTile from "@/components/InvitationTile.vue";
 import {computed, onMounted} from "vue";
 import {useFriendRequestStore} from "@/stores/FriendRequestStore.js";
 import {useUserStore} from "@/stores/UserStore.js";
@@ -24,7 +24,7 @@ onMounted(() =>{
   <section class="feed-container">
     <TitleTile>Zaproszenia do znajomych</TitleTile>
     <div class="friends-container">
-      <InvitationComponent
+      <InvitationTile
           v-for="friendRequest in friendsRequests"
           :key="friendRequest" :friend-request="friendRequest"/>
     </div>

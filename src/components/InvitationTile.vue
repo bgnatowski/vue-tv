@@ -49,7 +49,7 @@ const userProfile = ref({
 const isLoaded = ref(false);
 
 onMounted(async () => {
-  if (props.friendRequest != undefined) {
+  if (props.friendRequest !== undefined) {
     userProfile.value = await fetchUserByUid(props.friendRequest.senderId);
     isLoaded.value = true;
   } else {

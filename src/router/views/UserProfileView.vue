@@ -1,10 +1,9 @@
 <script setup>
-import UserMovesTile from "@/components/UserMoviesTile.vue"
+import ProfileMovies from "@/components/ProfileMovies.vue"
 import PostTile from "@/components/PostTile.vue";
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import TitleTile from "@/components/TitleTile.vue";
-import paths from "@/router/routerPaths.js";
 import {useRoute, useRouter} from "vue-router";
 import {fetchUserByUid} from "@/services/UserService.js";
 import {fetchAllPublicUserMovies} from "@/services/MovieService.js";
@@ -15,6 +14,43 @@ const router = useRouter()
 
 const userProfile = ref({});
 const userMovies = ref([]);
+
+const isLoaded = ref(false);
+const toWatchMoviesIds = ref([]);
+const watchedMoviesIds = ref([]);
+
+// ------------------LADOWANIE DANYCH --------//
+onMounted(async () => {
+  await loadUserData(route.params.id);
+});
+
+// ---------------------- REAGUJ NA ZMIANE ADRESU -------------- //
+watch(() => route.params.id, async (newUserId) => {
+  await loadUserData(newUserId);
+});
+
+async function loadUserData(userId) {
+  // Reset danych przed nowym zaladowaniem
+  userProfile.value = {};
+  userMovies.value = [];
+  isLoaded.value = false;
+
+  // Pobierz dane nowego użytkownika
+  userProfile.value = await fetchUserByUid(userId);
+  userMovies.value = await fetchAllPublicUserMovies(userId);
+
+  // Jesli uzytkownik nie istenieje
+  if(userProfile.value == null){
+    await router.push({name: 'NotFound'});
+    return;
+  }
+
+  if (userProfile.value && userMovies.value) {
+    isLoaded.value = true;
+    toWatchMoviesIds.value = userMovies.value.filter(m => !m.isWatched).map(m => m.movieId);
+    watchedMoviesIds.value = userMovies.value.filter(m => m.isWatched).map(m => m.movieId);
+  }
+}
 
 // --------------------- POPUP -------------- //
 const showDetails = ref(false);
@@ -31,21 +67,13 @@ function handleClose() {
   showDetails.value = false;
 }
 
-// ------------------LADOWANIE DANYCH --------//
-const isLoaded = ref(false);
-const toWatchMoviesIds = ref([]);
-const watchedMoviesIds = ref([]);
-onMounted(async () => {
-  const userId = route.params.id;
-  userProfile.value = await fetchUserByUid(userId);
-  userMovies.value = await fetchAllPublicUserMovies(userId);
-  if(userProfile.value && userMovies.value){
-    isLoaded.value = true
-  }
+const pushToUserWatched = () => {
+  router.push({name: 'UserWatched', params: {id: userProfile.value.uid}});
+};
 
-  toWatchMoviesIds.value = userMovies.value.filter(m => !m.isWatched).map(m => m.id)
-  watchedMoviesIds.value = userMovies.value.filter(m => m.isWatched).map(m => m.id)
-});
+const pushToUserToWatch = () => {
+  router.push({name: 'UserToWatch', params: {id: userProfile.value.uid}});
+};
 
 </script>
 
@@ -68,19 +96,20 @@ onMounted(async () => {
       </div>
       <p class="user-name">{{ userProfile.username }}</p>
 
-      <TitleTile class="list" @click="router.push(paths.TO_WATCH_ROUTE)">Filmy do obejrzenia</TitleTile>
-      <UserMovesTile
+      <TitleTile class="list"
+                 @click="pushToUserToWatch">Filmy do obejrzenia</TitleTile>
+      <ProfileMovies
           list-type="to-watch"
           movies-list="movies"
-          movies-ids="toWatchMoviesIds"
+          :movies-ids="toWatchMoviesIds"
           @show-details="handleShowDetails"
       />
 
-      <TitleTile class="list" @click="router.push(paths.WATCHED_ROUTE)">Filmy obejrzane</TitleTile>
-      <UserMovesTile
+      <TitleTile class="list" @click="pushToUserWatched">Filmy obejrzane</TitleTile>
+      <ProfileMovies
           list-type="watched"
           movies-list="movies"
-          movies-ids="watchedMoviesIds"
+          :movies-ids="watchedMoviesIds"
           @show-details="handleShowDetails"
       />
 

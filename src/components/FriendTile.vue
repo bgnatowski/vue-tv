@@ -23,8 +23,8 @@ const handleDeleteFriend = async () => {
 }
 
 const router = useRouter();
-const showProfile = async () => {
-  await router.push({name: 'UserProfile', params: {id: props.friendId}});
+const showProfile = () => {
+  router.push({name: 'UserProfile', params: {id: props.friendId}});
 };
 
 // -------------------ZALADOWANIE DANYCH ----------------//
@@ -38,7 +38,7 @@ const friend = ref({
 const isLoaded = ref(false);
 
 onMounted(async () => {
-  if (props.friendId != undefined) {
+  if (props.friendId !== undefined) {
     friend.value = await fetchUserByUid(props.friendId);
     isLoaded.value = true;
   } else {

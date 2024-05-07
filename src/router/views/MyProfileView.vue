@@ -1,7 +1,7 @@
 <script setup>
-import UserMovesTile from "@/components/UserMoviesTile.vue"
+import ProfileMovies from "@/components/ProfileMovies.vue"
 import PostTile from "@/components/PostTile.vue";
-import {computed, onMounted, reactive, ref, watchEffect} from "vue";
+import {computed, reactive, ref} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import TitleTile from "@/components/TitleTile.vue";
 import {useUserStore} from "@/stores/UserStore.js";
@@ -56,17 +56,19 @@ const watchedMoviesIds = computed(() => movieStore.getCurrentUserWatchedIds)
       <p class="user-name">{{ userStore.username }}</p>
 
       <TitleTile class="list" @click="router.push(paths.TO_WATCH_ROUTE)">Filmy do obejrzenia</TitleTile>
-      <UserMovesTile
+      <ProfileMovies
           list-type="to-watch"
           :movies-ids="toWatchMoviesIds"
           @show-details="handleShowDetails"
+          self
       />
 
       <TitleTile class="list" @click="router.push(paths.WATCHED_ROUTE)">Filmy obejrzane</TitleTile>
-      <UserMovesTile
+      <ProfileMovies
           list-type="watched"
           :movies-ids="watchedMoviesIds"
           @show-details="handleShowDetails"
+          self
       />
     </section>
     <section class="posts-column">
