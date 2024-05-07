@@ -30,18 +30,19 @@ const userRating = ref(0)
 
 // ------------------- MOVE TO USER LIST ----------------------//
 const moveToWatched = () => {
-  movieStore.modifyCurrentUserMovie(
-      userStore.uid,
-      props.movieId,
-      {isWatched: true}
-  );
+  movieStore.createCurrentUserMovie({
+    uId: userStore.uid,
+    mId: props.movieId,
+    isWatched: false
+  });
 };
+
 const moveToWatch = () => {
-  movieStore.modifyCurrentUserMovie(
-      userStore.uid,
-      props.movieId,
-      {isWatched: false}
-  );
+  movieStore.createCurrentUserMovie({
+    uId: userStore.uid,
+    mId: props.movieId,
+    isWatched: true
+  });
 };
 
 // ---------------------- IS ON LIST? --------- //
