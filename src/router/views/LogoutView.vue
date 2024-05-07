@@ -4,9 +4,10 @@ import {onMounted} from "vue";
 import AuthPopup from "@/components/auth/AuthPopup.vue";
 import {useAuthStore} from "@/stores/AuthStore.js";
 
+
 const authStore = useAuthStore()
 onMounted(() => {
-  authStore.logoutUser();
+  authStore.logoutUser()
 });
 
 </script>

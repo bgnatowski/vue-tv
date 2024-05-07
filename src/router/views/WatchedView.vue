@@ -1,22 +1,43 @@
 <script setup>
-import MovieTile from "@/components/MovieTile.vue"
 import TitleTile from "@/components/TitleTile.vue";
-import {ref} from "vue";
+import {computed, onMounted, ref, watch, watchEffect} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
-import minutesToText from "@/js/timeUtils.js";
+import {minutesToText} from "@/js/TimeUtils";
+import {useUserStore} from "@/stores/UserStore.js";
+import MovieTile from "@/components/MovieTile.vue";
+import {useMovieStore} from "@/stores/MovieStore.js";
 
+// --------------- STORES ------------------- //
+const userStore = useUserStore();
+const movieStore = useMovieStore();
+
+// --------------------- POPUP -------------- ///
 const showDetails = ref(false);
 const selectedMovie = ref(null);
+const isAnyList = ref(null);
+const isWatched = ref(true);
+const isToWatch = ref(false);
 
-function handleShowDetails(movie) {
-  selectedMovie.value = movie;
+const handleShowDetails = (showDetailsData) => {
+  selectedMovie.value = showDetailsData.movie;
+  console.log(selectedMovie.value)
   showDetails.value = true;
 }
 
 function handleClose() {
   showDetails.value = false;
 }
-const minutes = ref(1234);
+
+// --------------------- MOVIE TILE -------------- ///
+const moviesWatchedIds = computed(() => {
+  return movieStore.getCurrentUserWatchedIds;
+});
+
+// ------------------- TOTAL DURATION ---------- //
+const totalDuration = ref(0);
+const addToTotalDuration = (duration) => {
+  totalDuration.value += duration;
+};
 
 </script>
 
@@ -26,23 +47,29 @@ const minutes = ref(1234);
       Filmy obejrzane
       <template v-slot:p>Do tej pory na obejrzenie wszystkich filów spedziłeś:
       </template>
-      <template #strong>{{minutesToText(minutes)}}</template>
+      <template #strong>{{ minutesToText(totalDuration) }}</template>
     </TitleTile>
 
     <MovieDetailsPopup v-if="showDetails"
                        :movie="selectedMovie"
+                       :on-any-list="isAnyList"
+                       :on-to-watch="isToWatch"
+                       :on-watched="isWatched"
                        @close="handleClose">
-
     </MovieDetailsPopup>
 
-    <MovieTile watched @show-details="handleShowDetails"/>
-    <MovieTile watched @show-details="handleShowDetails"/>
-    <MovieTile watched @show-details="handleShowDetails"/>
-    <MovieTile watched @show-details="handleShowDetails"/>
-    <MovieTile watched @show-details="handleShowDetails"/>
-    <main class="user-content">
-      <h2>---Koniec---</h2>
-    </main>
+    <MovieTile
+        v-if="moviesWatchedIds.length"
+        watched
+        v-for="(movieId) in moviesWatchedIds"
+        :key="movieId"
+        :movie-id="movieId"
+        @show-details="handleShowDetails"
+        @emit-duration="addToTotalDuration"
+    />
+    <div v-else class="user-content">
+      <h2>--- Brak filmów na liście. Najpierw dodaj "do obejrzenia" lub dodaj wprost na te listę! ---</h2>
+    </div>
   </section>
 </template>
 

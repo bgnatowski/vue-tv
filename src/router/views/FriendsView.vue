@@ -1,70 +1,73 @@
 <script setup>
-import FriendComponent from "@/components/FriendComponent.vue"
 import TitleTile from "@/components/TitleTile.vue";
-import {ref} from "vue";
-import SearchBar from "@/components/page/SearchBar.vue";
+import {useFriendRequestStore} from "@/stores/FriendRequestStore.js";
+import {computed, onMounted, watch} from "vue";
+import {useUserStore} from "@/stores/UserStore.js";
+import FriendTile from "@/components/FriendTile.vue";
 
-const friends = ref([
-  {
-    id: 1,
-    userImage: "https://randomuser.me/api/portraits/men/21.jpg",
-    username: "JohnDoe123",
-    detail1: "This is a longer text to test whether it wraps properly and allows scrolling if it overflows.",
-    detail2: "Another longer piece of text to see if it requires scrolling to stay within the container.",
-  },
-  {
-    id: 2,
-    userImage: "https://randomuser.me/api/portraits/men/25.jpg",
-    username: "JaneDoe456",
-    detail1: "Some shorter text.",
-    detail2: "Another short piece of text.",
-  },
-  {
-    id: 3,
-    userImage: "https://randomuser.me/api/portraits/men/11.jpg",
-    username: "AliceDoe789",
-    detail1: "A variety of text lengths to test scrolling andfafasffasf wrafasfafasfafspping behavior.",
-    detail2: "Another text to check how well it works with gsdgdgsgsdgdgsdgsdg content.",
-  },
-  {
-    id: 4,
-    userImage: "https://randomuser.me/api/portraits/men/11.jpg",
-    username: "AliceDoe789",
-    detail1: "A variety of text lengths to test scrolling andfafasffasf wrafasfafasfafspping behavior.",
-    detail2: "Another text to check how well it works with gsdgdgsgsdgdgsdgsdg content.",
-  },
-  {
-    id: 5,
-    userImage: "https://randomuser.me/api/portraits/men/11.jpg",
-    username: "AliceDoe789",
-    detail1: "A variety of text lengths to test scrolling andfafasffasf wrafasfafasfafspping behavior.",
-    detail2: "Another text to check how well it works with gsdgdgsgsdgdgsdgsdg content.",
-  },
-])
+// --------------- STORES ------------------- //
+const friendRequestStore = useFriendRequestStore();
+const userStore = useUserStore();
+
+// ------------- ACCEPTED FRIENDS --------------//
+const friendsAcceptedRequests = computed(() => {
+  return friendRequestStore.getAcceptedFriendsRequests.filter(r => r.receiverId !== userStore.uid);
+});
+
+const friendsToDeleteRequests = computed(() => {
+  return friendRequestStore.getToDeleteFriendsRequests;
+});
+
+const friendsIds = computed( () => userStore.getFriendsIds)
+
+function updateFriendsFromRequests() {
+  if(friendsAcceptedRequests.value !== undefined){
+    friendsAcceptedRequests.value.forEach((request) => {
+      if (!friendsIds.value.includes(request.receiverId)) {
+        userStore.addFriend(request.receiverId);
+        console.log(`Uzytkownik ${request.receiverId} zaakceptował twoje(${request.senderId}) zaproszenie.`)
+        friendRequestStore.deleteOldRequest(request.id);
+      }
+    });
+  }
+  if(friendsToDeleteRequests.value != null){
+    friendsToDeleteRequests.value.forEach((request) => {
+      if (friendsIds.value.includes(request.senderId)) {
+        userStore.deleteFriend(request.senderId);
+        console.log(`Uzytkownik ${request.senderId} usunał Cię(${request.receiverId}) ze znajomych.`)
+        friendRequestStore.deleteOldRequest(request.id);
+      }
+    });
+  }
+}
+
+watch(friendsAcceptedRequests, () => {
+  updateFriendsFromRequests();
+});
+
+onMounted(() => {
+  updateFriendsFromRequests();
+  console.log("friendsIds:", friendsIds.value);
+  console.log("friendsAcceptedRequests:", friendsAcceptedRequests.value);
+});
+
 </script>
 
 <template>
   <section class="feed-container">
     <TitleTile>Znajomi</TitleTile>
-    <SearchBar type="friend" placeholder-txt="Filtruj znajomych"></SearchBar>
-      <div class="friends-container">
-        <FriendComponent v-for="friend in friends" :key="friend.id" v-bind="friend"/>
-      </div>
-    <main class="user-content">
-      <h2>---Koniec---</h2>
-    </main>
+    <div class="friends-container" v-if="friendsIds.length">
+      <FriendTile v-for="friendId in friendsIds" :key="friendId" :friend-id="friendId"/>
+    </div>
+    <div class="user-content" v-else>
+      <h2>---BRAK ZNAJOMYCH---</h2>
+    </div>
   </section>
 </template>
 
 <style scoped>
-.search {
-  width: 50%;
-  align-self: center;
-  margin-bottom: 10px;
-}
-
-h1 {
-  margin-left: 1rem;
+.user-content {
+  margin: auto;
 }
 
 .friends-container {

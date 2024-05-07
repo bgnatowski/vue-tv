@@ -2,10 +2,10 @@
 
 import {computed, reactive, ref, watch} from "vue";
 import {useRouter} from "vue-router";
-import {useAuthStore} from '@/stores/AuthStore';
 import paths from "@/router/routerPaths.js";
 import AuthPopup from "@/components/auth/AuthPopup.vue";
 import GoogleButton from "@/components/auth/AuthGoogleButton.vue";
+import {useAuthStore} from "@/stores/AuthStore.js";
 
 const emailRepeat = ref("");
 const passwordRepeat = ref("");
@@ -27,13 +27,11 @@ const credentials = reactive({
   username: '',
 });
 
-watch([credentials.email, emailRepeat], ([newEmail, newEmailRepeat]) => {
-  emailMismatchError.value = newEmail !== newEmailRepeat && newEmailRepeat !== '' ? 'E-maile nie są identyczne.' : '';
-});
-
-watch([credentials.password, passwordRepeat], ([newPassword, newPasswordRepeat]) => {
-  passwordMismatchError.value = newPassword !== newPasswordRepeat && newPasswordRepeat !== '' ? 'Hasła nie są identyczne.' : '';
-});
+watch([() => credentials.email, () => emailRepeat.value, () => credentials.password, () => passwordRepeat.value],
+    ([newEmail, newEmailRepeat, newPassword, newPasswordRepeat]) => {
+      emailMismatchError.value = newEmail !== newEmailRepeat && newEmailRepeat !== '';
+      passwordMismatchError.value = newPassword !== newPasswordRepeat && newPasswordRepeat !== '';
+    });
 
 const register = () => {
   authStore.registerUser(credentials)
@@ -45,10 +43,10 @@ const register = () => {
 };
 
 const isCompletedForm = computed(() => {
-  return !credentials.email || !emailRepeat.value || !credentials.username
-      || !credentials.password || !passwordRepeat.value
-      || credentials.email !== emailRepeat.value
-      || credentials.password !== passwordRepeat.value;
+  const baseValidation = !credentials.email || !emailRepeat.value || !credentials.username || !credentials.password || !passwordRepeat.value;
+  const passwordsMatch = credentials.password === passwordRepeat.value;
+  const emailsMatch = credentials.email === emailRepeat.value;
+  return baseValidation || !passwordsMatch || !emailsMatch;
 });
 
 </script>
@@ -72,8 +70,8 @@ const isCompletedForm = computed(() => {
       <label id="passwordRepeat" for="passwordRepeat">Powtórz hasło</label>
       <input type="password" placeholder="Powtórz hasło" v-model="passwordRepeat"/>
 
-      <p v-if="passwordMismatchError">{{ passwordMismatchError }}</p>
-      <p v-if="emailMismatchError">{{ emailMismatchError }}</p>
+      <p v-show="passwordMismatchError">Hasła nie są identyczne.</p>
+      <p v-show="emailMismatchError">Maile nie są identyczne.</p>
       <p v-if="errMsg">{{ errMsg }}</p>
     </form>
     <div class="buttons">

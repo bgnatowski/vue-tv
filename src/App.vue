@@ -7,8 +7,6 @@ import SidebarComponent from "@/components/page/SidebarComponent.vue";
 import FooterComponent from "@/components/page/FooterComponent.vue";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {useAuthStore} from "@/stores/AuthStore.js";
-import {auth} from "@/js/firebase.js";
-
 const route = useRoute();
 const showFooter = ref(false);
 const isLoggedIn = ref(false);
@@ -19,7 +17,7 @@ function toggleSidebar() {
 }
 
 const authStore = useAuthStore();
-onMounted(() => {
+onMounted(async () => {
       authStore.init();
       onAuthStateChanged(getAuth(), (user) => {
         if (route.path == paths.REGISTER_ROUTE) {

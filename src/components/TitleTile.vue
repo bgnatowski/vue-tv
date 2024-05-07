@@ -12,7 +12,6 @@
         <strong>
           <slot name="strong"></slot>
         </strong>
-
       </div>
   </div>
 </template>
@@ -26,9 +25,9 @@
   text-align: center;
   white-space: nowrap;
   height: 100%;
-
 }
 .title-tile h1{
+
   text-align: center;
   font-size: 1.5em;
 }
@@ -40,6 +39,14 @@
 .title-tile strong {
   font-size: 1em;
 }
+
+@media (max-width: 1270px) {
+  .title-tile h1 {
+    font-size: 1.1em;
+  }
+}
+
+
 
 @media (max-width: 700px) {
   .title-tile {

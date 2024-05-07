@@ -1,31 +1,35 @@
 <script setup>
-import {onMounted, ref} from "vue";
+
+import {ref, watch} from "vue";
+import {searchMovie} from "@/services/TVDBService.js";
+import {searchUsersByUsername} from "@/services/UserService.js";
 
 const props = defineProps({
-  mobile: Boolean,
-  type: String,
   placeholderTxt: String
 })
 
-onMounted(()=>{
-  console.log(props.mobile)
-})
+const emits = defineEmits(['searched-results'])
 
-function onSearchClick() {
-  if(type === 'movie'){
-    // logika wyszukiwania filmu
-  }else if(type === 'friend') {
-    // logika wyszukiwania znajomych
-  } else if(type === 'find-friend'){
-    // logika szukania nowych znajomych
-  }
+const searchQuery = ref('');
+const searchedMovies = ref([]);
+const searchedUsers = ref([]);
+
+watch(searchQuery, async () => {
+  searchedMovies.value = await searchMovie(searchQuery.value)
+  searchedUsers.value = await searchUsersByUsername(searchQuery.value);
+
+  emits('searched-results', { movies: searchedMovies.value, users: searchedUsers.value });
+});
+
+async function reloadSearched() {
+  emits('searched-results', { movies: searchedMovies.value, users: searchedUsers.value })
 }
 
 </script>
 <template>
   <div class="search">
-    <form class="search-form">
-      <input v-if="!mobile" type="search" :placeholder="placeholderTxt">
+    <form @submit.prevent class="search-form">
+      <input :placeholder="placeholderTxt" v-model="searchQuery" @click="reloadSearched">
     </form>
   </div>
 </template>
@@ -37,6 +41,12 @@ function onSearchClick() {
   justify-content: space-between;
   width: 20%;
   transition: .4s ease all;
+}
+
+@media screen and (max-width: 600px){
+  .search {
+    width: 100%;
+  }
 }
 
 .search-form {

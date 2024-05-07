@@ -10,20 +10,20 @@ import paths from "@/router/routerPaths.js";</script>
         <span class="button-text">Strona główna</span>
       </div>
     </router-link>
-    <router-link :to="paths.WATCHED_ROUTE" class="router-link-custom">
-      <div class="sidebar-button">
-        <div class="icon-button">
-          <img src="@/assets/img/video.png" alt="Filmy obejrzane">
-        </div>
-        <span class="button-text">Filmy ukonczone</span>
-      </div>
-    </router-link>
     <router-link :to="paths.TO_WATCH_ROUTE" class="router-link-custom">
       <div class="sidebar-button">
         <div class="icon-button">
           <img src="@/assets/img/watching-a-movie.png" alt="Filmy do obejrzenia">
         </div>
-        <span class="button-text">Filmy do zobaczenia</span>
+        <span class="button-text">Filmy do obejrzenia</span>
+      </div>
+    </router-link>
+    <router-link :to="paths.WATCHED_ROUTE" class="router-link-custom">
+      <div class="sidebar-button">
+        <div class="icon-button">
+          <img src="@/assets/img/video.png" alt="Filmy obejrzane">
+        </div>
+        <span class="button-text">Filmy obejrzane</span>
       </div>
     </router-link>
     <router-link :to="paths.FRIENDS_ROUTE" class="router-link-custom">
@@ -50,14 +50,6 @@ import paths from "@/router/routerPaths.js";</script>
         <span class="button-text">Ustawienia</span>
       </div>
     </router-link>
-<!--    <router-link :to="paths.LOGOUT_ROUTE" class="router-link-custom">-->
-<!--      <div class="sidebar-button">-->
-<!--        <div class="icon-button">-->
-<!--          <img src="@/assets/logout_icon.png" alt="Wyloguj">-->
-<!--        </div>-->
-<!--        <span class="button-text">WYLOGUJ DEV</span>-->
-<!--      </div>-->
-<!--    </router-link>-->
   </div>
 </template>
 
@@ -117,9 +109,26 @@ import paths from "@/router/routerPaths.js";</script>
 
 .icon-button {
   margin-right: 1em;
+  border-radius: unset;
 }
 
-@media screen and (max-width: 1000px){
+.icon-button:hover {
+  background-color: unset;
+  border: none;
+  box-shadow: unset;
+}
+
+@media screen and (max-width: 1200px){
+  .icon-button {
+    margin: 0;
+  }
+  .button-text {
+    transition: .5s ease all;
+    display: none;
+  }
+}
+
+@media screen and (max-width: 600px){
   .icon-button {
     margin: 0;
     height: 28px;
@@ -152,7 +161,7 @@ import paths from "@/router/routerPaths.js";</script>
 
 }
 
-@media screen and (max-width: 600px){
+@media screen and (max-width: 500px){
   .icon-button {
     height: 25px;
     width: 25px;

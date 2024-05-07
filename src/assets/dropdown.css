@@ -8,12 +8,12 @@
 
 .dropdown-content {
     transition: .5s ease all;
-    position: static;
+    position: absolute;
     background-color: #f9f9f9;
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
     white-space: nowrap;
     border-radius: 1.2em;
-    padding: .5em;
+    padding: .2em;
     font-size: .8em;
 }
 
@@ -22,14 +22,16 @@
     cursor: pointer;
     flex-direction: column;
     color: #000;
-    padding: .2em .5em;
+    padding: .2em .2em;
     border-radius: 1.2em;
+    transition: .5s ease all;
 }
 
 .dropdown-option {
     font-size: .8em;
     padding: .4em .8em;
     border-radius: 1em;
+    transition: .5s ease all;
 }
 
 .dropdown-option:hover {

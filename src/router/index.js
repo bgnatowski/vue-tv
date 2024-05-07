@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import paths from "@/router/routerPaths.js";
+import {useMovieStore} from "@/stores/MovieStore.js";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -63,11 +64,18 @@ const router = createRouter({
             }
         },
         {
-            path: paths.USER_PROFILE_ROUTE,
-            component: () => import("./views/ProfileView.vue"),
+            path: paths.MY_PROFILE_ROUTE,
+            component: () => import("./views/MyProfileView.vue"),
             name: "User",
             meta: {
                 requiresAuth: true,
+            },
+            beforeEnter: async (to, from, next) => {
+                const movieStore = useMovieStore();
+                if (!movieStore.currentUserMovies.length) {
+                    await movieStore.fetchCurrentUserMovies();
+                }
+                next();
             }
         },
         {
@@ -102,8 +110,33 @@ const router = createRouter({
                 requiresAuth: false,
             }
         },
-
-
+        {
+            path: paths.USER_PROFILE_ROUTE,
+            component: () => import('./views/UserProfileView.vue'),
+            name: 'UserProfile',
+            meta: {
+                requiresAuth: true,
+            },
+            props: true
+        },
+        {
+            path: paths.USER_WATCHED_ROUTE,
+            component: () => import('./views/UserWatchedView.vue'),
+            name: 'UserWatched',
+            meta: {
+                requiresAuth: true,
+            },
+            props: true
+        },
+        {
+            path: paths.USER_TO_WATCH_ROUTE,
+            component: () => import('./views/UserToWatchView.vue'),
+            name: 'UserToWatch',
+            meta: {
+                requiresAuth: true,
+            },
+            props: true
+        }
     ],
 });
 
@@ -127,7 +160,7 @@ router.beforeEach(async (to, from, next) => {
     if ((to.path === paths.HOME_ROUTE || to.path === paths.REGISTER_ROUTE || to.path === paths.LOGIN_ROUTE) && currentUser) {
         next(paths.MAIN_ROUTE);
     } else if (requiresAuth && !currentUser) {
-        alert("You don't have access!");
+        console.log("Nie masz tu dostępu :D")
         next(paths.HOME_ROUTE);
     } else {
         next();

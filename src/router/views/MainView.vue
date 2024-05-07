@@ -13,15 +13,18 @@ onMounted(() => {
   }
 });
 
+// --------------------- POPUP -------------- ///
 const showDetails = ref(false);
 const selectedMovie = ref(null);
+const isWatched = ref(null);
+const isToWatch = ref(null);
 
-function handleShowDetails(movie) {
-  console.log("main, handleShowDetails")
-  selectedMovie.value = movie;
+const handleShowDetails = (showDetailsData) => {
+  isWatched.value = showDetailsData.onWatched
+  isToWatch.value = showDetailsData.onToWatch
+  selectedMovie.value = showDetailsData.movie;
   showDetails.value = true;
 }
-
 function handleClose() {
   showDetails.value = false;
 }
@@ -32,6 +35,8 @@ function handleClose() {
   <section class="feed-container" :style="hasScrollbar ? 'margin: 0' : ''">
     <MovieDetailsPopup v-if="showDetails"
                        :movie="selectedMovie"
+                       :on-to-watch="isToWatch"
+                       :on-watched="isWatched"
                        @close="handleClose">
     </MovieDetailsPopup>
     <div class="posts-column">

@@ -1,20 +1,34 @@
 <script setup>
 import Rating from "primevue/rating";
-import {ref} from "vue";
+import {onBeforeMount, onMounted, ref, watch} from "vue";
 
 const props = defineProps({
   readOnly: Boolean,
   vertical: Boolean,
+  rating: Number,
+  totalCount: Number
 })
 
-const value = ref(4.5)
+const emits = defineEmits(['rating-value'])
 const isPointer = ref(props.readOnly ? 'default' : 'pointer');
+const stars = ref(0);
+
+watch(stars, (newValue) => {
+  if (!props.readOnly) {
+    emits("rating-value", stars.value);
+  }
+});
+
+onBeforeMount(() =>{
+  stars.value = props.rating;
+})
+
 </script>
 
 
 <template>
   <div class="rating-container" :class="vertical ? 'column' : ''">
-    <Rating v-model="value" :readonly="readOnly" :cancel="!readOnly" :class="vertical ? 'column' : ''">
+    <Rating :stars="10" v-model="stars" :readonly="readOnly" :cancel="!readOnly" :class="vertical ? 'column' : ''">
       <template #cancelicon>
         <img class="cancel-icon star-icon" src="@/assets/rating/cancel.png" alt="cancel"/>
       </template>
@@ -25,15 +39,15 @@ const isPointer = ref(props.readOnly ? 'default' : 'pointer');
         <img class="star-icon" src="@/assets/rating/custom-officon.png" alt="star-unfilled"/>
       </template>
     </Rating>
-    <p v-if="readOnly" class="real-value" v-text="value"></p>
+    <p v-if="readOnly" class="real-value"> {{ stars }} / 10</p>
   </div>
-
 </template>
 
 <style scoped>
 
 .rating-container {
   display: flex;
+  position: sticky;
   flex-direction: v-bind(direction);
   box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.25);
   background-color: transparent;
@@ -43,6 +57,7 @@ const isPointer = ref(props.readOnly ? 'default' : 'pointer');
   padding-left: 8px;
   padding-right: 8px;
   width: fit-content;
+  margin: 3px 3px 0 0;
 }
 
 .column {
@@ -53,7 +68,9 @@ const isPointer = ref(props.readOnly ? 'default' : 'pointer');
   text-align: center;
   align-self: center;
   font-weight: 600;
-  font-size: 1em;
+  font-size: .9em;
+  margin-left: 5px;
+  white-space: nowrap;
 }
 
 .p-rating {
@@ -74,7 +91,7 @@ const isPointer = ref(props.readOnly ? 'default' : 'pointer');
   width: 24px;
 }
 
-@media screen and (max-width: 737px) {
+@media screen and (max-width: 800px) {
   .star-icon {
     height: 20px;
     width: 20px;
@@ -85,10 +102,28 @@ const isPointer = ref(props.readOnly ? 'default' : 'pointer');
   }
 }
 
-@media screen and (max-width: 350px) {
+@media screen and (max-width: 600px) {
   .star-icon {
-    height: 16px;
-    width: 16px;
+    height: 18px;
+    width: 18px;
+  }
+  .rating-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: fit-content;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .star-icon {
+    height: 15px;
+    width: 15px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .p-rating {
+    flex-wrap: wrap;
   }
 }
 

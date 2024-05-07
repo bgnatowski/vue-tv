@@ -1,8 +1,8 @@
 <script setup>
-import {nextTick, onMounted, ref} from "vue";
+import {nextTick, onMounted, reactive, ref} from "vue";
+import {sampleMovie as sampleMovie1} from "@/services/TVDBService.js";
 
 const isShowDropdown = ref(false)
-const isShowButton = ref(true)
 
 const props = defineProps({
       profile: Boolean
@@ -11,12 +11,10 @@ const props = defineProps({
 
 function showDropdown() {
   isShowDropdown.value = true
-  isShowButton.value = false;
 }
 
 function hideDropdown() {
   isShowDropdown.value = false;
-  isShowButton.value = true;
 }
 
 const isDraggable = ref(false);
@@ -29,68 +27,82 @@ onMounted(async () => {
   }
 });
 
-const emit = defineEmits(['show-details']);
+const emits = defineEmits(['show-details']);
 
-function showInfo() {
-  emit('show-details');
-  console.log('wyemitowano show details');
+const sampleMovie = sampleMovie1;
+// ---------------------------POKAZANIE POPUPU ----------------//
+const showDetails = (movie) => {
+  emits('show-details', {
+    movie: movie,
+    onWatched: false,
+    onToWatch: true
+  });
 }
+
+const post = reactive({
+  id: 1,
+  author: 'userId',
+  movie: 'movieID? movie? wgle?',
+  timestamp: 'timestamp',
+  content: "Film świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman\n" +
+      "          dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił\n" +
+      "          samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem\n" +
+      "          dramatycznym. Coś wielkiegoFilm świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman\n" +
+      "          dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił\n" +
+      "          samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem\n" +
+      "          dramatycznym. Coś wielkiego."
+})
 
 </script>
 
 <template>
   <div class="post">
-    <div class="upper-bar" v-if="!profile">
+    <div class="upper-bar">
       <div class="user-info">
         <div class="user-image">
           <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
         </div>
-        <p class="user-name">uzytkownik prowatcher123 polecił film:</p>
+        <p v-if="!profile" class="user-name">uzytkownik prowatcher123 polecił film:</p>
+        <p v-else class="user-name">Poleciłeś film:</p>
       </div>
-    </div>
-    <div class="movie-card">
-      <div class="movie-poster">
-        <img src="https://static.posters.cz/image/1300/plakaty/diuna-czesc-1-i122815.jpg"
-             alt="Movie poster for Diuna"/>
-      </div>
-      <div class="movie-details">
-        <h1 class="movie-title">Diuna</h1>
-        <div>
-          <table class="tg">
-            <thead>
-            <tr>
-              <th class="tg-0pky">Gatunek:</th>
-              <th class="tg-0lax">Sci-Fi</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td class="tg-0pky">Długość:</td>
-              <td class="tg-0lax">124 min</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="post-description" ref="postDescriptionRef" v-dragscroll="isDraggable">Film świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman
-          dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił
-          samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem
-          dramatycznym. Coś wielkiegoFilm świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman
-          dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił
-          samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem
-          dramatycznym. Coś wielkiego.
-        </p>
-      </div>
-      <div class="dropdown" @mouseover="showDropdown" @mouseleave="hideDropdown">
-        <div class="icon-button" v-if="isShowButton">
+      <div class="dropdown">
+        <div class="icon-button" @click="showDropdown">
           <img src="@/assets/img/dots-icon.png" alt="Movie Options"/>
         </div>
-        <div v-if="isShowDropdown" class="dropdown-content">
+        <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
           <ul class="dropdown-list">
-            <li @click="showInfo" class="dropdown-option">Więcej o filmie</li>
+            <li @click="showDetails(sampleMovie)" class="dropdown-option">Więcej o filmie</li>
             <li v-if="!profile" class="dropdown-option">Dodaj do obejrzenia (jesli nie jest jeszcze obejrzany)</li>
             <li v-else class="dropdown-option">Usuń post</li>
           </ul>
         </div>
+      </div>
+    </div>
+    <div class="movie-card">
+      <div class="movie-poster">
+        <img :src="sampleMovie.posterPath"
+             alt="Movie poster for Diuna"/>
+      </div>
+      <div class="movie-details">
+        <h1 class="movie-title">{{ sampleMovie.title }}</h1>
+        <div>
+          <table class="tg">
+            <thead>
+            <tr>
+              <th class="tg-0pky tg-size">Gatunki:</th>
+              <th class="tg-0lax tg-size">{{ sampleMovie.genres.map((genre) => genre.name).join(", ") }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tg-0pky tg-size">Długość:</td>
+              <td class="tg-0lax tg-size">{{ sampleMovie.duration }} min</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="post-description" ref="postDescriptionRef" v-dragscroll="isDraggable"> {{post.content}}
+        </p>
       </div>
     </div>
   </div>
@@ -98,6 +110,22 @@ function showInfo() {
 
 <style scoped>
 @import url(@/assets/dropdown.css);
+.dropdown {
+  position: sticky;
+  z-index: 9;
+  transition: .5s ease all;
+}
+
+.dropdown-content {
+  position: absolute;
+  right: 0;
+  top: 0;
+  white-space: nowrap;
+  z-index: 9;
+  background-color: white;
+  transition: .5s ease all;
+}
+
 .user-info {
   display: flex;
   padding: .2rem;
@@ -108,6 +136,7 @@ function showInfo() {
 .user-info p {
   justify-content: center;
   align-content: center;
+  font-size: .8em;
 }
 
 .upper-bar {
@@ -127,16 +156,15 @@ function showInfo() {
 
 .movie-card {
   display: flex;
-  gap: 20px;
   height: 100%;
-  position: relative;
+  justify-content: space-between;
 }
 
 .movie-poster {
-  width: 300px;
-  height:100%;
-  margin: .2em;
-  aspect-ratio: 0.7;
+  width: 200px;
+  height: auto;
+  object-fit: cover;
+  margin-right: 10px;
 }
 
 .movie-poster img {
@@ -150,15 +178,12 @@ function showInfo() {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  margin: 0.5em 0;
-  padding: 0.5em 0;
   width: 100%;
-  gap: 10px;
 }
 
 .movie-title {
   color: #000;
-  font-size: 2em;
+  font-size: 1em;
 }
 
 .movie-details .post-description {
@@ -168,14 +193,25 @@ function showInfo() {
   scrollbar-width: thin;
   hyphens: auto;
   max-height: 150px;
+  font-size: .8em;
 }
 
+.tg-size{
+  font-size: .7em;
+}
+
+
 @media screen and (max-width: 728px) {
+  .movie-poster {
+    width: 100px;
+    height: auto;
+    object-fit: cover;
+  }
+}
+
+@media screen and (max-width: 350px) {
   .movie-poster{
     display: none;
-  }
-  .movie-card {
-    flex-direction: column;
   }
 }
 
