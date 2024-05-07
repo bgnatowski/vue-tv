@@ -20,6 +20,7 @@ const isFetching = ref(true);
 const movies = ref([])
 
 onMounted(async () => {
+  console.log("moviesIds?: ", props.moviesIds)
   if(props.moviesIds.length){
     for (const id of props.moviesIds) {
       let details = await fetchMovieDetails(id);

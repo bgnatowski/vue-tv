@@ -10,20 +10,20 @@ import paths from "@/router/routerPaths.js";</script>
         <span class="button-text">Strona główna</span>
       </div>
     </router-link>
-    <router-link :to="paths.WATCHED_ROUTE" class="router-link-custom">
-      <div class="sidebar-button">
-        <div class="icon-button">
-          <img src="@/assets/img/video.png" alt="Filmy obejrzane">
-        </div>
-        <span class="button-text">Filmy obejrzane</span>
-      </div>
-    </router-link>
     <router-link :to="paths.TO_WATCH_ROUTE" class="router-link-custom">
       <div class="sidebar-button">
         <div class="icon-button">
           <img src="@/assets/img/watching-a-movie.png" alt="Filmy do obejrzenia">
         </div>
         <span class="button-text">Filmy do obejrzenia</span>
+      </div>
+    </router-link>
+    <router-link :to="paths.WATCHED_ROUTE" class="router-link-custom">
+      <div class="sidebar-button">
+        <div class="icon-button">
+          <img src="@/assets/img/video.png" alt="Filmy obejrzane">
+        </div>
+        <span class="button-text">Filmy obejrzane</span>
       </div>
     </router-link>
     <router-link :to="paths.FRIENDS_ROUTE" class="router-link-custom">

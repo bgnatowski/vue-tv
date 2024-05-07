@@ -39,14 +39,6 @@ function handleClose() {
 const toWatchMoviesIds = computed(() => movieStore.getCurrentUserToWatchIds)
 const watchedMoviesIds = computed(() => movieStore.getCurrentUserWatchedIds)
 
-onMounted(async () => {
-  if (!movieStore.currentUserMovies.length) {
-    await movieStore.fetchCurrentUserMovies();
-  }
-  console.log('MyProfileView, toWatchMoviesIds: ', toWatchMoviesIds.value)
-  console.log('MyProfileView, watchedMoviesIds: ', watchedMoviesIds.value)
-})
-
 </script>
 
 <template>
@@ -63,17 +55,17 @@ onMounted(async () => {
       </div>
       <p class="user-name">{{ userStore.username }}</p>
 
-      <TitleTile class="list" @click="router.push(paths.WATCHED_ROUTE)">Filmy obejrzane</TitleTile>
-      <UserMovesTile
-          list-type="watched"
-          :movies-ids="watchedMoviesIds"
-          @show-details="handleShowDetails"
-      />
-
       <TitleTile class="list" @click="router.push(paths.TO_WATCH_ROUTE)">Filmy do obejrzenia</TitleTile>
       <UserMovesTile
           list-type="to-watch"
           :movies-ids="toWatchMoviesIds"
+          @show-details="handleShowDetails"
+      />
+
+      <TitleTile class="list" @click="router.push(paths.WATCHED_ROUTE)">Filmy obejrzane</TitleTile>
+      <UserMovesTile
+          list-type="watched"
+          :movies-ids="watchedMoviesIds"
           @show-details="handleShowDetails"
       />
     </section>

@@ -1,7 +1,7 @@
 import {
     createUserWithEmailAndPassword,
     deleteUser as firebaseDeleteUser,
-    EmailAuthProvider,
+    EmailAuthProvider, getAuth,
     GoogleAuthProvider, onAuthStateChanged,
     reauthenticateWithCredential,
     signInWithEmailAndPassword,

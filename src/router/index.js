@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import paths from "@/router/routerPaths.js";
+import {useMovieStore} from "@/stores/MovieStore.js";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -68,6 +69,13 @@ const router = createRouter({
             name: "User",
             meta: {
                 requiresAuth: true,
+            },
+            beforeEnter: async (to, from, next) => {
+                const movieStore = useMovieStore();
+                if (!movieStore.currentUserMovies.length) {
+                    await movieStore.fetchCurrentUserMovies();
+                }
+                next();
             }
         },
         {

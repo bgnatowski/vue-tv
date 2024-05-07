@@ -68,6 +68,14 @@ onMounted(async () => {
       </div>
       <p class="user-name">{{ userProfile.username }}</p>
 
+      <TitleTile class="list" @click="router.push(paths.TO_WATCH_ROUTE)">Filmy do obejrzenia</TitleTile>
+      <UserMovesTile
+          list-type="to-watch"
+          movies-list="movies"
+          movies-ids="toWatchMoviesIds"
+          @show-details="handleShowDetails"
+      />
+
       <TitleTile class="list" @click="router.push(paths.WATCHED_ROUTE)">Filmy obejrzane</TitleTile>
       <UserMovesTile
           list-type="watched"
@@ -76,13 +84,7 @@ onMounted(async () => {
           @show-details="handleShowDetails"
       />
 
-      <TitleTile class="list" @click="router.push(paths.TO_WATCH_ROUTE)">Filmy do obejrzenia</TitleTile>
-      <UserMovesTile
-          list-type="to-watch"
-          movies-list="movies"
-          movies-ids="toWatchMoviesIds"
-          @show-details="handleShowDetails"
-      />
+
     </section>
     <section class="posts-column">
       <TitleTile>Recenzje {{userProfile.username}}:</TitleTile>

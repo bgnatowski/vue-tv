@@ -17,7 +17,7 @@ function toggleSidebar() {
 }
 
 const authStore = useAuthStore();
-onMounted(() => {
+onMounted(async () => {
       authStore.init();
       onAuthStateChanged(getAuth(), (user) => {
         if (route.path == paths.REGISTER_ROUTE) {

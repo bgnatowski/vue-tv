@@ -1,5 +1,6 @@
 import {defineStore} from 'pinia';
 import {addMovieToUser, deleteUserMovie, fetchAllUserMovies, updateUserMovie} from "@/services/MovieService.js";
+import {useUserStore} from "@/stores/UserStore.js";
 
 export const useMovieStore = defineStore('movieStore', {
     state: () => ({
@@ -45,8 +46,9 @@ export const useMovieStore = defineStore('movieStore', {
             this.currentUserMovies = await fetchAllUserMovies(userId);
         },
         async fetchCurrentUserMovies() {
+            const userStore = useUserStore();
             if (!this.currentUserMovies.length) {
-                const userId = userStore.getUid; // upewnij się, że użytkownik jest zalogowany
+                const userId = userStore.getUid;
                 this.currentUserMovies = await fetchAllUserMovies(userId);
             }
         },
