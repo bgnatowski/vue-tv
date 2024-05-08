@@ -5,9 +5,9 @@ import {sampleMovie as sampleMovie1} from "@/services/TVDBService.js";
 const isShowDropdown = ref(false)
 
 const props = defineProps({
-      profile: Boolean
-    }
-)
+      profile: Boolean,
+      postId: ''
+})
 
 function showDropdown() {
   isShowDropdown.value = true
@@ -101,7 +101,7 @@ const post = reactive({
             </tbody>
           </table>
         </div>
-        <p class="post-description" ref="postDescriptionRef" v-dragscroll="isDraggable"> {{post.content}}
+        <p class="post-description" ref="postDescriptionRef" v-dragscroll="isDraggable"> {{ post.content }}
         </p>
       </div>
     </div>
@@ -110,6 +110,7 @@ const post = reactive({
 
 <style scoped>
 @import url(@/assets/dropdown.css);
+
 .dropdown {
   position: sticky;
   z-index: 9;
@@ -196,7 +197,7 @@ const post = reactive({
   font-size: .8em;
 }
 
-.tg-size{
+.tg-size {
   font-size: .7em;
 }
 
@@ -210,7 +211,7 @@ const post = reactive({
 }
 
 @media screen and (max-width: 350px) {
-  .movie-poster{
+  .movie-poster {
     display: none;
   }
 }

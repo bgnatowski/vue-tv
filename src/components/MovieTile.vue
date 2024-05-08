@@ -5,6 +5,7 @@ import {fetchMovieDetails} from "@/services/TVDBService.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import {useUserStore} from "@/stores/UserStore.js";
 import RatingStars from "@/components/RatingStars.vue";
+import {usePostStore} from "@/stores/PostStore.js";
 
 // ------------------ PROPS AND EMITS -----------------------//
 const props = defineProps({
@@ -103,6 +104,27 @@ onMounted(async () => {
   }
 });
 
+// -------------------- CREATE POST ---------------------- //
+const postStore = usePostStore();
+const handleCreatePost = () => {
+  let postDetails = {
+    movie: {
+      id: movie.value.id,
+      title: movie.value.title,
+      duration: movie.value.duration,
+      posterPath: movie.value.posterPath,
+      genres: movie.value.genres,
+      userRating: userRating.value
+    },
+    content: "Film świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman\n" +
+        "          dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił\n" +
+        "          samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem\n" +
+        "          dramatycznym. Coś wielkiegoFilm świetny, ale końcówka do mnie nie przemawia."
+  }
+  console.log('Proba utworzenia posta: ', postDetails)
+  postStore.createUserPost(postDetails);
+}
+
 </script>
 
 <template>
@@ -140,7 +162,7 @@ onMounted(async () => {
         <div class="buttons">
           <div class="card-action-buttons" :class="watched ? 'cab-min-width' : ''">
             <!--            todo: recommend -->
-            <div class="card-action-icon" v-if="!isPrivate && watched" aria-label="Recommend">
+            <div class="card-action-icon" v-if="!isPrivate && watched" aria-label="Recommend" @click="handleCreatePost">
               <img src="@/assets/img/recommend-icon.png" alt="Recommend icon"/>
               <span class="button-span" v-if="!isPrivate && watched">Recenzja</span>
             </div>

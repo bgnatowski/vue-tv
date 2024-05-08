@@ -15,6 +15,7 @@ import {auth,} from '../js/firebase';
 import {useUserStore} from "@/stores/UserStore.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import {useFriendRequestStore} from "@/stores/FriendRequestStore.js";
+import {usePostStore} from "@/stores/PostStore.js";
 
 export const useAuthStore = defineStore('authStore', {
     actions: {
@@ -23,6 +24,7 @@ export const useAuthStore = defineStore('authStore', {
                 const userStore = useUserStore();
                 const movieStore = useMovieStore();
                 const friendsRequestStore = useFriendRequestStore();
+                const postStore = usePostStore();
                 if (userDetails) {
                     userStore.$patch({
                         uid: userDetails.uid,
@@ -33,6 +35,7 @@ export const useAuthStore = defineStore('authStore', {
                     await userStore.initUser(userDetails.uid);
                     await movieStore.initCurrentUserMovies(userDetails.uid)
                     await friendsRequestStore.initFriendRequests(userDetails.uid)
+                    await postStore.initUserPosts(userDetails.uid)
                 } else {
                     userStore.resetUser();
                 }

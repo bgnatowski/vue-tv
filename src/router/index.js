@@ -171,6 +171,7 @@ router.beforeEach(async (to, from, next) => {
 
     const friendRequestStore = useFriendRequestStore();
     hasPendingInvitations.value = friendRequestStore.isPendingFriendsRequestsForCurrentUser;
+    // console.log(hasPendingInvitations.value)
 
     if ((to.path === paths.HOME_ROUTE || to.path === paths.REGISTER_ROUTE || to.path === paths.LOGIN_ROUTE) && currentUser) {
         next(paths.MAIN_ROUTE);
