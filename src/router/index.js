@@ -138,7 +138,16 @@ const router = createRouter({
                 requiresAuth: true,
             },
             props: true
-        }
+        },
+        {
+            path: paths.MOVIE,
+            component: () => import('./views/MovieDetailsView.vue'),
+            name: 'MovieDetails',
+            meta: {
+                requiresAuth: true,
+            },
+            props: true
+        },
     ],
 });
 
