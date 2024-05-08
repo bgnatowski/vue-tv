@@ -142,20 +142,26 @@ onMounted(async () => {
             <!--            todo: recommend -->
             <div class="card-action-icon" v-if="!isPrivate && watched" aria-label="Recommend">
               <img src="@/assets/img/recommend-icon.png" alt="Recommend icon"/>
+              <span class="button-span" v-if="!isPrivate && watched">Recenzja</span>
             </div>
             <!--            todo: note -->
             <div class="card-action-icon" aria-label="Note">
               <img src="@/assets/img/edit-icon.png" alt="Note icon"/>
+              <span class="button-span">Notatka</span>
             </div>
             <div @click="showDetails" class="card-action-icon" aria-label="Info">
               <img src="@/assets/img/info-icon.png" alt="Info icon"/>
+              <span class="button-span">Więcej informacji</span>
             </div>
             <div class="card-action-icon" aria-label="Hide">
               <img src="@/assets/img/hide-icon.png" v-if="isPrivate" alt="Hide icon" @click="publicMovie"/>
               <img src="@/assets/img/show-icon.png" v-else alt="Show icon" @click="unpublicMovie"/>
+              <p class="button-span" v-if="isPrivate">Ukryty</p>
+              <span class="button-span" v-else>Publiczny</span>
             </div>
             <div @click="deleteMovie" class="card-action-icon" aria-label="Delete">
               <img src="@/assets/img/delete-icon.png" alt="Delete icon"/>
+              <span class="button-span">Usuń</span>
             </div>
           </div>
 
@@ -170,6 +176,7 @@ onMounted(async () => {
 
 <style scoped>
 @import url(@/assets/movie-buttons.css);
+
 .post {
   min-height: fit-content;
 }
@@ -383,6 +390,10 @@ input:checked + .slider:before {
     width: 50px;
     height: auto;
     object-fit: cover;
+  }
+  .movie-details{
+    padding-bottom: 1em;
+    margin-bottom: 10px;
   }
 
   .movie-text h2 {

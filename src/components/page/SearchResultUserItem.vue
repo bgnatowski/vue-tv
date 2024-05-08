@@ -52,14 +52,14 @@ const goToProfile = () => {
       <h3>{{ user.username }}</h3>
       <h2 v-if="isFriend">Znajomy</h2>
     </div>
+    <div class="icon-button" @click="showDropdown">
+      <img src="@/assets/img/dots-icon.png" alt="Movie Options"/>
+    </div>
     <div class="dropdown">
-      <div class="icon-button" @click="showDropdown">
-        <img src="@/assets/img/dots-icon.png" alt="User Options"/>
-      </div>
       <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
         <ul class="dropdown-list">
           <li @click="goToProfile" class="dropdown-option">Zobacz profil</li>
-          <li @click="sendFriendRequest" v-if="!isAlreadySent && !isFriend" class="dropdown-option">Wyślij zaproszenie do znajomych</li>
+          <li @click="sendFriendRequest" v-if="!isAlreadySent && !isFriend && !isMe" class="dropdown-option">Wyślij zaproszenie do znajomych</li>
         </ul>
       </div>
     </div>
@@ -68,7 +68,6 @@ const goToProfile = () => {
 
 <style scoped>
 @import url(@/assets/dropdown.css);
-
 .user-item {
   display: flex;
   align-items: center;
@@ -109,19 +108,15 @@ const goToProfile = () => {
 
 .dropdown {
   position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
-  z-index: 999;
+  z-index: 9;
   transition: .5s ease all;
 }
 
 .dropdown-content {
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 15px;
   white-space: nowrap;
-  z-index: 999;
+  z-index: 999999;
   background-color: white;
   transition: .5s ease all;
 }

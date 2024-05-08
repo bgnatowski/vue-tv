@@ -122,15 +122,15 @@ const goToMoviePage = () => {
         <div class="icon-button" @click="closePopup">
           <img src="@/assets/img/close-icon.png" alt="Close icon"/>
         </div>
-        <div class="dropdown" v-if="!(onToWatch || onWatched)">
+        <div class="dropdown">
           <div class="icon-button" @click="showDropdown">
             <img src="@/assets/img/dots-icon.png" alt="Movie Options"/>
           </div>
           <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
             <ul class="dropdown-list">
               <li @click="goToMoviePage" class="dropdown-option">Zobacz strone filmu</li>
-              <li @click="addToWatch" class="dropdown-option">Dodaj do obejrzenia</li>
-              <li @click="addToWatched" class="dropdown-option">Dodaj do obejrzanych</li>
+              <li @click="addToWatch" v-if="!(onToWatch || onWatched)" class="dropdown-option">Dodaj do obejrzenia</li>
+              <li @click="addToWatched" v-if="!(onToWatch || onWatched)" class="dropdown-option">Dodaj do obejrzanych</li>
             </ul>
           </div>
         </div>

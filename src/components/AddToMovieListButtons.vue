@@ -50,25 +50,25 @@ const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movieDetails.id)
 
 <template>
   <div class="buttons" :class="noInfoButton ? 'flex-row' : ''">
-    <button class="card-action-buttons" @click="moveToWatch" v-if="!(isOnToWatch || isOnWatched)">
+    <button class="card-action-buttons" :class="noInfoButton ? 'card-flex' : ''" @click="moveToWatch" v-if="!(isOnToWatch || isOnWatched)">
       <div class="card-action-icon">
         <i class="plus-sign">+</i>
         <img src="@/assets/img/watching-a-movie.png" alt="To Watch"/>
       </div>
       <span class="button-span">Do obejrzenia</span>
     </button>
-    <button class="card-action-buttons" @click="moveToWatched" v-if="!(isOnToWatch || isOnWatched)">
+    <button class="card-action-buttons" :class="noInfoButton ? 'card-flex' : ''" @click="moveToWatched" v-if="!(isOnToWatch || isOnWatched)">
       <div class="card-action-icon">
         <i class="plus-sign">+</i>
         <img src="@/assets/img/video.png" alt="To Watched"/>
       </div>
       <span class="button-span">Do obejrzanych</span>
     </button>
-    <button class="card-action-buttons" @click="showDetails" v-if="!noInfoButton">
+    <button class="card-action-buttons" :class="noInfoButton ? 'card-flex' : ''" @click="showDetails" v-if="!noInfoButton">
       <div class="card-action-icon">
         <img src="@/assets/img/info-icon.png" alt="Info"/>
       </div>
-      <span class="button-span">Informacje</span>
+      <span class="button-span">Więcej informacji</span>
     </button>
   </div>
   <div class="list-info" v-if="(isOnToWatch || isOnWatched)">
@@ -85,21 +85,21 @@ const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movieDetails.id)
   width: fit-content;
   height: min-content;
   align-content: center;
-  justify-content: center;
   text-align: center;
-  min-height: 150px;
-  gap: 5px;
 }
 
 .card-action-buttons {
   display: flex;
-  flex-direction: column;
+  flex-direction: row-reverse;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: center;
   background-color: transparent;
   border: none;
-  height: auto;
+  min-width: 112px;
+}
+.card-flex{
+  flex-direction: row;
 }
 
 .card-action-icon{
@@ -109,12 +109,18 @@ const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movieDetails.id)
   text-align: center;
 }
 
-.button-span {
+.card-action-buttons .button-span {
+  display: none;
   font-size: .5em;
   text-align: center;
-  align-self: flex-start;
+  align-self: center;
+  line-height: 1.2;
   width: min-content;
-  white-space: break-spaces;
+  margin-right: 20px;
+}
+
+.card-action-buttons:hover .button-span {
+  display: block;
 }
 
 .plus-sign{
@@ -142,32 +148,38 @@ const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movieDetails.id)
     height: auto;
     width: auto;
   }
-
   .card-action-buttons {
     min-height: unset;
-    flex-direction: column;
+    flex-direction: row-reverse;
     justify-content: flex-start;
     align-self: flex-start;
-    min-width: unset;
+    min-width: 112px;
     height: auto;
+
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    background-color: transparent;
+    border: none;
   }
 
   .card-action-icon {
-    height: 35px;
-    width: 35px;
+    height: 50px;
+    width: 50px;
     border-radius: 50%;
-    padding: 8px;
+  }
+  .card-flex{
+    flex-direction: row;
   }
 }
 @media screen and (max-width: 600px){
   .flex-row {
-    flex-direction: row;
     min-height: unset;
   }
 }
 
 @media screen and (max-width: 500px) {
-
 
   .card-action-buttons {
     padding: 0;
@@ -176,6 +188,9 @@ const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movieDetails.id)
   .card-action-icon {
     height: 35px;
     width: 35px;
+  }
+  .list-info{
+    white-space: break-spaces;
   }
 }
 

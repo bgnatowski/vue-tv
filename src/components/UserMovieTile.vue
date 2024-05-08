@@ -167,6 +167,10 @@ onMounted(async () => {
     height: auto;
     object-fit: cover;
   }
+  .movie-details{
+    padding-bottom: 1em;
+    margin-bottom: 10px;
+  }
 }
 
 @media screen and (max-width: 420px) {

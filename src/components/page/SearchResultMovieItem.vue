@@ -15,12 +15,8 @@ const emits = defineEmits(['show-details']);
 
 // ----------- DROPDOWN --------------//
 const isShowDropdown = ref(false);
-const showDropdown = () => {
-  isShowDropdown.value = true;
-};
-const hideDropdown = () => {
-  isShowDropdown.value = false;
-};
+const showDropdown = () => isShowDropdown.value = true;
+const hideDropdown = () => isShowDropdown.value = false;
 
 // ------------- POPUP -------------//
 const showDetails = async () => {
@@ -94,10 +90,10 @@ const formattedReleaseDate = computed(() => {
       <span class="on-list" v-if="isOnWatched">Na liście: obejrzane</span>
       <span class="on-list" v-else-if="isOnToWatch">Na liście: do obejrzenia</span>
     </div>
+    <div class="icon-button" @click="showDropdown">
+      <img src="@/assets/img/dots-icon.png" alt="Movie Options"/>
+    </div>
     <div class="dropdown">
-      <div class="icon-button" @click="showDropdown">
-        <img src="@/assets/img/dots-icon.png" alt="Movie Options"/>
-      </div>
       <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
         <ul class="dropdown-list">
           <li @click="showDetails" class="dropdown-option">Szybki podgląd</li>
@@ -163,15 +159,15 @@ const formattedReleaseDate = computed(() => {
 }
 
 .dropdown {
-  position: sticky;
+  position: absolute;
   z-index: 9;
   transition: .5s ease all;
 }
 
 .dropdown-content {
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 15px;
+  top: -15px;
   white-space: nowrap;
   z-index: 999999;
   background-color: white;
