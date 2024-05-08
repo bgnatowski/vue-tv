@@ -8,6 +8,7 @@ export default defineConfig({
     vue(),
     webfontDownload(),
   ],
+  base: '/vue-tv/',
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),

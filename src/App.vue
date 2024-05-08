@@ -1,28 +1,40 @@
 <script setup>
 import {onMounted, ref, watch} from "vue";
-import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {useRoute} from "vue-router";
-import Footer from "@/components/Footer.vue";
-import Header from "@/components/Header.vue";
-import Sidebar from "@/components/Sidebar.vue"
-
+import paths from "@/router/routerPaths.js";
+import NavbarComponent from "@/components/page/NavbarComponent.vue";
+import SidebarComponent from "@/components/page/SidebarComponent.vue";
+import FooterComponent from "@/components/page/FooterComponent.vue";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
+import {useAuthStore} from "@/stores/AuthStore.js";
 const route = useRoute();
+const showFooter = ref(false);
 const isLoggedIn = ref(false);
-const showFooter = ref(true);
+const showSidebar = ref(false);
 
-let auth;
-onMounted(() => {
-  auth = getAuth()
-  onAuthStateChanged(auth, (user) => {
-    isLoggedIn.value = !!user;
-  })
-});
+function toggleSidebar() {
+  showSidebar.value = !showSidebar.value;
+}
 
-// ustawienie footera
+const authStore = useAuthStore();
+onMounted(async () => {
+      authStore.init();
+      onAuthStateChanged(getAuth(), (user) => {
+        if (route.path == paths.REGISTER_ROUTE) {
+          isLoggedIn.value = false;
+          showSidebar.value = false;
+        } else {
+          isLoggedIn.value = !!user;
+          showSidebar.value = true;
+        }
+      })
+    }
+);
+
 watch(
     () => route.path,
     (newPath) => {
-      showFooter.value = newPath !== '/';
+      showFooter.value = newPath !== paths.HOME_ROUTE;
     },
     {immediate: true}
 );
@@ -30,40 +42,43 @@ watch(
 </script>
 
 <template>
-  <header>
-    <Header v-if="isLoggedIn"></Header>
-  </header>
+  <NavbarComponent v-if="isLoggedIn" :isSidebarVisible="showSidebar"
+                   @toggle-sidebar="toggleSidebar"></NavbarComponent>
   <main class="container">
-    <!--    ver1 lub ver2 - zmien w celu sprawdzenia ktory kolor lepszy dla sidebara -->
-    <Sidebar v-if="isLoggedIn" styl="ver2"/>
+    <transition name="sidebar">
+      <SidebarComponent v-if="showSidebar && isLoggedIn"></SidebarComponent>
+    </transition>
     <router-view></router-view>
   </main>
-  <footer>
-    <Footer v-if="showFooter"></Footer>
-  </footer>
+  <FooterComponent v-if="showFooter"></FooterComponent>
 </template>
 
 <style>
-header {
-  background-color: #fff;
-  box-shadow: 0 4px 13px rgba(0, 0, 0, 0.25);
-  position: fixed;
-  width: 100%;
+/* transition sidebar */
+.sidebar-leave-active {
+  transition: .5s ease all; /* Smooth transition for both enter and leave */
 }
 
-.container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-image: url("@/resources/background.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-  min-height: 100vh;
-  width: 100%;
-  padding-top: 5em; /* odstep od gory hardcoded narazie xd*/
+.sidebar-leave {
+  transform: translateX(0); /* Start position for leave animation (fully on-screen) */
 }
+
+.sidebar-leave-to {
+  transform: translateX(-100%); /* End position for leave animation (off-screen) */
+}
+
+@media (max-width: 1000px) {
+  .sidebar-leave {
+    transform: translateY(0); /* Start position for leave animation (fully on-screen) */
+  }
+
+  .sidebar-leave-to {
+    transform: translateY(100%); /* End position for leave animation (off-screen) */
+  }
+
+  .feed-container {
+    padding-bottom: 60px;
+  }
+}
+
 </style>

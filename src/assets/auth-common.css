@@ -1,0 +1,120 @@
+/* LOGIN / REGISTER / HOME COMMON*/
+
+.panel-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3em;
+    margin: 1em;
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0px 4px 13px 3px rgba(0, 0, 0, 0.25);
+    min-width: min-content;
+    width: 70%;
+    height: 100%
+}
+
+.panel-container h1 {
+    width: 100%;
+    text-align: center;
+    font-size: 2.5em;
+    white-space: nowrap;
+}
+
+.panel-container form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: min-content;
+    padding: 1rem;
+    font-size: 1em;
+    width: 80%
+}
+
+.panel-container form label {
+    padding: .3rem;
+    margin: 0.1rem;
+}
+
+.panel-container form input {
+    padding: 1rem;
+    margin: 0.1rem;
+    border-radius: 3em;
+    width: 100%
+}
+
+.panel-container form p {
+    width: 100%;
+    color: red;
+    font-weight: 200;
+    text-align: center;
+    padding-top: .5rem;
+    font-size: calc((0.2em + .5vmin) + (0.2em + .5vmax));
+}
+
+.signup-text {
+    white-space: nowrap;
+    display: flex;
+    justify-content: center;
+    gap: 5%;
+    width: 80%;
+    font-weight: 200;
+    text-align: center;
+    padding: 1rem;
+    color: #000;
+    font-size: 1.2em;
+}
+
+.signup-link {
+    color: var(--main-color);
+    cursor: pointer;
+}
+
+.signup-link:hover {
+    color: var(--lighter-main)
+}
+
+@media (min-width: 1048px){
+    .panel-container {
+        border-radius: 3em;
+        margin: 1em;
+        min-width: min-content;
+        width: 70%;
+        height: 100%
+    }
+
+    .panel-container h1 {
+        width: 100%;
+        font-size: 2.5em;
+    }
+
+    .panel-container form {
+        padding: 1rem;
+        font-size: 1em;
+        width: 80%
+    }
+
+    .panel-container form label {
+        padding: .3rem;
+        margin: 0.1rem;
+    }
+
+    .panel-container form input {
+        padding: 1rem;
+        margin: 0.1rem;
+        border-radius: 3em;
+    }
+
+    .panel-container form p {
+        padding-top: .5rem;
+        font-size: 1.2em;
+    }
+
+    .signup-text {
+        gap: 5%;
+        width: 80%;
+        font-weight: 200;
+        padding: 1rem;
+        font-size: 1.2em;
+    }
+}

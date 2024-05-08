@@ -1,16 +1,162 @@
-@import url('https://fonts.googleapis.com/css2?family=Bruno+Ace&display=swap');
+/*@import url('https://fonts.googleapis.com/css2?family=Bruno+Ace&display=swap');*/
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: "Red Hat Display", sans-serif;
+    font-size: calc(15px + 0.390625vw);
 }
 
 :root {
     --main-color: #3DCCC7;
-    --lighter-main: #9CEAEF
+    --lighter-main: #9CEAEF;
+    --lighter-main-transparent: rgba(156, 234, 239, 0.5);
+    --clicked-button: rgb(161, 241, 246);
+    --google-button-hover: #4285F4;
+    --google-button-active: rgba(241, 241, 241, 0.78);
 }
 
-#app{
+html{
+    overflow-x: hidden;
+    scrollbar-width: thin;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-image: url("@/assets/img/background.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    position: relative;
+    min-height: 100vh;
+    width: 100vw;
+}
+
+@media screen and (max-width: 600px){
+    .container {
+        padding: 10px;
+    }
+}
+
+.main-auth-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 0 1rem 0;
+}
+
+.feed-container {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    background: transparent;
+    margin-top: .5em;
+    padding: 0 1em;
+    width: 100%;
+    transition: .5s ease all;
+}
+
+
+.post {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    border-radius: 2em;
+    box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
+    background-color: rgba(255, 255, 255, 0.5);
+    margin: .5em 0;
+    padding: .5rem 1rem .5rem 1rem;
+    height:fit-content;
+}
+
+.bruno-ace-regular {
+    font-family: "Bruno Ace", sans-serif;
+    font-weight: 400;
+}
+
+.bruno-ace-bold {
+    font-family: "Bruno Ace", sans-serif;
+    font-weight: 600;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    font-size: 1.5em;
+    color: var(--main-color);
+}
+
+.icon-button {
+    display: flex;
+    height: 35px;
+    width: 35px;
+    align-content: center;
+    justify-content: center;
+    margin: 0;
+    transition: .5s ease all;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.icon-button img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.icon-button:hover {
+    background-color: var(--lighter-main);
+    border: none;
+    box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
+}
+
+.icon-button:active {
+    background-color: var(--clicked-button);
+}
+
+.rotate180 {
+    transform: rotate(180deg);
+}
+
+.rotate360 {
+    transform: rotate(360deg);
+}
+
+.tg {
+    border: none;
+    border-collapse: collapse;
+}
+
+.tg td {
+    overflow: hidden;
+    word-break: normal;
+}
+
+.tg th {
+    font-weight: normal;
+    overflow: hidden;
+    word-break: normal;
+}
+
+.tg .tg-0pky {
+    border-color: inherit;
+    text-align: left;
+    vertical-align: top;
+}
+
+.tg .tg-0lax {
+    text-align: left;
 }

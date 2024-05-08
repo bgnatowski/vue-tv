@@ -1,198 +1,219 @@
+<script setup>
+import {nextTick, onMounted, reactive, ref} from "vue";
+import {sampleMovie as sampleMovie1} from "@/services/TVDBService.js";
+
+const isShowDropdown = ref(false)
+
+const props = defineProps({
+      profile: Boolean
+    }
+)
+
+function showDropdown() {
+  isShowDropdown.value = true
+}
+
+function hideDropdown() {
+  isShowDropdown.value = false;
+}
+
+const isDraggable = ref(false);
+const postDescriptionRef = ref(null);
+
+onMounted(async () => {
+  await nextTick();
+  if (postDescriptionRef.value.offsetHeight > 100) {
+    isDraggable.value = true;
+  }
+});
+
+const emits = defineEmits(['show-details']);
+
+const sampleMovie = sampleMovie1;
+// ---------------------------POKAZANIE POPUPU ----------------//
+const showDetails = (movie) => {
+  emits('show-details', {
+    movie: movie,
+    onWatched: false,
+    onToWatch: true
+  });
+}
+
+const post = reactive({
+  id: 1,
+  author: 'userId',
+  movie: 'movieID? movie? wgle?',
+  timestamp: 'timestamp',
+  content: "Film świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman\n" +
+      "          dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił\n" +
+      "          samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem\n" +
+      "          dramatycznym. Coś wielkiegoFilm świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman\n" +
+      "          dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił\n" +
+      "          samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem\n" +
+      "          dramatycznym. Coś wielkiego."
+})
+
+</script>
+
 <template>
   <div class="post">
-    <div class="user-info">
-      <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
-      <p class="user-name">uzytkownik prowatcher123 polecił film:</p>
-    </div>
-    <div class="movie-card">
-      <img class="movie-poster" src="https://static.posters.cz/image/1300/plakaty/diuna-czesc-1-i122815.jpg"
-           alt="Movie poster for Diuna"/>
-      <div class="movie-details">
-        <div class="movie-header">
-          <h2 class="movie-title">Diuna</h2>
-          <div class="buttons">
-            <button class="watched-button">Dodaj do "Filmy obejrzane"</button>
-            <button class="towatch-button">Dodaj do "Filmy do obejrzenia"</button>
-          </div>
+    <div class="upper-bar">
+      <div class="user-info">
+        <div class="user-image">
+          <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
         </div>
-        <div class="movie-info">
-          <div class="movie-metadata">
-            <p class="movie-genre">Gatunek: Sci-Fi</p>
-            <p class="movie-duration">Długość: 2h 04 min</p>
-          </div>
+        <p v-if="!profile" class="user-name">uzytkownik prowatcher123 polecił film:</p>
+        <p v-else class="user-name">Poleciłeś film:</p>
+      </div>
+      <div class="dropdown">
+        <div class="icon-button" @click="showDropdown">
+          <img src="@/assets/img/dots-icon.png" alt="Movie Options"/>
+        </div>
+        <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
+          <ul class="dropdown-list">
+            <li @click="showDetails(sampleMovie)" class="dropdown-option">Więcej o filmie</li>
+            <li v-if="!profile" class="dropdown-option">Dodaj do obejrzenia (jesli nie jest jeszcze obejrzany)</li>
+            <li v-else class="dropdown-option">Usuń post</li>
+          </ul>
         </div>
       </div>
     </div>
-    <div class="post-text">
-      <p class="text">Film świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman
-        dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił
-        samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem
-        dramatycznym. Coś wielkiego.</p>
+    <div class="movie-card">
+      <div class="movie-poster">
+        <img :src="sampleMovie.posterPath"
+             alt="Movie poster for Diuna"/>
+      </div>
+      <div class="movie-details">
+        <h1 class="movie-title">{{ sampleMovie.title }}</h1>
+        <div>
+          <table class="tg">
+            <thead>
+            <tr>
+              <th class="tg-0pky tg-size">Gatunki:</th>
+              <th class="tg-0lax tg-size">{{ sampleMovie.genres.map((genre) => genre.name).join(", ") }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tg-0pky tg-size">Długość:</td>
+              <td class="tg-0lax tg-size">{{ sampleMovie.duration }} min</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="post-description" ref="postDescriptionRef" v-dragscroll="isDraggable"> {{post.content}}
+        </p>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.post {
-  border-radius: 25px;
-  box-shadow: 0px 4px 13px 3px rgba(0, 0, 0, 0.25);
-  background-color: #fff;
-  margin: 10px;
-  padding: .5rem 1rem .5rem 1rem;
-  display: flex;
-  flex-direction: column;
+@import url(@/assets/dropdown.css);
+.dropdown {
+  position: sticky;
+  z-index: 9;
+  transition: .5s ease all;
+}
+
+.dropdown-content {
+  position: absolute;
+  right: 0;
+  top: 0;
+  white-space: nowrap;
+  z-index: 9;
+  background-color: white;
+  transition: .5s ease all;
 }
 
 .user-info {
   display: flex;
   padding: .2rem;
-  margin: 0;
-  /* padding-top: 0; */
-  /* justify-content: left; */
-  align-items: center;
+  justify-content: flex-start;
+  align-content: flex-start;
+}
+
+.user-info p {
+  justify-content: center;
+  align-content: center;
+  font-size: .8em;
+}
+
+.upper-bar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.user-image {
+  display: flex;
+  height: 35px;
+  width: 35px;
+  align-content: center;
+  justify-content: center;
+  margin: auto 1em auto 0;
 }
 
 .movie-card {
-  height: 10rem;
   display: flex;
-  gap: 20px;
+  height: 100%;
+  justify-content: space-between;
 }
 
 .movie-poster {
-  aspect-ratio: .7;
-  object-fit: fill;
-  height: 10rem;
-  border-radius: 17px;
+  width: 200px;
+  height: auto;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.movie-poster img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 1.5em;
 }
 
 .movie-details {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  justify-content: flex-start;
   width: 100%;
 }
 
-.movie-header {
-  display: flex;
-  /* gap: 20px; */
-  font-size: 20px;
-  color: #000;
-  font-weight: 500;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .movie-title {
-  font-family: Red Hat Display, sans-serif;
-  margin: 0;
-  margin-top: 0;
-  padding-top: 0;
-}
-
-.movie-info {
-  display: flex;
-  align-items: start;
-  gap: 20px;
-  font-size: 15px;
-  justify-content: space-between;
-}
-
-.movie-metadata {
-  display: flex;
-  flex-direction: column;
   color: #000;
-  font-weight: 400;
-  text-align: left;
+  font-size: 1em;
 }
 
-.movie-genre,
-.movie-duration {
-  font-family: Red Hat Display, sans-serif;
-  margin: 0;
-}
-
-.movie-duration {
-  margin-top: 5px;
-}
-
-.buttons {
-  display: flex;
-  flex-direction: column;
-  color: #fff;
-  font-weight: 600;
-  text-align: center;
-}
-
-.watched-button,
-.towatch-button {
-  font-family: Red Hat Display, sans-serif;
-  border-radius: 36px;
-  justify-content: center;
-  padding: 11px 20px;
-  border: none;
-  cursor: pointer;
-  color: white;
-  font-size: 15px;
-}
-
-.watched-button {
-  background-color: #3dccc7;
-}
-
-.towatch-button {
-  background-color: #3dccc7;
-  margin-top: 9px;
-}
-
-.text {
+.movie-details .post-description {
   text-align: justify;
+  text-justify: inter-word;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  hyphens: auto;
+  max-height: 150px;
+  font-size: .8em;
 }
 
-@media (max-width: 767px) {
-  .post {
-    padding-top: 0;
-  }
+.tg-size{
+  font-size: .7em;
+}
 
-  .movie-card {
-    transition: 0.3s;
-    flex-direction: column;
-    align-items: center;
-    padding-right: 0;
-    gap: 5px;
-    height: 15rem;
-  }
 
+@media screen and (max-width: 728px) {
   .movie-poster {
-    aspect-ratio: auto;
-    height: 100%;
-    width: 9rem;
-  }
-
-  .movie-details,
-  .movie-header,
-  .movie-info,
-  .watched-button,
-  .towatch-button {
-    font-size: 10px;
-    width: 100%;
-    margin-bottom: 0px;
-  }
-
-  .icon {
-    width: 15px;
-  }
-
-  .watched-button,
-  .towatch-button {
-    padding: 2px 5px;
-    margin: 2px;
-
-  }
-
-  .post-text {
-    margin-top: 1.5rem;
-    padding-top: 1rem;
+    width: 100px;
+    height: auto;
+    object-fit: cover;
   }
 }
+
+@media screen and (max-width: 350px) {
+  .movie-poster{
+    display: none;
+  }
+}
+
 </style>
-  
+

@@ -1,6 +1,6 @@
 <script setup>
 
-import {computed, onMounted, ref, watch} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {fetchMovieDetails} from "@/services/TVDBService.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import {useUserStore} from "@/stores/UserStore.js";
@@ -9,8 +9,10 @@ import RatingStars from "@/components/RatingStars.vue";
 // ------------------ PROPS AND EMITS -----------------------//
 const props = defineProps({
   watched: Boolean,
-  movieId: {type: Number, required: true}
+  movieId: '',
+  userRating: 0,
 })
+
 const emit = defineEmits([
   'show-details',
   'emit-duration',
@@ -26,57 +28,26 @@ const isLoaded = ref(false);
 const isPrivate = ref();
 const userRating = ref(0)
 
-// ------------------- DELETE FROM LIST -------------------//
-const deleteMovie = () => {
-  movieStore.removeCurrentUserMovie(
-      userStore.uid,
-      props.movieId,
-  );
-  emit("emit-duration", -movie.value.duration)
-};
-
-// ------------------- MOVE TO WATCHED ----------------------//
+// ------------------- MOVE TO USER LIST ----------------------//
 const moveToWatched = () => {
-  movieStore.modifyCurrentUserMovie(
-      userStore.uid,
-      props.movieId,
-      {isWatched: true}
-  );
-  emit("emit-duration", -movie.value.duration)
+  movieStore.createCurrentUserMovie({
+    uId: userStore.uid,
+    mId: props.movieId,
+    isWatched: false
+  });
 };
 
-// ------------------- RATING UPDATE ----------------------//
-const updateRating = (newRating) => {
-  movieStore.modifyCurrentUserMovie(
-      userStore.uid,
-      props.movieId,
-      {userRating: newRating}
-  );
-  userRating.value = newRating;
+const moveToWatch = () => {
+  movieStore.createCurrentUserMovie({
+    uId: userStore.uid,
+    mId: props.movieId,
+    isWatched: true
+  });
 };
-
-// ------------------- CHANGE VISIBLE/PUBLIKACJA -----------//
-const publicMovie = () => {
-  movieStore.modifyCurrentUserMovie(
-      userStore.uid,
-      props.movieId,
-      {isPrivate: false}
-  );
-  isPrivate.value = false;
-}
-
-const unpublicMovie = () => {
-  movieStore.modifyCurrentUserMovie(
-      userStore.uid,
-      props.movieId,
-      {isPrivate: true}
-  );
-  isPrivate.value = true;
-}
 
 // ---------------------- IS ON LIST? --------- //
-const isOnWatched = computed(() => movieStore.isOnWatched(movie.value.id))
-const isOnToWatch = computed(() => movieStore.isOnToWatch(movie.value.id))
+const isOnWatched = computed(() => movieStore.isOnWatched(props.movieId))
+const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movieId))
 
 // ---------------------------POKAZANIE POPUPU ----------------//
 const showDetails = () => {
@@ -86,17 +57,12 @@ const showDetails = () => {
     onToWatch: isOnToWatch.value
   });
 }
-
 // ----------------------------- ZALADOWANIE DANYCH ----------------//
 onMounted(async () => {
-  if (props.movieId != undefined) {
+  if (props.movieId !== undefined) {
     movie.value = await fetchMovieDetails(props.movieId);
     emit("emit-duration", movie.value.duration)
-
-    let userMovie = movieStore.getCurrentUserMovieById(props.movieId);
-    isPrivate.value = userMovie.isPrivate
-    userRating.value = userMovie.userRating
-
+    userRating.value = props.userRating;
     isLoaded.value = true;
   } else {
     console.log('BLAD')
@@ -120,45 +86,18 @@ onMounted(async () => {
               <p class="metadata-title">Gatunki: <span>{{ movie.genres.map((genre) => genre.name).join(", ") }}</span>
               </p>
               <p class="metadata-title">Długość: <span>{{ movie.duration }} min</span></p>
-              <p class="metadata-title" v-if="watched">Twoja ocena: <span>{{ userRating }}/10</span></p>
-              <RatingStars @rating-value="updateRating" :rating="userRating" v-if="watched"></RatingStars>
+              <p class="metadata-title" v-if="watched">Ocena: <span>{{ userRating }}/10</span></p>
+              <RatingStars v-if="watched" read-only :rating="userRating"></RatingStars>
             </div>
           </div>
-          <div class="movie-action-buttons" v-if="!watched">
-            <div class="action-switch">
-              <div class="switch-text">
-                <p>Obejrzałeś?</p>
-                <p>Przesuń &#8594;</p>
-              </div>
-              <label class="switch">
-                <input @change="moveToWatched" type="checkbox">
-                <span class="slider round"> </span>
-              </label>
-            </div>
+          <div class="buttons" v-if="!(isOnToWatch || isOnWatched)">
+            <button class="action-button" @click="moveToWatch">Do obejrzenia</button>
+            <button class="action-button" @click="moveToWatched">Do obejrzanych</button>
           </div>
-        </div>
-        <div class="buttons">
-          <div class="card-action-buttons" :class="watched ? 'cab-min-width' : ''">
-            <!--            todo: recommend -->
-            <div class="card-action-icon" v-if="!isPrivate && watched" aria-label="Recommend">
-              <img src="@/assets/img/recommend-icon.png" alt="Recommend icon"/>
-            </div>
-            <!--            todo: note -->
-            <div class="card-action-icon" aria-label="Note">
-              <img src="@/assets/img/edit-icon.png" alt="Note icon"/>
-            </div>
-            <div @click="showDetails" class="card-action-icon" aria-label="Info">
-              <img src="@/assets/img/info-icon.png" alt="Info icon"/>
-            </div>
-            <div class="card-action-icon" aria-label="Hide">
-              <img src="@/assets/img/hide-icon.png" v-if="isPrivate" alt="Hide icon" @click="publicMovie"/>
-              <img src="@/assets/img/show-icon.png" v-else alt="Show icon" @click="unpublicMovie"/>
-            </div>
-            <div @click="deleteMovie" class="card-action-icon" aria-label="Delete">
-              <img src="@/assets/img/delete-icon.png" alt="Delete icon"/>
-            </div>
+          <div v-else>
+            <span class="on-list" v-if="isOnWatched">Na liście: obejrzane</span>
+            <span class="on-list" v-else-if="isOnToWatch">Na liście: do obejrzenia</span>
           </div>
-
         </div>
       </div>
     </div>
@@ -169,6 +108,20 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+@import url(@/assets/buttons.css);
+.action-button{
+  align-self: flex-start;
+  min-width: fit-content;
+  width: 150px;
+  padding: .8em;
+  font-size: .6em;
+}
+.on-list{
+  font-size: 0.7em;
+  font-weight: 600;
+  color: var(--main-color);
+}
+
 .post {
   min-height: fit-content;
 }
