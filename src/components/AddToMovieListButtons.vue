@@ -49,7 +49,7 @@ const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movieDetails.id)
 </script>
 
 <template>
-  <div class="buttons">
+  <div class="buttons" :class="noInfoButton ? 'flex-row' : ''">
     <button class="card-action-buttons" @click="moveToWatch" v-if="!(isOnToWatch || isOnWatched)">
       <div class="card-action-icon">
         <i class="plus-sign">+</i>
@@ -104,7 +104,7 @@ const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movieDetails.id)
 
 .card-action-icon{
   display: flex;
-  align-content: center;
+  align-items: flex-start;
   justify-content: center;
   text-align: center;
 }
@@ -112,7 +112,7 @@ const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movieDetails.id)
 .button-span {
   font-size: .5em;
   text-align: center;
-  align-self: center;
+  align-self: flex-start;
   width: min-content;
   white-space: break-spaces;
 }
@@ -146,8 +146,8 @@ const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movieDetails.id)
   .card-action-buttons {
     min-height: unset;
     flex-direction: column;
-    justify-content: center;
-    align-self: center;
+    justify-content: flex-start;
+    align-self: flex-start;
     min-width: unset;
     height: auto;
   }
@@ -159,9 +159,16 @@ const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movieDetails.id)
     padding: 8px;
   }
 }
-
+@media screen and (max-width: 600px){
+  .flex-row {
+    flex-direction: row;
+    min-height: unset;
+  }
+}
 
 @media screen and (max-width: 500px) {
+
+
   .card-action-buttons {
     padding: 0;
   }
@@ -170,6 +177,6 @@ const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movieDetails.id)
     height: 35px;
     width: 35px;
   }
-
 }
+
 </style>
