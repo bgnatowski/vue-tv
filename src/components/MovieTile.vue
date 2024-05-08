@@ -169,6 +169,7 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+@import url(@/assets/movie-buttons.css);
 .post {
   min-height: fit-content;
 }
@@ -242,48 +243,6 @@ onMounted(async () => {
   flex-direction: column;
   width: 60%;
   justify-content: space-between;
-}
-
-.buttons {
-  display: flex;
-  flex-direction: column;
-  width: 40%;
-  min-width: fit-content;
-}
-
-.card-action-buttons {
-  display: flex;
-  align-content: flex-end;
-  justify-content: flex-end;
-}
-
-.cab-min-width {
-  min-width: 250px;
-}
-
-.card-action-icon {
-  height: 50px;
-  width: 50px;
-  border-radius: 50%;
-  padding: 10px;
-  transition: .3s ease all;
-  cursor: pointer;
-}
-
-.card-action-icon:hover {
-  background-color: var(--lighter-main);
-  border: none;
-  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
-}
-
-.card-action-icon:active {
-  background-color: var(--clicked-button);
-}
-
-.card-action-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
 }
 
 .movie-action-buttons {
@@ -388,26 +347,6 @@ input:checked + .slider:before {
   .movie-center {
     width: 100%;
   }
-
-  .buttons {
-    height: fit-content;
-    width: auto;
-  }
-
-  .card-action-buttons {
-    min-height: 185px;
-    flex-direction: column-reverse;
-    justify-content: flex-end;
-    align-self: flex-end;
-    min-width: unset
-  }
-
-  .card-action-icon {
-    height: 35px;
-    width: 35px;
-    border-radius: 50%;
-    padding: 8px;
-  }
 }
 
 
@@ -416,15 +355,6 @@ input:checked + .slider:before {
     width: 100px;
     height: auto;
     object-fit: cover;
-  }
-
-  .card-action-buttons {
-    padding: 0;
-  }
-
-  .card-action-icon {
-    height: 35px;
-    width: 35px;
   }
 
   .movie-details {

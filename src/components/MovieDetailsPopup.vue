@@ -1,8 +1,10 @@
 <script setup>
 import RatingStars from "@/components/RatingStars.vue";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import {useUserStore} from "@/stores/UserStore.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
+import {formatISODate} from "@/js/TimeUtils.js";
+import {useRouter} from "vue-router";
 
 // ------------------------ STORES ------------------------------//
 const userStore = useUserStore();
@@ -61,6 +63,16 @@ const addToWatched = async () => {
   hideDropdown()
 };
 
+const formattedReleaseDate = computed(() => formatISODate(props.movie.releaseDate));
+
+// ------------ TO MOVIE PAGE ---------//
+const router = useRouter();
+const goToMoviePage = () => {
+  hideDropdown()
+  closePopup()
+  router.push({name: 'MovieDetails', params: {id: props.movie.id}});
+}
+
 </script>
 <template>
   <div class="overlay">
@@ -76,7 +88,7 @@ const addToWatched = async () => {
               <thead>
               <tr>
                 <th class="tg-0pky tg-size">Premiera:</th>
-                <th class="tg-0lax tg-size">{{ movie.releaseDate }}</th>
+                <th class="tg-0lax tg-size">{{ formattedReleaseDate }}</th>
               </tr>
               <tr>
                 <th class="tg-0pky tg-size">Gatunki:</th>
@@ -116,6 +128,7 @@ const addToWatched = async () => {
           </div>
           <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
             <ul class="dropdown-list">
+              <li @click="goToMoviePage" class="dropdown-option">Zobacz strone filmu</li>
               <li @click="addToWatch" class="dropdown-option">Dodaj do obejrzenia</li>
               <li @click="addToWatched" class="dropdown-option">Dodaj do obejrzanych</li>
             </ul>

@@ -20,7 +20,16 @@ function minutesToText(minutes) {
 }
 
 function formatISODate(isoDateString) {
+    if (!isoDateString) {
+        throw new Error("Brak podanej daty.");
+    }
+
     const date = new Date(isoDateString);
+
+    if (isNaN(date.getTime())) {
+        throw new Error("Nieprawidłowy format daty.");
+    }
+
     return new Intl.DateTimeFormat('pl-PL', {
         year: 'numeric',
         month: 'long',

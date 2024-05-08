@@ -1,0 +1,175 @@
+<script setup>
+import {useMovieStore} from "@/stores/MovieStore.js";
+import {useUserStore} from "@/stores/UserStore.js";
+import {computed} from "vue";
+
+// ------------------ PROPS AND EMITS -----------------------//
+const props = defineProps({
+  movieDetails: Object,
+  noInfoButton: Boolean
+})
+const emit = defineEmits([
+  'show-details',
+]);
+
+// ------------------- INSTANCJE STORES -------------------//
+const movieStore = useMovieStore();
+const userStore = useUserStore();
+
+// ------------------- MOVE TO USER LIST ----------------------//
+const moveToWatched = () => {
+  movieStore.createCurrentUserMovie({
+    uId: userStore.uid,
+    mId: props.movieDetails.id,
+    isWatched: false
+  });
+};
+
+const moveToWatch = () => {
+  movieStore.createCurrentUserMovie({
+    uId: userStore.uid,
+    mId: props.movieDetails.id,
+    isWatched: true
+  });
+};
+
+// ---------------------------POKAZANIE POPUPU ----------------//
+const showDetails = () => {
+  emit('show-details', {
+    movie: props.movieDetails,
+    onWatched: isOnWatched.value,
+    onToWatch: isOnToWatch.value
+  });
+}
+
+// ---------------------- IS ON LIST? --------- //
+const isOnWatched = computed(() => movieStore.isOnWatched(props.movieDetails.id))
+const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movieDetails.id))
+
+</script>
+
+<template>
+  <div class="buttons">
+    <button class="card-action-buttons" @click="moveToWatch" v-if="!(isOnToWatch || isOnWatched)">
+      <div class="card-action-icon">
+        <i class="plus-sign">+</i>
+        <img src="@/assets/img/watching-a-movie.png" alt="To Watch"/>
+      </div>
+      <span class="button-span">Do obejrzenia</span>
+    </button>
+    <button class="card-action-buttons" @click="moveToWatched" v-if="!(isOnToWatch || isOnWatched)">
+      <div class="card-action-icon">
+        <i class="plus-sign">+</i>
+        <img src="@/assets/img/video.png" alt="To Watched"/>
+      </div>
+      <span class="button-span">Do obejrzanych</span>
+    </button>
+    <button class="card-action-buttons" @click="showDetails" v-if="!noInfoButton">
+      <div class="card-action-icon">
+        <img src="@/assets/img/info-icon.png" alt="Info"/>
+      </div>
+      <span class="button-span">Informacje</span>
+    </button>
+  </div>
+  <div class="list-info" v-if="(isOnToWatch || isOnWatched)">
+    <span class="on-list" v-if="isOnWatched">Na liście: obejrzane</span>
+    <span class="on-list" v-else-if="isOnToWatch">Na liście: do obejrzenia</span>
+  </div>
+</template>
+<style scoped>
+@import url(@/assets/movie-buttons.css);
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  height: min-content;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 150px;
+  gap: 5px;
+}
+
+.card-action-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: transparent;
+  border: none;
+  height: auto;
+}
+
+.card-action-icon{
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.button-span {
+  font-size: .5em;
+  text-align: center;
+  align-self: center;
+  width: min-content;
+  white-space: break-spaces;
+}
+
+.plus-sign{
+  display: block;
+  position: absolute;
+  transform: translateX(-200%) translateY(30%);
+  font-size: .8em;
+}
+
+.list-info{
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  align-self: flex-end;
+}
+
+.on-list {
+  font-size: 0.7em;
+  font-weight: 600;
+  color: var(--main-color);
+}
+
+@media screen and (max-width: 800px) {
+  .buttons {
+    height: auto;
+    width: auto;
+  }
+
+  .card-action-buttons {
+    min-height: unset;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    min-width: unset;
+    height: auto;
+  }
+
+  .card-action-icon {
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    padding: 8px;
+  }
+}
+
+
+@media screen and (max-width: 500px) {
+  .card-action-buttons {
+    padding: 0;
+  }
+
+  .card-action-icon {
+    height: 35px;
+    width: 35px;
+  }
+
+}
+</style>
