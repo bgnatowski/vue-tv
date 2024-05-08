@@ -28,22 +28,21 @@ const isGoogleAuth = computed(() => authStore.isGoogleUser())
 <template>
   <section class="feed-container">
     <div class="post">
-      <div @click="showChangeAvatarPopup=true" class="profile-picture">
+      <div @click="showChangeAvatarPopup.value=true" class="profile-picture">
         <img :src="user.photoUrl" alt="profile avatar" class="user-profile-pic">
         <img :src="changeImageIcon" alt="change icon" class="change-image-icon">
       </div>
       <p class="user-name">{{ user.username }}</p>
       <div class="settings-actions">
-        <button v-if="!isGoogleAuth" @click="showChangePasswordPopup=true" class="action-button">Zmień hasło</button>
-        <button @click="showDeleteAccountPopup=true" class="action-button">Usuń konto</button>
-        <button class="action-button" @click="router.push(routerPaths.LOGOUT_ROUTE)">Wyloguj</button>
+        <button v-if="!isGoogleAuth" @click="showChangePasswordPopup.value=true" class="action-button">Zmień hasło</button>
+        <button @click="showDeleteAccountPopup.value=true" class="action-button">Usuń konto</button>
       </div>
       <ActionPopup :is-google-user="isGoogleAuth" action-type="changePassword" v-if="showChangePasswordPopup"
-                   @close="showChangePasswordPopup=false"></ActionPopup>
+                   @close="showChangePasswordPopup.value=false"></ActionPopup>
       <ActionPopup :is-google-user="isGoogleAuth" action-type="delete" v-if="showDeleteAccountPopup"
-                   @close="showDeleteAccountPopup=false"></ActionPopup>
+                   @close="showDeleteAccountPopup.value=false"></ActionPopup>
       <ActionPopup action-type="changeAvatar" v-if="showChangeAvatarPopup"
-                   @close="showChangeAvatarPopup=false"></ActionPopup>
+                   @close="showChangeAvatarPopup.value=false"></ActionPopup>
     </div>
   </section>
 </template>
