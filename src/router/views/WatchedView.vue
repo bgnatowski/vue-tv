@@ -48,7 +48,7 @@ function handleClose() {
 
 async function handleReload() {
   await movieStore.fetchCurrentUserMovies();
-  // await postStore.fetchCurrentUserPosts();
+  await postStore.fetchCurrentUserPosts();
 }
 
 // --------------------- MOVIE TILE LADOWANIE DANYCH -------------- ///

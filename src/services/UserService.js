@@ -55,6 +55,9 @@ const fetchUserByUid = async (uid) => {
 };
 
 const searchUsersByUsername = async (usernamePattern) => {
+    if(!usernamePattern.length){
+        return [];
+    }
     const usersRef = collection(db, 'users');
 
     const q = query(

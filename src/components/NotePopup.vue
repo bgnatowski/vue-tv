@@ -50,7 +50,7 @@ const editNote = () => {
         <div class="upper-bar flex-column">
           <h1 class="popup-title">Notatka dla filmu:</h1>
           <h1 class="popup-subtitle">{{movieData.title}}</h1>
-          <textarea @input="handleContent"
+          <textarea
                     v-model="content"
                     :readonly="readOnly"
                     :class="readOnly ? 'disable-grey' : ''"

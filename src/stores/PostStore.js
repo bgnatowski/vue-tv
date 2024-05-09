@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import {createPost, deletePost, updatePost, fetchPosts} from "@/services/PostService.js";
+import {createPost, updatePost, fetchPosts, deletePostsByMovieId} from "@/services/PostService.js";
 import {useUserStore} from "@/stores/UserStore.js";
 
 export const usePostStore = defineStore('postStore', {
@@ -38,18 +38,10 @@ export const usePostStore = defineStore('postStore', {
                 this.userPosts[index] = updatedPost;
             }
         },
-        async deleteUserPost(postId) {
+        async deleteUserPost(movieId) {
             const userStore = useUserStore();
-            await deletePost(userStore.uid, postId);
-            this.userPosts = this.userPosts.filter(post => post.id !== postId);
+            await deletePostsByMovieId(userStore.uid, movieId);
+            this.userPosts = this.userPosts.filter(post => post.movie.id !== movieId);
         },
     },
 });
-
-// recenzje (w przyszlosci mozna ofc dodac jeszcze jakies lajki czy cos XD):
-// postsStore.addPost({
-//     id: 'post1',
-//     userMovieId: '13153' // firestore path: user/id/movies/id
-//     content: 'This is an insightful review of the movie.',
-//     timestamp: 2024-05-02T11:15 (idk mozna w ISO przechwowyac albo timestapma nwm jak w jsie time ma ogarineta biblioteke)
-// });

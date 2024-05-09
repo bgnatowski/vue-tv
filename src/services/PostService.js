@@ -5,27 +5,13 @@ import {
     getDocs,
     updateDoc,
     deleteDoc,
+    writeBatch,
     query,
     where,
     Timestamp,
     addDoc, getDoc
 } from 'firebase/firestore';
 import { db } from '@/js/firebase';
-
-const samplePost = {
-    movie: {
-        id: 693134,
-        title: "Diuna 2",
-        duration: 123,
-        posterPath: "https://image.tmdb.org/t/p/w500//xdfO6EB9e59qZpzmHxezTdPfTxZ.jpg",
-        genres: [{id: 876, name: 'Sci-Fi'}, {id: 12, name: 'Przygodowy'}],
-        userRating: 9
-    },
-    content: "Film świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman\n" +
-        "          dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił\n" +
-        "          samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem\n" +
-        "          dramatycznym. Coś wielkiegoFilm świetny, ale końcówka do mnie nie przemawia."
-}
 
 const createPost = async (userId, postDetails) => {
     console.log(`Tworzenie postu userId:${userId}, dla ${postDetails.movie.id} z contentem ${postDetails.movie}`);
@@ -56,15 +42,22 @@ const createPost = async (userId, postDetails) => {
     }
 };
 
-const deletePost = async (userId, postId) => {
-    console.log(`Usuwanie postu: ${postId}, użytkownika ${userId}`)
-    const postRef = doc(db, `users/${userId}/posts`, postId);
+const deletePostsByMovieId = async (userId, movieId) => {
+    const postsRef = collection(db, `users/${userId}/posts`);
+    const queryRef = query(postsRef, where("movie.id", "==", movieId));
 
     try {
-        await deleteDoc(postRef);
-        console.log(`Post o id ${postId}, uzytkownika ${userId}, usniety`);
+        const querySnapshot = await getDocs(queryRef);
+
+        if (!querySnapshot.empty) {
+            const postDoc = querySnapshot.docs[0];
+            await deleteDoc(postDoc.ref);
+            console.log(`Post o ID: ${postDoc.id} został usunięty.`);
+        } else {
+            console.log("Nie znaleziono postu do usunięcia.");
+        }
     } catch (error) {
-        console.error(`Błąd podczas usuwania postu ${postId} użytkownika ${userId}:`, error);
+        console.error(`Błąd podczas usuwania postu dla filmu o ID ${movieId}:`, error);
     }
 };
 
@@ -111,4 +104,4 @@ const fetchPosts = async (friendsIds) => {
     return posts;
 };
 
-export { createPost, deletePost, updatePost, fetchPosts };
+export { createPost, deletePostsByMovieId, updatePost, fetchPosts };
