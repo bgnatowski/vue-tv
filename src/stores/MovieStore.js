@@ -49,7 +49,7 @@ export const useMovieStore = defineStore('movieStore', {
             const userStore = useUserStore();
             const userId = userStore.getUid;
             this.currentUserMovies = await fetchAllUserMovies(userId);
-
+            // console.log("pobrano z powrotem: ", this.currentUserMovies.find(m => m.isWatched));
         },
         async createCurrentUserMovie(movieDetails) {
             const userStore = useUserStore();
@@ -65,7 +65,6 @@ export const useMovieStore = defineStore('movieStore', {
 
             try {
                 const newMovie = await addMovieToUser(userMovieObject);
-
                 if (newMovie) {
                     this.currentUserMovies.push(newMovie);
                     console.log('Movie added to currentUserMovies:', newMovie);
@@ -89,7 +88,9 @@ export const useMovieStore = defineStore('movieStore', {
             await this.fetchCurrentUserMovies();
         },
         async removeCurrentUserMovie(movieId) {
-            await deleteUserMovie(movieId);
+            const userStore = useUserStore();
+            let userId = userStore.uid;
+            await deleteUserMovie(userId, movieId);
 
             const index = this.currentUserMovies.findIndex((movie) => movie.movieId === movieId);
 

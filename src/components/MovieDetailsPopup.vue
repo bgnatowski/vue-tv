@@ -73,11 +73,7 @@ const goToMoviePage = () => {
 <template>
   <div class="overlay">
     <div class="post popup">
-      <div class="popup-card">
-        <div class="upper-bar">
-          <div class="movie-poster">
-            <img :src="movie.posterPath" alt="Movie poster"/>
-          </div>
+        <div class="upper-bar flex-column">
           <div class="movie-details">
             <h1 class="movie-title">{{ movie.title }}</h1>
             <table class="tg">
@@ -106,14 +102,11 @@ const goToMoviePage = () => {
             <span class="on-list" v-if="onWatched">Na liście: obejrzane</span>
             <span class="on-list" v-else-if="onToWatch">Na liście: do obejrzenia</span>
           </div>
+            <h2>Opis</h2>
+            <div class="movie-description">
+              <p>{{ movie.description }}</p>
+            </div>
         </div>
-        <div class="lower-bar flex-column">
-          <h2>Opis</h2>
-          <div class="movie-description">
-            <p>{{ movie.description }}</p>
-          </div>
-        </div>
-      </div>
       <div class="close-bar">
         <div class="icon-button" @click="closePopup">
           <img src="@/assets/img/close-icon.png" alt="Close icon"/>
@@ -138,6 +131,7 @@ const goToMoviePage = () => {
 <style scoped>
 @import url(@/assets/dropdown.css);
 @import url(@/assets/popup.css);
+
 .on-list{
   font-size: 0.7em;
   font-weight: 600;
@@ -171,8 +165,8 @@ const goToMoviePage = () => {
 
 .movie-poster {
   display: flex;
-  width: fit-content;
-  height: auto;
+  width: 150px;
+  height: 280px;
   margin-right: 1em;
   flex-grow: 0;
   flex-shrink: 1;
@@ -190,11 +184,11 @@ const goToMoviePage = () => {
   margin-top: 10px;
 }
 
-.movie-description {
+.flex-column{
   text-align: justify;
   text-justify: inter-word;
+  overflow-y: auto;
 }
-
 .movie-details .movie-title {
   font-size: 1.5em;
 }

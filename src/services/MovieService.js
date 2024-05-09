@@ -41,6 +41,7 @@ const updateUserMovie = async (userId, movieId, newDetails) => {
         await updateDoc(movieDocRef, newDetails);
         const updatedDocSnap = await getDoc(movieDocRef);
         if (updatedDocSnap.exists()) {
+            console.log(`Zmodyfukowano: ${movieId} o ${newDetails}`);
             return updatedDocSnap.data();
         } else {
             console.error(`Dokument nie istnieje: ${movieId}`);
@@ -54,6 +55,7 @@ const updateUserMovie = async (userId, movieId, newDetails) => {
 
 const deleteUserMovie = async (userId, movieId) => {
     const movieDocRef = doc(db, `users/${userId}/movies`, movieId.toString());
+    console.log("tutaj")
 
     try {
         await deleteDoc(movieDocRef);

@@ -1,6 +1,6 @@
 <script setup>
 
-import {computed, onMounted, ref, watch} from "vue";
+import {computed, onBeforeMount, onMounted, ref, watch} from "vue";
 import {fetchMovieDetails} from "@/services/TVDBService.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import RatingStars from "@/components/RatingStars.vue";
@@ -25,6 +25,7 @@ const movie = ref({});
 const isLoaded = ref(false);
 const isPrivate = ref();
 const userRating = ref(0)
+const movieNote = ref('')
 
 // ------------------- DELETE FROM LIST -------------------//
 const deleteMovie = () => {
@@ -44,12 +45,11 @@ const moveToWatched = () => {
 };
 
 // ------------------- RATING UPDATE ----------------------//
-const updateRating = () => {
-  movieStore.modifyCurrentUserMovie(
+const updateRating = async () => {
+  await movieStore.modifyCurrentUserMovie(
       props.movieId,
       {userRating: userRating.value}
   );
-
   //todo on update rating -> check if there is already post -> update user rating in post otherwise do nothing
 };
 
@@ -61,7 +61,6 @@ const publicMovie = () => {
   );
   isPrivate.value = false;
 }
-
 const unpublicMovie = () => {
   movieStore.modifyCurrentUserMovie(
       props.movieId,
@@ -69,7 +68,6 @@ const unpublicMovie = () => {
   );
   isPrivate.value = true;
 }
-
 // ---------------------- IS ON LIST? --------- //
 const isOnWatched = computed(() => movieStore.isOnWatched(movie.value.id))
 const isOnToWatch = computed(() => movieStore.isOnToWatch(movie.value.id))
@@ -87,25 +85,28 @@ const showNote = () => {
   emit('show-note', {
     id: movie.value.id,
     title: movie.value.title,
-    note: userMovie.value.note
+    note: movieNote.value
   });
 }
 
 // ----------------------------- ZALADOWANIE DANYCH ----------------//
-const userMovie = computed(() => movieStore.getCurrentUserMovieById(props.movieId))
-onMounted(async () => {
-  if (props.movieId != undefined) {
+onBeforeMount(async () => {
+  if (props.movieId !== undefined) {
     movie.value = await fetchMovieDetails(props.movieId);
     emit("emit-duration", movie.value.duration)
-    isPrivate.value = userMovie.isPrivate
-    userRating.value = userMovie.userRating
-
+    fetchUserMovieData();
     isLoaded.value = true;
   } else {
     console.log('BLAD')
   }
 });
 
+function fetchUserMovieData() {
+  let uM = movieStore.getCurrentUserMovieById(props.movieId)
+  isPrivate.value = uM.isPrivate
+  userRating.value = uM.userRating
+  movieNote.value = uM.note
+}
 // -------------------- CREATE POST ---------------------- //
 const postStore = usePostStore();
 const handleCreatePost = () => {
