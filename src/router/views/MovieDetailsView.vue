@@ -49,6 +49,5 @@ async function loadMovieData(movieId) {
 </template>
 
 <style scoped>
-
 </style>
 

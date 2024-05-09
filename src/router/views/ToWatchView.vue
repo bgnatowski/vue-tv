@@ -3,12 +3,10 @@ import TitleTile from "@/components/TitleTile.vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import {computed, ref} from "vue";
 import {minutesToText} from "@/js/TimeUtils.js";
-import {useUserStore} from "@/stores/UserStore.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import MovieTile from "@/components/MovieTile.vue";
 
 // --------------- STORES ------------------- //
-const userStore = useUserStore();
 const movieStore = useMovieStore();
 
 // --------------------- POPUP -------------- ///

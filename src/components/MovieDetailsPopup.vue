@@ -1,13 +1,11 @@
 <script setup>
 import RatingStars from "@/components/RatingStars.vue";
 import {computed, ref} from "vue";
-import {useUserStore} from "@/stores/UserStore.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import {formatISODate} from "@/js/TimeUtils.js";
 import {useRouter} from "vue-router";
 
 // ------------------------ STORES ------------------------------//
-const userStore = useUserStore();
 const movieStore = useMovieStore();
 
 // ------------------------ PROPS AND EMITS --------------------//
@@ -46,7 +44,6 @@ const hideDropdown = () => {
 const addToWatch = async () => {
   let m = props.movie;
   await movieStore.createCurrentUserMovie({
-    uId: userStore.uid,
     mId: m.id,
     isWatched: false
   });
@@ -56,7 +53,6 @@ const addToWatch = async () => {
 const addToWatched = async () => {
   let m = props.movie;
   await movieStore.createCurrentUserMovie({
-    uId: userStore.uid,
     mId: m.id,
     isWatched: true
   });
