@@ -30,6 +30,7 @@
 }
 
 .flex-column{
+    display: flex;
     flex-direction: column;
 }
 
@@ -50,6 +51,7 @@
     flex-direction: column;
     align-items: flex-end;
     width: fit-content;
+    min-width: fit-content;
 }
 
 .icon-button {
@@ -60,19 +62,11 @@
 }
 
 
-@media (min-width: 2000px) {
-    .icon-button {
-        border-radius: 2em;
-        padding: 10px;
-        width: 50px;
-        height: 50px;
-    }
-}
-
 @media screen and (max-width: 1000px) {
     .icon-button {
         width: 30px;
         height: 30px;
+        padding: 5px;
     }
 }
 
@@ -80,10 +74,5 @@
     .lower-bar,
     .upper-bar {
         height: fit-content;
-    }
-
-    .icon-button {
-        width: 20px;
-        height: 20px;
     }
 }

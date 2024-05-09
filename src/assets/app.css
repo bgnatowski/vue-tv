@@ -83,10 +83,12 @@ html{
 }
 
 .flex-row{
+    display: flex;
     flex-direction: row;
 }
 
 .flex-column{
+    display: flex;
     flex-direction: column;
 }
 
@@ -157,6 +159,8 @@ html{
 .tg {
     border: none;
     border-collapse: collapse;
+    width: min-content;
+    white-space: nowrap;
 }
 
 .tg td {
