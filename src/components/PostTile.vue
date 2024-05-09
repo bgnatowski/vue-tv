@@ -78,7 +78,7 @@ const post = reactive({
         </div>
       </div>
     </div>
-    <div class="movie-card">
+    <div class="popup-card">
       <div class="movie-poster">
         <img :src="sampleMovie.posterPath"
              alt="Movie poster for Diuna"/>
@@ -155,7 +155,7 @@ const post = reactive({
   margin: auto 1em auto 0;
 }
 
-.movie-card {
+.note-card {
   display: flex;
   height: 100%;
   justify-content: space-between;

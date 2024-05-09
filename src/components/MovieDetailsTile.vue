@@ -24,7 +24,7 @@ const formattedReleaseDate = computed(() => formatISODate(props.movie.releaseDat
 
 <template>
   <section class="post">
-    <div class="movie-card">
+    <div class="popup-card">
       <div class="upper-bar">
         <div class="movie-poster">
           <img :src="movie.posterPath" alt="Movie poster"/>
@@ -75,7 +75,7 @@ const formattedReleaseDate = computed(() => formatISODate(props.movie.releaseDat
 .rating {
   margin: 5px 0;
 }
-.movie-card{
+.popup-card{
   margin-right: 1em;
   margin-left: 1em;
 }

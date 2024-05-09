@@ -1,29 +1,43 @@
 <script setup>
 import TitleTile from "@/components/TitleTile.vue";
-import {computed,ref} from "vue";
+import {computed, ref} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import {minutesToText} from "@/js/TimeUtils";
 import MovieTile from "@/components/MovieTile.vue";
 import {useMovieStore} from "@/stores/MovieStore.js";
+import NotePopup from "@/components/NotePopup.vue";
+
+// ----------------------- ZMIENNE -----------//
+const isAnyList = ref(null);
+const isWatched = ref(true);
+const isToWatch = ref(false);
 
 // --------------- STORES ------------------- //
 const movieStore = useMovieStore();
 
 // --------------------- POPUP -------------- ///
 const showDetails = ref(false);
+const showNote = ref(false);
 const selectedMovie = ref(null);
-const isAnyList = ref(null);
-const isWatched = ref(true);
-const isToWatch = ref(false);
+const selectedNote = ref(null);
 
 const handleShowDetails = (showDetailsData) => {
   selectedMovie.value = showDetailsData.movie;
-  console.log(selectedMovie.value)
   showDetails.value = true;
+}
+
+const handleShowNote = (showNoteData) => {
+  selectedNote.value = showNoteData;
+  showNote.value = true;
 }
 
 function handleClose() {
   showDetails.value = false;
+  showNote.value = false;
+}
+
+async function handleReload() {
+  await movieStore.fetchCurrentUserMovies();
 }
 
 // --------------------- MOVIE TILE -------------- ///
@@ -56,6 +70,13 @@ const addToTotalDuration = (duration) => {
                        @close="handleClose">
     </MovieDetailsPopup>
 
+    <NotePopup v-if="showNote"
+               :movie-data="selectedNote"
+               @close="handleClose"
+               @edited="handleReload"
+    >
+    </NotePopup>
+
     <MovieTile
         v-if="moviesWatchedIds.length"
         watched
@@ -63,6 +84,7 @@ const addToTotalDuration = (duration) => {
         :key="movieId"
         :movie-id="movieId"
         @show-details="handleShowDetails"
+        @show-note="handleShowNote"
         @emit-duration="addToTotalDuration"
     />
     <div v-else class="user-content">

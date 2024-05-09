@@ -46,7 +46,7 @@ onMounted(async () => {
 
 <template>
   <section class="post">
-    <div class="movie-card" v-if="isLoaded">
+    <div class="popup-card" v-if="isLoaded">
       <div class="movie-poster">
         <img :src="movie.posterPath" alt="Movie poster"/>
       </div>
@@ -83,7 +83,7 @@ onMounted(async () => {
   min-height: fit-content;
 }
 
-.movie-card {
+.popup-card {
   display: flex;
   align-content: center;
   justify-content: center;

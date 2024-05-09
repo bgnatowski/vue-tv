@@ -1,7 +1,7 @@
 <script setup>
 import ProfileMovies from "@/components/ProfileMovies.vue"
 import PostTile from "@/components/PostTile.vue";
-import {computed, reactive, ref} from "vue";
+import {computed, reactive, ref, watch} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import TitleTile from "@/components/TitleTile.vue";
 import {useUserStore} from "@/stores/UserStore.js";

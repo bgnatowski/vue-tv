@@ -72,8 +72,8 @@ const goToMoviePage = () => {
 </script>
 <template>
   <div class="overlay">
-    <div class="post">
-      <div class="movie-card">
+    <div class="post popup">
+      <div class="popup-card">
         <div class="upper-bar">
           <div class="movie-poster">
             <img :src="movie.posterPath" alt="Movie poster"/>
@@ -107,7 +107,7 @@ const goToMoviePage = () => {
             <span class="on-list" v-else-if="onToWatch">Na liście: do obejrzenia</span>
           </div>
         </div>
-        <div class="lower-bar">
+        <div class="lower-bar flex-column">
           <h2>Opis</h2>
           <div class="movie-description">
             <p>{{ movie.description }}</p>
@@ -137,6 +137,7 @@ const goToMoviePage = () => {
 
 <style scoped>
 @import url(@/assets/dropdown.css);
+@import url(@/assets/popup.css);
 .on-list{
   font-size: 0.7em;
   font-weight: 600;
@@ -164,80 +165,8 @@ const goToMoviePage = () => {
   white-space: nowrap;;
 }
 
-.post {
-  flex-direction: row;
-  background-color: white;
-  width: 90vw;
-  height: 90vh;
-  padding: 1em;
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
 .rating {
   margin-left: 5px;
-}
-
-.movie-card {
-  overflow-y: auto;
-  scrollbar-width: thin;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  padding: 15px;
-}
-
-.upper-bar {
-  display: flex;
-  height: 50%;
-  width: 100%;
-}
-
-.lower-bar {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 50%;
-}
-
-.close-bar {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  widt: fit-content;
-}
-
-.icon-button {
-  border-radius: 50%;
-  padding: 5px;
-}
-
-.icon-button img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.movie-details {
-  display: flex;
-  flex-direction: column;
-  min-width: 50%;
-  width: 100%;
-  flex-grow: 0;
-  flex-shrink: 1;
-
 }
 
 .movie-poster {
@@ -255,16 +184,6 @@ const goToMoviePage = () => {
   object-fit: cover;
   border-radius: 1.5em;
   box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.50);
-}
-
-.icon-button:hover {
-  background-color: var(--lighter-main);
-  border: none;
-  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
-}
-
-.icon-button:active {
-  background-color: var(--clicked-button);
 }
 
 .lower-bar h2 {
@@ -288,22 +207,8 @@ const goToMoviePage = () => {
   font-size: 1em;
 }
 
-@media (min-width: 2000px) {
-  .icon-button {
-    border-radius: 2em;
-    padding: 10px;
-    width: 50px;
-    height: 50px;
-  }
-}
-
 
 @media screen and (max-width: 1000px) {
-  .close-bar .icon-button {
-    width: 30px;
-    height: 30px;
-  }
-
   .movie-details .movie-title {
     font-size: 1.2em;
   }
@@ -318,21 +223,10 @@ const goToMoviePage = () => {
 }
 
 @media screen and (max-width: 700px) {
-  .lower-bar,
-  .upper-bar {
-    height: fit-content;
-  }
-
   .movie-poster {
     width: 150px;
     height: 200px;
   }
-
-  .close-bar .icon-button {
-    width: 20px;
-    height: 20px;
-  }
-
   .movie-details .movie-title {
     font-size: 1em;
   }

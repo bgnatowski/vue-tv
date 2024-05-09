@@ -22,7 +22,6 @@ const movieStore = useMovieStore();
 
 // --------------------- ZMIENNE -------------------------//
 const movie = ref({});
-const userMovie = ref({});
 const isLoaded = ref(false);
 const isPrivate = ref();
 const userRating = ref(0)
@@ -93,12 +92,11 @@ const showNote = () => {
 }
 
 // ----------------------------- ZALADOWANIE DANYCH ----------------//
+const userMovie = computed(() => movieStore.getCurrentUserMovieById(props.movieId))
 onMounted(async () => {
   if (props.movieId != undefined) {
     movie.value = await fetchMovieDetails(props.movieId);
     emit("emit-duration", movie.value.duration)
-
-    userMovie.value = movieStore.getCurrentUserMovieById(props.movieId);
     isPrivate.value = userMovie.isPrivate
     userRating.value = userMovie.userRating
 

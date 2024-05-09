@@ -46,22 +46,22 @@ const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movieDetails.id)
 </script>
 
 <template>
-  <div class="buttons" :class="noInfoButton ? 'flex-row' : ''">
-    <button class="card-action-buttons" :class="noInfoButton ? 'card-flex' : ''" @click="moveToWatch" v-if="!(isOnToWatch || isOnWatched)">
+  <div class="buttons" :class="noInfoButton ? 'card-row' : ''">
+    <button class="card-action-buttons" :class="noInfoButton ? 'flex-row' : ''" @click="moveToWatch" v-if="!(isOnToWatch || isOnWatched)">
       <div class="card-action-icon">
         <i class="plus-sign">+</i>
         <img src="@/assets/img/watching-a-movie.png" alt="To Watch"/>
       </div>
       <span class="button-span">Do obejrzenia</span>
     </button>
-    <button class="card-action-buttons" :class="noInfoButton ? 'card-flex' : ''" @click="moveToWatched" v-if="!(isOnToWatch || isOnWatched)">
+    <button class="card-action-buttons" :class="noInfoButton ? 'flex-row' : ''" @click="moveToWatched" v-if="!(isOnToWatch || isOnWatched)">
       <div class="card-action-icon">
         <i class="plus-sign">+</i>
         <img src="@/assets/img/video.png" alt="To Watched"/>
       </div>
       <span class="button-span">Do obejrzanych</span>
     </button>
-    <button class="card-action-buttons" :class="noInfoButton ? 'card-flex' : ''" @click="showDetails" v-if="!noInfoButton">
+    <button class="card-action-buttons" :class="noInfoButton ? 'flex-row' : ''" @click="showDetails" v-if="!noInfoButton">
       <div class="card-action-icon">
         <img src="@/assets/img/info-icon.png" alt="Info"/>
       </div>
@@ -94,9 +94,6 @@ const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movieDetails.id)
   background-color: transparent;
   border: none;
   min-width: 112px;
-}
-.card-flex{
-  flex-direction: row;
 }
 
 .card-action-icon{
@@ -166,12 +163,9 @@ const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movieDetails.id)
     width: 50px;
     border-radius: 50%;
   }
-  .card-flex{
-    flex-direction: row;
-  }
 }
 @media screen and (max-width: 600px){
-  .flex-row {
+  .card-flex {
     min-height: unset;
   }
 }

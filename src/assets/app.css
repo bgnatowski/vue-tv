@@ -79,6 +79,14 @@ html{
     height:fit-content;
 }
 
+.flex-row{
+    flex-direction: row;
+}
+
+.flex-column{
+    flex-direction: column;
+}
+
 .user-content {
     text-align: center;
     font-size: 1.17em;

@@ -47,10 +47,9 @@ export const useMovieStore = defineStore('movieStore', {
         },
         async fetchCurrentUserMovies() {
             const userStore = useUserStore();
-            if (!this.currentUserMovies.length) {
-                const userId = userStore.getUid;
-                this.currentUserMovies = await fetchAllUserMovies(userId);
-            }
+            const userId = userStore.getUid;
+            this.currentUserMovies = await fetchAllUserMovies(userId);
+
         },
         async createCurrentUserMovie(movieDetails) {
             const userStore = useUserStore();
@@ -77,7 +76,7 @@ export const useMovieStore = defineStore('movieStore', {
                 // Obsłuż błędy zapisu
                 console.error('Error adding new movie:', error);
             }
-            await this.initCurrentUserMovies(userMovieObject.userId);
+            await this.fetchCurrentUserMovies();
         },
         async modifyCurrentUserMovie(movieId, newDetails) {
             const userStore = useUserStore();
@@ -87,12 +86,9 @@ export const useMovieStore = defineStore('movieStore', {
             if (index !== -1) {
                 this.currentUserMovies[index] = { ...this.currentUserMovies[index], ...newDetails };
             }
-            await this.initCurrentUserMovies(userId);
+            await this.fetchCurrentUserMovies();
         },
         async removeCurrentUserMovie(movieId) {
-            const userStore = useUserStore();
-            let userId = userStore.uid;
-
             await deleteUserMovie(movieId);
 
             const index = this.currentUserMovies.findIndex((movie) => movie.movieId === movieId);
@@ -103,7 +99,7 @@ export const useMovieStore = defineStore('movieStore', {
             } else {
                 console.warn(`Film o ID ${movieId} nie został znaleziony w lokalnym stanie.`);
             }
-            await this.initCurrentUserMovies(userId);
+            await this.fetchCurrentUserMovies();
         },
     },
 });
