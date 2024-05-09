@@ -1,7 +1,7 @@
 <script setup>
 import TitleTile from "@/components/TitleTile.vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
-import {computed, ref} from "vue";
+import {computed, onBeforeMount, ref} from "vue";
 import {minutesToText} from "@/js/TimeUtils.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import MovieTile from "@/components/MovieTile.vue";

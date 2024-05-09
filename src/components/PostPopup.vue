@@ -1,46 +1,63 @@
 <script setup>
-import {useMovieStore} from "@/stores/MovieStore.js";
-import {onBeforeMount, ref} from "vue";
+import {onBeforeMount, ref, watch} from "vue";
+import {usePostStore} from "@/stores/PostStore.js";
 
-const movieStore = useMovieStore();
-
+// --------------- PROPS AND EMITS ------------------//
 const props = defineProps({
-  movieData: {
+  postData: {
     id: '',
     title: '',
-    note: ''
+    duration: 0,
+    posterPath: 'https://motivatevalmorgan.com/wp-content/uploads/2016/06/default-movie-1-3-696x1024.jpg',
+    genres: [],
+    userRating: 0
   },
 });
-
 const emits = defineEmits(['close', 'edited']);
-const content = ref(props.movieData.note);
+// -------------------------
+const postStore = usePostStore();
 const isSaved = ref(false);
-const readOnly = ref(props.movieData.note ? true : false);
+
+const content = ref('');
+const readOnly = ref(false);
+
+const handleContent = () => {
+  console.log('update:', content.value);
+}
+
+const existingPost = ref(null);
+onBeforeMount(() =>{
+  existingPost.value = postStore.getUserPostByMovieId(props.postData.id)
+  if(existingPost){
+    content.value = existingPost.value.content
+    readOnly.value = true
+  }
+})
 
 function closePopup() {
   emits('close');
-  emits('edited');
 }
 
-const deleteNote = () => {
-  movieStore.modifyCurrentUserMovie(props.movieData.id, {note: ''});
+const deletePost = () => {
+  postStore.deleteUserPost(existingPost.value.id)
   isSaved.value = false;
   content.value = '';
   readOnly.value = false;
   closePopup();
 }
 
-const saveNote = () => {
-  movieStore.modifyCurrentUserMovie(props.movieData.id, {note: content.value});
+const sendPost = () => {
+  let postDetails = {
+    movie: props.movie,
+    content: content.value
+  }
+  console.log('Proba utworzenia posta: ', postDetails)
+  postStore.createUserPost(postDetails);
   isSaved.value = true;
   readOnly.value = true;
-  emits('edited');
+  //fetch jesli nie sfetchowano
 }
 
-const editNote = () => {
-  readOnly.value = false;
-  isSaved.value = false;
-}
 
 </script>
 <template>
@@ -48,34 +65,30 @@ const editNote = () => {
     <div class="post popup">
       <div class="popup-card">
         <div class="upper-bar flex-column">
-          <h1 class="popup-title">Notatka dla filmu:</h1>
-          <h1 class="popup-subtitle">{{movieData.title}}</h1>
+          <h1 class="popup-title">Utwórz publiczną recenzje</h1>
+          <h1 class="popup-subtitle">Film: {{postData.title}}</h1>
           <textarea @input="handleContent"
                     v-model="content"
                     :readonly="readOnly"
                     :class="readOnly ? 'disable-grey' : ''"
                     class="note-area"
-                    placeholder="Napisz notatkę..."
+                    placeholder="Napisz coś o filmie :)"
                     maxlength="500"
           >
           </textarea>
         </div>
         <div class="lower-bar">
           <div class="popup-action-buttons">
-            <div class="icon-button flex-column" v-if="readOnly" @click="deleteNote">
+            <div class="icon-button flex-column" @click="deletePost">
               <img src="@/assets/img/delete-icon.png" alt="Delete icon"/>
               <span class="button-span">Usuń</span>
             </div>
-            <div class="icon-button flex-column" v-if="readOnly" @click="editNote">
-              <img src="@/assets/img/edit-icon.png" alt="Delete icon"/>
-              <span class="button-span">Edytuj</span>
-            </div>
-            <div class="icon-button flex-column" @click="saveNote">
-              <img src="@/assets/img/save-icon.png" alt="Save icon"/>
-              <span class="button-span">Zapisz</span>
+            <div class="icon-button flex-column" @click="sendPost">
+              <img src="@/assets/img/send-icon.png" alt="Send icon"/>
+              <span class="button-span">Publikuj</span>
             </div>
           </div>
-          <span class="span-info" v-if="isSaved && readOnly">Zapisano</span>
+          <span class="span-info" v-if="isSaved && readOnly">Opublikowano</span>
           <span class="span-left" v-if="!readOnly">Pozostało: {{ 500 - content.length }}/500</span>
         </div>
       </div>
@@ -94,6 +107,7 @@ const editNote = () => {
 .upper-bar {
   height: 90%;
 }
+
 .lower-bar {
   flex-direction: row-reverse;
   justify-content: space-between;
@@ -139,7 +153,6 @@ const editNote = () => {
   align-self: flex-start;
   padding: 5px;
 }
-
 
 .note-area {
   padding: 5px;

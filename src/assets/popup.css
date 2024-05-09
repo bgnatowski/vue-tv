@@ -61,6 +61,13 @@
     height: 40px;
 }
 
+.popup-title {
+    font-size: 1.2em;
+}
+
+.popup-subtitle {
+    font-size: 1em;
+}
 
 @media screen and (max-width: 1000px) {
     .icon-button {

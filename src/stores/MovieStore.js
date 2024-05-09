@@ -49,7 +49,8 @@ export const useMovieStore = defineStore('movieStore', {
             const userStore = useUserStore();
             const userId = userStore.getUid;
             this.currentUserMovies = await fetchAllUserMovies(userId);
-            // console.log("pobrano z powrotem: ", this.currentUserMovies.find(m => m.isWatched));
+            // console.log("fetch wszystkich z powrotem: ", this.currentUserMovies.find(m => m.isWatched));
+            // console.log("fetch wszystkich z powrotem: ", this.currentUserMovies.find(m => !m.isWatched));
         },
         async createCurrentUserMovie(movieDetails) {
             const userStore = useUserStore();
