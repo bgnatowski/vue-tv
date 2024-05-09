@@ -3,7 +3,6 @@
 import {computed, onMounted, ref, watch} from "vue";
 import {fetchMovieDetails} from "@/services/TVDBService.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
-import {useUserStore} from "@/stores/UserStore.js";
 import RatingStars from "@/components/RatingStars.vue";
 import {usePostStore} from "@/stores/PostStore.js";
 
@@ -14,15 +13,16 @@ const props = defineProps({
 })
 const emit = defineEmits([
   'show-details',
+  'show-note',
   'emit-duration',
 ]);
 
 // ------------------- INSTANCJE STORES -------------------//
 const movieStore = useMovieStore();
-const userStore = useUserStore();
 
 // --------------------- ZMIENNE -------------------------//
 const movie = ref({});
+const userMovie = ref({});
 const isLoaded = ref(false);
 const isPrivate = ref();
 const userRating = ref(0)
@@ -30,7 +30,6 @@ const userRating = ref(0)
 // ------------------- DELETE FROM LIST -------------------//
 const deleteMovie = () => {
   movieStore.removeCurrentUserMovie(
-      userStore.uid,
       props.movieId,
   );
   emit("emit-duration", -movie.value.duration)
@@ -39,7 +38,6 @@ const deleteMovie = () => {
 // ------------------- MOVE TO WATCHED ----------------------//
 const moveToWatched = () => {
   movieStore.modifyCurrentUserMovie(
-      userStore.uid,
       props.movieId,
       {isWatched: true}
   );
@@ -47,13 +45,11 @@ const moveToWatched = () => {
 };
 
 // ------------------- RATING UPDATE ----------------------//
-const updateRating = (newRating) => {
+const updateRating = () => {
   movieStore.modifyCurrentUserMovie(
-      userStore.uid,
       props.movieId,
-      {userRating: newRating}
+      {userRating: userRating.value}
   );
-  userRating.value = newRating;
 
   //todo on update rating -> check if there is already post -> update user rating in post otherwise do nothing
 };
@@ -61,7 +57,6 @@ const updateRating = (newRating) => {
 // ------------------- CHANGE VISIBLE/PUBLIKACJA -----------//
 const publicMovie = () => {
   movieStore.modifyCurrentUserMovie(
-      userStore.uid,
       props.movieId,
       {isPrivate: false}
   );
@@ -70,7 +65,6 @@ const publicMovie = () => {
 
 const unpublicMovie = () => {
   movieStore.modifyCurrentUserMovie(
-      userStore.uid,
       props.movieId,
       {isPrivate: true}
   );
@@ -90,13 +84,21 @@ const showDetails = () => {
   });
 }
 
+const showNote = () => {
+  emit('show-note', {
+    id: movie.value.id,
+    title: movie.value.title,
+    note: userMovie.value.note
+  });
+}
+
 // ----------------------------- ZALADOWANIE DANYCH ----------------//
 onMounted(async () => {
   if (props.movieId != undefined) {
     movie.value = await fetchMovieDetails(props.movieId);
     emit("emit-duration", movie.value.duration)
 
-    let userMovie = movieStore.getCurrentUserMovieById(props.movieId);
+    userMovie.value = movieStore.getCurrentUserMovieById(props.movieId);
     isPrivate.value = userMovie.isPrivate
     userRating.value = userMovie.userRating
 
@@ -131,7 +133,7 @@ const handleCreatePost = () => {
 
 <template>
   <section class="post">
-    <div class="movie-card" v-if="isLoaded">
+    <div class="popup-card" v-if="isLoaded">
       <div class="movie-poster">
         <img :src="movie.posterPath" alt="Movie poster"/>
       </div>
@@ -145,7 +147,7 @@ const handleCreatePost = () => {
               </p>
               <p class="metadata-title">Długość: <span>{{ movie.duration }} min</span></p>
               <p class="metadata-title" v-if="watched">Twoja ocena: <span>{{ userRating }}/10</span></p>
-              <RatingStars @rating-value="updateRating" :rating="userRating" v-if="watched"></RatingStars>
+              <RatingStars @rating-value="e => userRating=e" @click="updateRating" :rating="userRating" v-if="watched"></RatingStars>
             </div>
           </div>
           <div class="movie-action-buttons" v-if="!watched">
@@ -168,8 +170,7 @@ const handleCreatePost = () => {
               <img src="@/assets/img/recommend-icon.png" alt="Recommend icon"/>
               <span class="button-span" v-if="!isPrivate && watched">Recenzja</span>
             </div>
-            <!--            todo: note -->
-            <div class="card-action-icon" aria-label="Note">
+            <div @click="showNote" class="card-action-icon" aria-label="Note">
               <img src="@/assets/img/edit-icon.png" alt="Note icon"/>
               <span class="button-span">Notatka</span>
             </div>
@@ -205,7 +206,7 @@ const handleCreatePost = () => {
   min-height: fit-content;
 }
 
-.movie-card {
+.popup-card {
   display: flex;
   align-content: center;
   justify-content: center;
@@ -415,7 +416,8 @@ input:checked + .slider:before {
     height: auto;
     object-fit: cover;
   }
-  .movie-details{
+
+  .movie-details {
     padding-bottom: 1em;
     margin-bottom: 10px;
   }
