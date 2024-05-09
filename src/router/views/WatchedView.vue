@@ -1,6 +1,6 @@
 <script setup>
 import TitleTile from "@/components/TitleTile.vue";
-import {computed,, ref} from "vue";
+import {computed,ref} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import {minutesToText} from "@/js/TimeUtils";
 import MovieTile from "@/components/MovieTile.vue";
