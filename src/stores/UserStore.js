@@ -19,10 +19,19 @@ export const useUserStore = defineStore('userStore', {
         getPhotoUrl: state => state.photoUrl,
         getFriendsIds: state => state.friendsIds,
         getPostsIds: state => state.postsIds,
+        hasFriend: state => (friendId) => state.friendsIds.some(fId => fId === friendId),
     },
     actions: {
         async initUser(uid) {
             const userData = await getUserData(uid);
+            this.assignData(userData)
+        },
+        async fetchCurrentUser(){
+            console.log('id: ', this.uid)
+            const userData = await getUserData(this.uid);
+            this.assignData(userData)
+        },
+        assignData(userData) {
             if (userData) {
                 this.uid = userData.uid;
                 this.username = userData.username;

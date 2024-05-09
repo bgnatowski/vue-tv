@@ -7,15 +7,21 @@ import TitleTile from "@/components/TitleTile.vue";
 import {useRoute, useRouter} from "vue-router";
 import {fetchUserByUid} from "@/services/UserService.js";
 import {fetchAllPublicUserMovies} from "@/services/MovieService.js";
+import {useUserStore} from "@/stores/UserStore.js";
+import {fetchPosts} from "@/services/PostService.js";
 
 // ----------------- ZMIENNE -----------------//
+const userStore = useUserStore();
+
 const route = useRoute();
 const router = useRouter()
 
 const userProfile = ref({});
 const userMovies = ref([]);
+const userPosts = ref([]);
 
 const isLoaded = ref(false);
+const isFriend = ref(false);
 const toWatchMoviesIds = ref([]);
 const watchedMoviesIds = ref([]);
 
@@ -33,6 +39,7 @@ async function loadUserData(userId) {
   // Reset danych przed nowym zaladowaniem
   userProfile.value = {};
   userMovies.value = [];
+  userPosts.value = [];
   isLoaded.value = false;
 
   // Pobierz dane nowego użytkownika
@@ -43,6 +50,13 @@ async function loadUserData(userId) {
   if(userProfile.value == null){
     await router.push({name: 'NotFound'});
     return;
+  }
+
+  // Jesli uzytkownik jest friendem zaladuj recenzje
+  // await userStore.fetchCurrentUser();
+  if(userStore.hasFriend(userProfile.value.uid)){
+    userPosts.value = await fetchPosts([userProfile.value.uid])
+    isFriend.value = true;
   }
 
   if (userProfile.value && userMovies.value) {
@@ -118,7 +132,21 @@ const pushToUserToWatch = () => {
     <section class="posts-column">
       <TitleTile>Recenzje {{userProfile.username}}:</TitleTile>
       <div class="posts" v-dragscroll>
-        <PostTile @show-details="handleShowDetails"></PostTile>
+        <PostTile
+            v-if="userPosts.length"
+            v-for="post in userPosts"
+            :key="post"
+            :post="post"
+            :user="userProfile"
+            @show-details="handleShowDetails"
+        >
+        </PostTile>
+        <div v-else-if="!userPosts.length" class="user-content">
+          <h2>---BRAK RECENZJI---</h2>
+        </div>
+        <div v-if="!isFriend" class="user-content">
+          <h2>---NIE JESTEŚCIE ZNAJOMYMI---</h2>
+        </div>
       </div>
     </section>
   </section>

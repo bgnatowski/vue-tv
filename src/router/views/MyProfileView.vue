@@ -1,7 +1,7 @@
 <script setup>
 import ProfileMovies from "@/components/ProfileMovies.vue"
 import PostTile from "@/components/PostTile.vue";
-import {computed, reactive, ref, watch} from "vue";
+import {computed, reactive, ref} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import TitleTile from "@/components/TitleTile.vue";
 import {useUserStore} from "@/stores/UserStore.js";
@@ -78,6 +78,7 @@ const posts = computed(() => postStore.getUserPosts)
       <TitleTile>Twoje recenzje</TitleTile>
       <div class="posts" v-dragscroll>
         <PostTile
+            v-if="posts.length"
             v-for="post in posts"
             :key="post"
             :post="post"
@@ -85,6 +86,9 @@ const posts = computed(() => postStore.getUserPosts)
             @show-details="handleShowDetails"
         >
         </PostTile>
+        <div class="user-content" v-else>
+          <h2>---BRAK RECENZJI---</h2>
+        </div>
       </div>
     </section>
   </section>
@@ -142,7 +146,7 @@ const posts = computed(() => postStore.getUserPosts)
   height: 100%;
   object-fit: contain;
   border-radius: 50%;
-  border: 2px solid var(--lighter-main);
+  border: 4px solid var(--lighter-main);
   box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
 }
 

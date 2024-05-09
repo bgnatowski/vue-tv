@@ -58,6 +58,7 @@ const formattedReleaseDate = computed(() => formatISODate(props.movie.releaseDat
               :movie-details="movie"
               @show-details="handleUpShowDetails"
               :noInfoButton="noInfoButton"
+              row="row"
           ></AddToMovieListButtons>
         </div>
       </div>

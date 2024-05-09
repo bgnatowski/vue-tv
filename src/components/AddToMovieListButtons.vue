@@ -1,12 +1,12 @@
 <script setup>
 import {useMovieStore} from "@/stores/MovieStore.js";
-import {useUserStore} from "@/stores/UserStore.js";
 import {computed} from "vue";
 
 // ------------------ PROPS AND EMITS -----------------------//
 const props = defineProps({
   movieDetails: Object,
-  noInfoButton: Boolean
+  noInfoButton: Boolean,
+  row: {type: String, default: "row-reverse"}
 })
 const emit = defineEmits([
   'show-details',
@@ -87,13 +87,13 @@ const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movieDetails.id)
 
 .card-action-buttons {
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: v-bind(row);
   align-items: center;
   justify-content: flex-start;
   text-align: center;
   background-color: transparent;
   border: none;
-  min-width: 112px;
+  min-width: 125px;
 }
 
 .card-action-icon{
@@ -149,10 +149,7 @@ const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movieDetails.id)
     align-self: flex-start;
     min-width: 112px;
     height: auto;
-
-    flex-direction: row-reverse;
     align-items: center;
-    justify-content: flex-start;
     text-align: center;
     background-color: transparent;
     border: none;

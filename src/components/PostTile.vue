@@ -4,9 +4,13 @@ import {fetchMovieDetails} from "@/services/TVDBService.js";
 import RatingStars from "@/components/RatingStars.vue";
 import {useUserStore} from "@/stores/UserStore.js";
 import {formatFirestoreTimestamp} from "@/js/TimeUtils";
+import {usePostStore} from "@/stores/PostStore.js";
+import {useMovieStore} from "@/stores/MovieStore.js";
 
 // -------------- STORE----------------------------//
 const userStore = useUserStore();
+const postStore = usePostStore();
+const movieStore = useMovieStore();
 const photoUrl = userStore.getPhotoUrl;
 
 // -------------- PROPS AND EMITS ------------------//
@@ -31,14 +35,24 @@ function hideDropdown() {
 
 // ---------------------------POKAZANIE POPUPU ----------------//
 const showDetails = async () => {
+  let movie = await fetchMovieDetails(props.post.movie.id)
   if (props.profile) {
-    let movie = await fetchMovieDetails(props.post.movie.id)
     emits('show-details', {
       movie: movie,
       onWatched: true,
       onToWatch: false
     });
+  } else {
+    emits('show-details', {
+      movie: movie,
+      onWatched: movieStore.isOnWatched(movie.id),
+      onToWatch: movieStore.isOnToWatch(movie.id)
+    });
   }
+}
+// ------------------- USUWANIE POSTU -----------------//
+const handleDeletePost = () => {
+  postStore.deleteUserPost(props.post.movie.id);
 }
 
 </script>
@@ -48,9 +62,10 @@ const showDetails = async () => {
     <div class="upper-bar">
       <div class="user-info">
         <div class="user-image">
-          <img :src="photoUrl" alt="user photo">
+          <img v-if="!profile" :src="user.photoUrl" alt="user photo">
+          <img v-else :src="photoUrl" alt="user photo">
         </div>
-        <p v-if="!profile" class="user-name">uzytkownik prowatcher123 polecił film:</p>
+        <p v-if="!profile" class="user-name">uzytkownik {{user.username}} polecił film:</p>
         <p v-else class="user-name">Poleciłeś film:</p>
       </div>
       <div class="dropdown">
@@ -60,7 +75,7 @@ const showDetails = async () => {
         <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
           <ul class="dropdown-list">
             <li @click="showDetails" class="dropdown-option">Więcej o filmie</li>
-            <li v-if="profile" class="dropdown-option">Usuń post</li>
+            <li v-if="profile" @click="handleDeletePost" class="dropdown-option">Usuń post</li>
           </ul>
         </div>
       </div>
