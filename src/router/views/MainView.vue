@@ -1,7 +1,9 @@
 <script setup>
-import {ref} from "vue";
+import {onBeforeMount, ref} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import TitleTile from "@/components/TitleTile.vue";
+import {useUserStore} from "@/stores/UserStore.js";
+import {usePostStore} from "@/stores/PostStore.js";
 
 // --------------------- POPUP -------------- ///
 const showDetails = ref(false);
@@ -14,13 +16,25 @@ const handleShowDetails = (showDetailsData) => {
   selectedMovie.value = showDetailsData.movie;
   showDetails.value = true;
 }
+
 function handleClose() {
   showDetails.value = false;
 }
 
 // ------------------ LADOWANIE DANYCH ------------- //
-const isLoaded = ref(true);
-const postsIds = ref([]);
+const isLoaded = ref(false);
+const userStore = useUserStore();
+const postStore = usePostStore();
+const friendsPosts = ref([{
+  friendPost: {},
+  friendId: ''
+}])
+
+onBeforeMount(async () => {
+  let friendsIds = userStore.friendsIds
+  friendsPosts.value = await postStore.fetchFriendsPostsByAFriend(friendsIds)
+})
+
 
 </script>
 
@@ -40,14 +54,19 @@ const postsIds = ref([]);
     </MovieDetailsPopup>
 
 
-    <div class="post-container" v-if="postsIds.length">
-<!--      <PostTile v-for="postId in postsIds" :key="postId"-->
-<!--                :post-id="postId"-->
-<!--                @show-details="handleShowDetails"-->
-<!--      ></PostTile>-->
-    </div>
-    <div class="user-content" v-else>
-      <h2>---BRAK---</h2>
+    <div class="posts-container" v-dragscroll>
+      <PostTile
+          v-if="friendsPosts.length"
+          v-for="post in friendsPosts"
+          :key="post"
+          :post="post"
+          :user="friendProfile"
+          @show-details="handleShowDetails"
+      >
+      </PostTile>
+      <div v-else-if="!userPosts.length" class="user-content">
+        <h2>---BRAK RECENZJI---</h2>
+      </div>
     </div>
   </section>
 

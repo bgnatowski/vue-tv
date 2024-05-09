@@ -104,4 +104,18 @@ const fetchPosts = async (friendsIds) => {
     return posts;
 };
 
-export { createPost, deletePostsByMovieId, updatePost, fetchPosts };
+const fetchPostsByAFriend = async (friendsIds) => {
+    let posts = [];
+    for (let userId of friendsIds) {
+        const userPostsRef = collection(db, `users/${userId}/posts`);
+        const snapshot = await getDocs(userPostsRef);
+        const userPosts = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+        posts = [...posts, ...userPosts];
+    }
+    return posts;
+};
+
+export { createPost, deletePostsByMovieId, updatePost, fetchPosts, fetchPostsByAFriend };

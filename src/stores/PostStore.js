@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import {createPost, updatePost, fetchPosts, deletePostsByMovieId} from "@/services/PostService.js";
+import {createPost, updatePost, fetchPosts, deletePostsByMovieId, fetchPostsByAFriend} from "@/services/PostService.js";
 import {useUserStore} from "@/stores/UserStore.js";
 
 export const usePostStore = defineStore('postStore', {
@@ -23,6 +23,10 @@ export const usePostStore = defineStore('postStore', {
         },
         async fetchFriendsPosts(friendsIds) {
             const friendsPosts = await fetchPosts(friendsIds);
+            return friendsPosts;
+        },
+        async fetchFriendsPostsByAFriend(friendsIds) {
+            const friendsPosts = await fetchPostsByAFriend(friendsIds);
             return friendsPosts;
         },
         async createUserPost(postDetails) {
