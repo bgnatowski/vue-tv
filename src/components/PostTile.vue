@@ -1,13 +1,25 @@
 <script setup>
-import {nextTick, onMounted, reactive, ref} from "vue";
-import {sampleMovie as sampleMovie1} from "@/services/TVDBService.js";
+import {ref} from "vue";
+import {fetchMovieDetails} from "@/services/TVDBService.js";
+import RatingStars from "@/components/RatingStars.vue";
+import {useUserStore} from "@/stores/UserStore.js";
+import {formatFirestoreTimestamp} from "@/js/TimeUtils";
 
-const isShowDropdown = ref(false)
+// -------------- STORE----------------------------//
+const userStore = useUserStore();
+const photoUrl = userStore.getPhotoUrl;
 
+// -------------- PROPS AND EMITS ------------------//
 const props = defineProps({
-      profile: Boolean,
-      postId: ''
+  profile: Boolean,
+  postId: '',
+  post: Object,
+  user: Object
 })
+const emits = defineEmits(['show-details']);
+
+// ---------------------- DROPDOWN ----------------//
+const isShowDropdown = ref(false)
 
 function showDropdown() {
   isShowDropdown.value = true
@@ -17,41 +29,17 @@ function hideDropdown() {
   isShowDropdown.value = false;
 }
 
-const isDraggable = ref(false);
-const postDescriptionRef = ref(null);
-
-onMounted(async () => {
-  await nextTick();
-  if (postDescriptionRef.value.offsetHeight > 100) {
-    isDraggable.value = true;
-  }
-});
-
-const emits = defineEmits(['show-details']);
-
-const sampleMovie = sampleMovie1;
 // ---------------------------POKAZANIE POPUPU ----------------//
-const showDetails = (movie) => {
-  emits('show-details', {
-    movie: movie,
-    onWatched: false,
-    onToWatch: true
-  });
+const showDetails = async () => {
+  if (props.profile) {
+    let movie = await fetchMovieDetails(props.post.movie.id)
+    emits('show-details', {
+      movie: movie,
+      onWatched: true,
+      onToWatch: false
+    });
+  }
 }
-
-const post = reactive({
-  id: 1,
-  author: 'userId',
-  movie: 'movieID? movie? wgle?',
-  timestamp: 'timestamp',
-  content: "Film świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman\n" +
-      "          dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił\n" +
-      "          samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem\n" +
-      "          dramatycznym. Coś wielkiegoFilm świetny, ale końcówka do mnie nie przemawia. Tu nie powinno być happy endu. Kiedy Truman\n" +
-      "          dociera do ściany jest świetna dramaturgia i bezradność. Gdyby w tamtym momencie skoczył do wody i popełnił\n" +
-      "          samobójstwo zakończenie byłoby znacznie mocniejsze i ciekawsze. Truman stałby się prawdziwym bohaterem\n" +
-      "          dramatycznym. Coś wielkiego."
-})
 
 </script>
 
@@ -60,7 +48,7 @@ const post = reactive({
     <div class="upper-bar">
       <div class="user-info">
         <div class="user-image">
-          <img src="https://cdn-icons-png.flaticon.com/512/4715/4715330.png" alt="" class="user-profile-pic">
+          <img :src="photoUrl" alt="user photo">
         </div>
         <p v-if="!profile" class="user-name">uzytkownik prowatcher123 polecił film:</p>
         <p v-else class="user-name">Poleciłeś film:</p>
@@ -71,37 +59,38 @@ const post = reactive({
         </div>
         <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
           <ul class="dropdown-list">
-            <li @click="showDetails(sampleMovie)" class="dropdown-option">Więcej o filmie</li>
-            <li v-if="!profile" class="dropdown-option">Dodaj do obejrzenia (jesli nie jest jeszcze obejrzany)</li>
-            <li v-else class="dropdown-option">Usuń post</li>
+            <li @click="showDetails" class="dropdown-option">Więcej o filmie</li>
+            <li v-if="profile" class="dropdown-option">Usuń post</li>
           </ul>
         </div>
       </div>
     </div>
-    <div class="popup-card">
+    <div class="post-card">
       <div class="movie-poster">
-        <img :src="sampleMovie.posterPath"
+        <img :src="post.movie.posterPath"
              alt="Movie poster for Diuna"/>
       </div>
       <div class="movie-details">
-        <h1 class="movie-title">{{ sampleMovie.title }}</h1>
         <div>
+          <span class="span-date">{{ formatFirestoreTimestamp(post.timestamp) }}</span>
+          <h1 class="movie-title">{{ post.movie.title }}</h1>
           <table class="tg">
             <thead>
             <tr>
               <th class="tg-0pky tg-size">Gatunki:</th>
-              <th class="tg-0lax tg-size">{{ sampleMovie.genres.map((genre) => genre.name).join(", ") }}</th>
+              <th class="tg-0lax tg-size">{{ post.movie.genres.map((genre) => genre.name).join(", ") }}</th>
             </tr>
             </thead>
             <tbody>
             <tr>
               <td class="tg-0pky tg-size">Długość:</td>
-              <td class="tg-0lax tg-size">{{ sampleMovie.duration }} min</td>
+              <td class="tg-0lax tg-size">{{ post.movie.duration }} min</td>
             </tr>
             </tbody>
           </table>
         </div>
-        <p class="post-description" ref="postDescriptionRef" v-dragscroll="isDraggable"> {{ post.content }}
+        <RatingStars read-only :rating="post.movie.userRating"></RatingStars>
+        <p class="post-description" ref="postDescriptionRef" v-dragscroll.y> {{ post.content }}
         </p>
       </div>
     </div>
@@ -127,6 +116,11 @@ const post = reactive({
   transition: .5s ease all;
 }
 
+.span-date {
+  font-size: .8em;
+  font-style: italic;
+}
+
 .user-info {
   display: flex;
   padding: .2rem;
@@ -148,14 +142,24 @@ const post = reactive({
 
 .user-image {
   display: flex;
-  height: 35px;
-  width: 35px;
+  height: 45px;
+  width: 45px;
   align-content: center;
   justify-content: center;
   margin: auto 1em auto 0;
+  border-radius: 50%;
+
+}
+.user-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  border: 2px solid var(--lighter-main)
 }
 
-.note-card {
+
+.post-card {
   display: flex;
   height: 100%;
   justify-content: space-between;

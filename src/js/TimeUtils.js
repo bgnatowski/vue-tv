@@ -19,6 +19,20 @@ function minutesToText(minutes) {
     return text.join(' ');
 }
 
+function formatFirestoreTimestamp(timestamp) {
+    if(!timestamp){
+        return ""
+    }
+
+    const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+
+    return new Intl.DateTimeFormat('pl-PL', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    }).format(date);
+}
+
 function formatISODate(isoDateString) {
     if (!isoDateString) {
         throw new Error("Brak podanej daty.");
@@ -39,5 +53,6 @@ function formatISODate(isoDateString) {
 
 export {
     formatISODate,
-    minutesToText
+    minutesToText,
+    formatFirestoreTimestamp
 }

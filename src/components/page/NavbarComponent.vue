@@ -185,7 +185,7 @@ header {
 
 .user-profile-button img{
   border-radius: 50%;
-  border: 2px solid var(--main-color);
+  border: 2px solid var(--lighter-main);
 }
 
 .navigation .icon-button:hover {
