@@ -8,7 +8,6 @@ import {useMovieStore} from "@/stores/MovieStore.js";
 import NotePopup from "@/components/NotePopup.vue";
 
 // ----------------------- ZMIENNE -----------//
-const isAnyList = ref(null);
 const isWatched = ref(true);
 const isToWatch = ref(false);
 
@@ -40,7 +39,7 @@ async function handleReload() {
   await movieStore.fetchCurrentUserMovies();
 }
 
-// --------------------- MOVIE TILE -------------- ///
+// --------------------- MOVIE TILE LADOWANIE DANYCH -------------- ///
 const moviesWatchedIds = computed(() => {
   return movieStore.getCurrentUserWatchedIds;
 });
@@ -64,7 +63,6 @@ const addToTotalDuration = (duration) => {
 
     <MovieDetailsPopup v-if="showDetails"
                        :movie="selectedMovie"
-                       :on-any-list="isAnyList"
                        :on-to-watch="isToWatch"
                        :on-watched="isWatched"
                        @close="handleClose">

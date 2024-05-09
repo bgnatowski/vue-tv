@@ -42,8 +42,7 @@ watch(
 </script>
 
 <template>
-  <NavbarComponent v-if="isLoggedIn" :isSidebarVisible="showSidebar"
-                   @toggle-sidebar="toggleSidebar"></NavbarComponent>
+  <NavbarComponent v-if="isLoggedIn" :isSidebarVisible="showSidebar" @toggle-sidebar="toggleSidebar"></NavbarComponent>
   <main class="container">
     <transition name="sidebar">
       <SidebarComponent v-if="showSidebar && isLoggedIn"></SidebarComponent>

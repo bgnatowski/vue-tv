@@ -130,12 +130,12 @@ const hideDropdown = () => {
 }
 
 header {
+  position: sticky;
   background: rgb(255, 255, 255, 0.25);
   top: 0;
   left: 0;
   z-index: 99;
   width: 100vw;
-  position: sticky;
   border: none;
   box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
 }
