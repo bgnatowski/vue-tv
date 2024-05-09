@@ -66,9 +66,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.user-content {
-  margin: auto;
-}
 
 .friends-container {
   display: flex;

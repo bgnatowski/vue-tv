@@ -54,8 +54,5 @@ const postsIds = ref([]);
 </template>
 
 <style scoped>
-.user-content {
-  text-align: center;
-}
 
 </style>

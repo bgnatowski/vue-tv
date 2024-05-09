@@ -70,8 +70,5 @@ const addToTotalDuration = (duration) => {
 
 <style scoped>
 
-.user-content {
-  text-align: center;
-}
 
 </style>

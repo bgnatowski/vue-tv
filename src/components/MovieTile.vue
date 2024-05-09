@@ -54,6 +54,8 @@ const updateRating = (newRating) => {
       {userRating: newRating}
   );
   userRating.value = newRating;
+
+  //todo on update rating -> check if there is already post -> update user rating in post otherwise do nothing
 };
 
 // ------------------- CHANGE VISIBLE/PUBLIKACJA -----------//

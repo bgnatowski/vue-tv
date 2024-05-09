@@ -38,9 +38,6 @@ const friendsRequests = computed(() => {
   justify-content: flex-start;
   gap: 5%;
 }
-.user-content {
-  margin: auto;
-}
 
 @media screen and (max-width: 460px) {
   .friends-container {

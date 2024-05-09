@@ -79,6 +79,14 @@ html{
     height:fit-content;
 }
 
+.user-content {
+    text-align: center;
+    font-size: 1.17em;
+    color: gray;
+    font-style: italic;
+    opacity: 0.3;
+}
+
 .bruno-ace-regular {
     font-family: "Bruno Ace", sans-serif;
     font-weight: 400;
