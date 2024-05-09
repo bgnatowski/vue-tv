@@ -53,8 +53,10 @@ export const useMovieStore = defineStore('movieStore', {
             }
         },
         async createCurrentUserMovie(movieDetails) {
+            const userStore = useUserStore();
+            let userId = userStore.uid;
             const userMovieObject = {
-                userId: movieDetails.uId,
+                userId: userId,
                 movieId: movieDetails.mId,
                 isWatched: movieDetails.isWatched,
                 isPrivate: true,
@@ -77,7 +79,9 @@ export const useMovieStore = defineStore('movieStore', {
             }
             await this.initCurrentUserMovies(userMovieObject.userId);
         },
-        async modifyCurrentUserMovie(userId, movieId, newDetails) {
+        async modifyCurrentUserMovie(movieId, newDetails) {
+            const userStore = useUserStore();
+            let userId = userStore.uid;
             await updateUserMovie(userId, movieId, newDetails);
             const index = this.currentUserMovies.findIndex(m => m.movieId === movieId);
             if (index !== -1) {
@@ -85,8 +89,11 @@ export const useMovieStore = defineStore('movieStore', {
             }
             await this.initCurrentUserMovies(userId);
         },
-        async removeCurrentUserMovie(userId, movieId) {
-            await deleteUserMovie(userId, movieId);
+        async removeCurrentUserMovie(movieId) {
+            const userStore = useUserStore();
+            let userId = userStore.uid;
+
+            await deleteUserMovie(movieId);
 
             const index = this.currentUserMovies.findIndex((movie) => movie.movieId === movieId);
 

@@ -14,12 +14,10 @@ const emit = defineEmits([
 
 // ------------------- INSTANCJE STORES -------------------//
 const movieStore = useMovieStore();
-const userStore = useUserStore();
 
 // ------------------- MOVE TO USER LIST ----------------------//
 const moveToWatched = () => {
   movieStore.createCurrentUserMovie({
-    uId: userStore.uid,
     mId: props.movieDetails.id,
     isWatched: false
   });
@@ -27,7 +25,6 @@ const moveToWatched = () => {
 
 const moveToWatch = () => {
   movieStore.createCurrentUserMovie({
-    uId: userStore.uid,
     mId: props.movieDetails.id,
     isWatched: true
   });

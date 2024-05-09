@@ -1,14 +1,12 @@
 <script setup>
 import TitleTile from "@/components/TitleTile.vue";
-import {computed, onMounted, ref, watch, watchEffect} from "vue";
+import {computed,, ref} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import {minutesToText} from "@/js/TimeUtils";
-import {useUserStore} from "@/stores/UserStore.js";
 import MovieTile from "@/components/MovieTile.vue";
 import {useMovieStore} from "@/stores/MovieStore.js";
 
 // --------------- STORES ------------------- //
-const userStore = useUserStore();
 const movieStore = useMovieStore();
 
 // --------------------- POPUP -------------- ///
