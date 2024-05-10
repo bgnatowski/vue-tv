@@ -45,6 +45,7 @@ const deletePost = () => {
 
 const sendPost = () => {
   let postDetails = {
+    userId: '',
     movie: props.postData,
     content: content.value
   }

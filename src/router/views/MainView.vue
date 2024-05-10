@@ -32,7 +32,8 @@ const friendsPosts = ref([{
 
 onBeforeMount(async () => {
   let friendsIds = userStore.friendsIds
-  friendsPosts.value = await postStore.fetchFriendsPostsByAFriend(friendsIds)
+  // friendsPosts.value = await postStore.fetchFriendsPostsByAFriend(friendsIds)
+  isLoaded.value=true
 })
 
 
@@ -55,16 +56,15 @@ onBeforeMount(async () => {
 
 
     <div class="posts-container" v-dragscroll>
-      <PostTile
-          v-if="friendsPosts.length"
-          v-for="post in friendsPosts"
-          :key="post"
-          :post="post"
-          :user="friendProfile"
-          @show-details="handleShowDetails"
-      >
-      </PostTile>
-      <div v-else-if="!userPosts.length" class="user-content">
+<!--      <PostTile-->
+<!--          v-if="friendsPosts.length"-->
+<!--          v-for="post in friendsPosts"-->
+<!--          :key="post"-->
+<!--          :post="post"-->
+<!--          :user="friendProfile"-->
+<!--          @show-details="handleShowDetails"-->
+<!--      ></PostTile>-->
+      <div class="user-content">
         <h2>---BRAK RECENZJI---</h2>
       </div>
     </div>

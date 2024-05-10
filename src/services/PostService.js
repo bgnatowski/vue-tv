@@ -9,7 +9,7 @@ import {
     query,
     where,
     Timestamp,
-    addDoc, getDoc
+    addDoc, getDoc, orderBy
 } from 'firebase/firestore';
 import { db } from '@/js/firebase';
 
@@ -26,13 +26,16 @@ const createPost = async (userId, postDetails) => {
         throw new Error("Content is too long. Maximum 500 characters allowed.");
     }
 
-    const userPostsRef = collection(db, `users/${userId}/posts`);
+    console.log("tworzenie userPostsRef")
+    const userPostsRef = collection(db, `posts`);
     const newPost = {
+        userId: userId,
         movie: postDetails.movie,
         content: postDetails.content,
         timestamp: Timestamp.now()
     };
     try {
+        console.log("Próba dodania addDoc")
         const docRef = await addDoc(userPostsRef, newPost);
         console.log(`Utworzono post z ID: ${docRef.id}`);
         return { id: docRef.id, ...newPost };
@@ -42,9 +45,11 @@ const createPost = async (userId, postDetails) => {
     }
 };
 
-const deletePostsByMovieId = async (userId, movieId) => {
-    const postsRef = collection(db, `users/${userId}/posts`);
-    const queryRef = query(postsRef, where("movie.id", "==", movieId));
+const deletePostByUserAndMovieId = async (userId, movieId) => {
+    const postsRef = collection(db, "posts");
+    const queryRef = query(postsRef,
+        where("movie.id", "==", movieId),
+        where("userId", "==", userId));
 
     try {
         const querySnapshot = await getDocs(queryRef);
@@ -57,65 +62,40 @@ const deletePostsByMovieId = async (userId, movieId) => {
             console.log("Nie znaleziono postu do usunięcia.");
         }
     } catch (error) {
-        console.error(`Błąd podczas usuwania postu dla filmu o ID ${movieId}:`, error);
+        console.error(`Błąd podczas usuwania postu dla filmu o ID ${movieId} użytkownika ${userId}:`, error);
     }
 };
 
-const updatePost = async (userId, postId, { content }) => {
-    if (!content || typeof content !== 'string' || content.trim() === '') {
-        throw new Error("Content must be a non-empty string.");
-    }
-    if (content.length > 500) {
-        throw new Error("Content is too long. Maximum 500 characters allowed.");
-    }
+const fetchUserPosts = async (userId) => {
+    const postsRef = collection(db, "posts");
+    const queryRef = query(postsRef, where("userId", "==", userId), orderBy("timestamp", "desc"));
 
-    const postRef = doc(db, `users/${userId}/posts`, postId);
-    const updateData = {
-        content,
-        timestamp: Timestamp.now()
-    };
-    console.log(`Update postu: ${postId}, użytkownika ${userId}, o nowy content ${content}`)
     try {
-        await updateDoc(postRef, updateData);
-        const updatedDocSnap = await getDoc(postRef);
-        if (updatedDocSnap.exists()) {
-            return { id: updatedDocSnap.id, ...updatedDocSnap.data() };
-        } else {
-            console.error(`Post nie istnieje: ${postId}`);
-            return null;
-        }
-    } catch (error) {
-        console.error(`Błąd przy aktualizacji postu ${postId} użytkownika ${userId}:`, error);
-        return null;
-    }
-};
-
-const fetchPosts = async (friendsIds) => {
-    let posts = [];
-    for (let userId of friendsIds) {
-        const userPostsRef = collection(db, `users/${userId}/posts`);
-        const snapshot = await getDocs(userPostsRef);
+        const snapshot = await getDocs(queryRef);
         const userPosts = snapshot.docs.map(doc => ({
             id: doc.id,
             ...doc.data()
         }));
-        posts = [...posts, ...userPosts];
+        console.log(`Znaleziono ${userPosts.length} postów użytkownika o ID: ${userId}.`);
+        return userPosts;
+    } catch (error) {
+        console.error(`Błąd podczas pobierania postów użytkownika ${userId}:`, error);
+        return [];
     }
-    return posts;
 };
 
 const fetchPostsByAFriend = async (friendsIds) => {
     let posts = [];
-    for (let userId of friendsIds) {
-        const userPostsRef = collection(db, `users/${userId}/posts`);
-        const snapshot = await getDocs(userPostsRef);
-        const userPosts = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-        }));
-        posts = [...posts, ...userPosts];
-    }
+    // for (let userId of friendsIds) {
+    //     const userPostsRef = collection(db, `users/${userId}/posts`);
+    //     const snapshot = await getDocs(userPostsRef);
+    //     const userPosts = snapshot.docs.map(doc => ({
+    //         id: doc.id,
+    //         ...doc.data()
+    //     }));
+    //     posts = [...posts, ...userPosts];
+    // }
     return posts;
 };
 
-export { createPost, deletePostsByMovieId, updatePost, fetchPosts, fetchPostsByAFriend };
+export { createPost, deletePostByUserAndMovieId, fetchUserPosts, fetchPostsByAFriend };

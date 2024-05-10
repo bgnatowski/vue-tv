@@ -1,5 +1,10 @@
 import { defineStore } from 'pinia';
-import {createPost, updatePost, fetchPosts, deletePostsByMovieId, fetchPostsByAFriend} from "@/services/PostService.js";
+import {
+    createPost,
+    fetchUserPosts,
+    fetchPostsByAFriend,
+    deletePostByUserAndMovieId
+} from "@/services/PostService.js";
 import {useUserStore} from "@/stores/UserStore.js";
 
 export const usePostStore = defineStore('postStore', {
@@ -15,36 +20,20 @@ export const usePostStore = defineStore('postStore', {
     },
     actions: {
         async initUserPosts(userId) {
-            this.userPosts = await fetchPosts([userId]);
+            this.userPosts = await fetchUserPosts(userId);
         },
         async fetchCurrentUserPosts() {
             const userStore = useUserStore();
-            this.userPosts = await fetchPosts([userStore.uid]);
-        },
-        async fetchFriendsPosts(friendsIds) {
-            const friendsPosts = await fetchPosts(friendsIds);
-            return friendsPosts;
-        },
-        async fetchFriendsPostsByAFriend(friendsIds) {
-            const friendsPosts = await fetchPostsByAFriend(friendsIds);
-            return friendsPosts;
+            this.userPosts = await fetchUserPosts(userStore.uid);
         },
         async createUserPost(postDetails) {
             const userStore = useUserStore();
             const newPost = await createPost(userStore.uid, postDetails);
             this.userPosts.push(newPost);
         },
-        async updateUserPost(postId, postDetails) {
-            const userStore = useUserStore();
-            const updatedPost = await updatePost(userStore.uid, postId, postDetails);
-            const index = this.userPosts.findIndex(post => post.id === postId);
-            if (index !== -1) {
-                this.userPosts[index] = updatedPost;
-            }
-        },
         async deleteUserPost(movieId) {
             const userStore = useUserStore();
-            await deletePostsByMovieId(userStore.uid, movieId);
+            await deletePostByUserAndMovieId(userStore.uid, movieId);
             this.userPosts = this.userPosts.filter(post => post.movie.id !== movieId);
         },
     },

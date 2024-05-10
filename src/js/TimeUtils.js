@@ -29,7 +29,9 @@ function formatFirestoreTimestamp(timestamp) {
     return new Intl.DateTimeFormat('pl-PL', {
         day: 'numeric',
         month: 'long',
-        year: 'numeric'
+        year: 'numeric',
+        hour: '2-digit', // Ustawia godzinę na dwie cyfry
+        minute: '2-digit' // Ustawia minutę na dwie cyfry
     }).format(date);
 }
 

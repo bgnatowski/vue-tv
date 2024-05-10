@@ -8,7 +8,7 @@ import {useRoute, useRouter} from "vue-router";
 import {fetchUserByUid} from "@/services/UserService.js";
 import {fetchAllPublicUserMovies} from "@/services/MovieService.js";
 import {useUserStore} from "@/stores/UserStore.js";
-import {fetchPosts} from "@/services/PostService.js";
+import {fetchUserPosts} from "@/services/PostService.js";
 
 // ----------------- ZMIENNE -----------------//
 const userStore = useUserStore();
@@ -55,7 +55,7 @@ async function loadUserData(userId) {
   // Jesli uzytkownik jest friendem zaladuj recenzje
   // await userStore.fetchCurrentUser();
   if(userStore.hasFriend(userProfile.value.uid)){
-    userPosts.value = await fetchPosts([userProfile.value.uid])
+    userPosts.value = await fetchUserPosts(userProfile.value.uid)
     isFriend.value = true;
   }
 
