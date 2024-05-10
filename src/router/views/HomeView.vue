@@ -38,7 +38,6 @@ const router = useRouter()
 <style scoped>
 @import url(@/assets/auth-common.css);
 @import url(@/assets/buttons.css);
-
 .panel-container {
   background-color: #000;
   height: 100vh;

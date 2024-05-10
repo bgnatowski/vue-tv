@@ -43,7 +43,7 @@ watch(
 
 <template>
   <NavbarComponent v-if="isLoggedIn" :isSidebarVisible="showSidebar" @toggle-sidebar="toggleSidebar"></NavbarComponent>
-  <main class="container">
+  <main class="container" :class="!isLoggedIn ? 'noPadding' : ''">
     <transition name="sidebar">
       <SidebarComponent v-if="showSidebar && isLoggedIn"></SidebarComponent>
     </transition>
@@ -53,6 +53,11 @@ watch(
 </template>
 
 <style>
+.container.noPadding {
+  padding: 0;
+  margin: 0;
+  overflow-y: hidden;
+}
 /* transition sidebar */
 .sidebar-leave-active {
   transition: .5s ease all; /* Smooth transition for both enter and leave */
