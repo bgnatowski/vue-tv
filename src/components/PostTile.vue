@@ -1,24 +1,43 @@
 <script setup>
-import {ref} from "vue";
+import {onBeforeMount, reactive, ref} from "vue";
 import {fetchMovieDetails} from "@/services/TVDBService.js";
 import RatingStars from "@/components/RatingStars.vue";
 import {useUserStore} from "@/stores/UserStore.js";
 import {formatFirestoreTimestamp} from "@/js/TimeUtils";
 import {usePostStore} from "@/stores/PostStore.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
+import {fetchUserByUid} from "@/services/UserService.js";
 
 // -------------- STORE----------------------------//
 const userStore = useUserStore();
 const postStore = usePostStore();
 const movieStore = useMovieStore();
-const photoUrl = userStore.getPhotoUrl;
+
+// ------------ LADOWANIE DANYCH ----------------//
+const isLoaded = ref(false);
+const user = reactive({
+  username: '',
+  photoUrl: '',
+})
+
+onBeforeMount(async () => {
+  if (props.profile) {
+    user.photoUrl = userStore.getPhotoUrl
+  } else {
+    let friend = await fetchUserByUid(props.post.userId)
+    if (friend) {
+      user.username = friend.username;
+      user.photoUrl = friend.photoUrl;
+    }
+  }
+  isLoaded.value = true
+})
 
 // -------------- PROPS AND EMITS ------------------//
 const props = defineProps({
   profile: Boolean,
   postId: '',
   post: Object,
-  user: Object
 })
 const emits = defineEmits(['show-details']);
 
@@ -62,8 +81,7 @@ const handleDeletePost = () => {
     <div class="upper-bar">
       <div class="user-info">
         <div class="user-image">
-          <img v-if="!profile" :src="user.photoUrl" alt="user photo">
-          <img v-else :src="photoUrl" alt="user photo">
+          <img :src="user.photoUrl" alt="user photo">
         </div>
         <p v-if="!profile" class="user-name">uzytkownik {{user.username}} polecił film:</p>
         <p v-else class="user-name">Poleciłeś film:</p>
@@ -80,7 +98,7 @@ const handleDeletePost = () => {
         </div>
       </div>
     </div>
-    <div class="post-card">
+    <div class="post-card" v-if="isLoaded">
       <div class="movie-poster">
         <img :src="post.movie.posterPath"
              alt="Movie poster for Diuna"/>
@@ -108,6 +126,9 @@ const handleDeletePost = () => {
         <p class="post-description" ref="postDescriptionRef" v-dragscroll.y> {{ post.content }}
         </p>
       </div>
+    </div>
+    <div v-else class="loading">
+      <p>Ładowanie...</p>
     </div>
   </div>
 </template>

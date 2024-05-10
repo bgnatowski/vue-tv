@@ -4,6 +4,8 @@ import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import TitleTile from "@/components/TitleTile.vue";
 import {useUserStore} from "@/stores/UserStore.js";
 import {usePostStore} from "@/stores/PostStore.js";
+import {fetchFriendsPostsByAFriend} from "@/services/PostService.js";
+import PostTile from "@/components/PostTile.vue";
 
 // --------------------- POPUP -------------- ///
 const showDetails = ref(false);
@@ -25,15 +27,15 @@ function handleClose() {
 const isLoaded = ref(false);
 const userStore = useUserStore();
 const postStore = usePostStore();
-const friendsPosts = ref([{
-  friendPost: {},
-  friendId: ''
-}])
+const friendsPosts = ref([]);
 
 onBeforeMount(async () => {
+  await userStore.fetchCurrentUser()
   let friendsIds = userStore.friendsIds
-  // friendsPosts.value = await postStore.fetchFriendsPostsByAFriend(friendsIds)
+  console.log('znajomi:', friendsIds)
+  friendsPosts.value = await fetchFriendsPostsByAFriend(friendsIds)
   isLoaded.value=true
+  console.log('znalezione posty znajomych:',friendsPosts.value)
 })
 
 
@@ -56,15 +58,14 @@ onBeforeMount(async () => {
 
 
     <div class="posts-container" v-dragscroll>
-<!--      <PostTile-->
-<!--          v-if="friendsPosts.length"-->
-<!--          v-for="post in friendsPosts"-->
-<!--          :key="post"-->
-<!--          :post="post"-->
-<!--          :user="friendProfile"-->
-<!--          @show-details="handleShowDetails"-->
-<!--      ></PostTile>-->
-      <div class="user-content">
+      <PostTile
+          v-if="friendsPosts.length"
+          v-for="post in friendsPosts"
+          :key="post"
+          :post="post"
+          @show-details="handleShowDetails"
+      ></PostTile>
+      <div v-else class="user-content">
         <h2>---BRAK RECENZJI---</h2>
       </div>
     </div>

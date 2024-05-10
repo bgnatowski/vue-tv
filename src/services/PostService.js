@@ -84,18 +84,33 @@ const fetchUserPosts = async (userId) => {
     }
 };
 
-const fetchPostsByAFriend = async (friendsIds) => {
-    let posts = [];
-    // for (let userId of friendsIds) {
-    //     const userPostsRef = collection(db, `users/${userId}/posts`);
-    //     const snapshot = await getDocs(userPostsRef);
-    //     const userPosts = snapshot.docs.map(doc => ({
-    //         id: doc.id,
-    //         ...doc.data()
-    //     }));
-    //     posts = [...posts, ...userPosts];
-    // }
-    return posts;
+const fetchFriendsPostsByAFriend = async (friendsIds) => {
+    let allPosts = [];
+
+    try {
+        for (let friendId of friendsIds) {
+            const postsRef = collection(db, "posts");
+            const q = query(postsRef,
+                where("userId", "==", friendId),
+                orderBy("timestamp", "desc")
+            );
+
+            const querySnapshot = await getDocs(q);
+
+            const posts = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+
+            allPosts = [...allPosts, ...posts];
+        }
+
+        allPosts.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
+    } catch (error) {
+        console.error("Błąd podczas pobierania postów znajomych: ", error);
+        return [];
+    }
+    return allPosts;
 };
 
-export { createPost, deletePostByUserAndMovieId, fetchUserPosts, fetchPostsByAFriend };
+export { createPost, deletePostByUserAndMovieId, fetchUserPosts, fetchFriendsPostsByAFriend };

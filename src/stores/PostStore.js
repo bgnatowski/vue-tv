@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 import {
     createPost,
     fetchUserPosts,
-    fetchPostsByAFriend,
     deletePostByUserAndMovieId
 } from "@/services/PostService.js";
 import {useUserStore} from "@/stores/UserStore.js";

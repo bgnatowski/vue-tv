@@ -137,7 +137,6 @@ const pushToUserToWatch = () => {
             v-for="post in userPosts"
             :key="post"
             :post="post"
-            :user="userProfile"
             @show-details="handleShowDetails"
         >
         </PostTile>
