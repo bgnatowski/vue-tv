@@ -13,7 +13,8 @@ export const useFriendRequestStore = defineStore('friendRequestStore', {
         pending: false
     }),
     getters: {
-        isPendingFriendsRequestsForCurrentUser: (state) => state.friendRequests.some(r => r.receiverId === useUserStore().uid),
+        isPendingFriendsRequestsForCurrentUser: (state) => state.friendRequests.some(r => r.receiverId === useUserStore().uid && r.status === 'pending'),
+        isAcceptedFriendRequestForCurrentUser: (state) => state.friendRequests.some(r => r.senderId === useUserStore().uid && r.status === 'accepted'),
         getPendingFriendsRequests: (state) => state.friendRequests.filter(request => request.status === 'pending'),
         getAcceptedFriendsRequests: (state) => state.friendRequests.filter(request => request.status === 'accepted'),
         getToDeleteFriendsRequests: (state) => state.friendRequests.filter(request => request.status === 'to-delete'),

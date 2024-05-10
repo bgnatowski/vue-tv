@@ -1,9 +1,18 @@
 <script setup>
 import paths from "@/router/routerPaths.js";
-import {hasPendingInvitations} from "@/router/index.js";
+import {hasAcceptedInvitations, hasPendingInvitations} from "@/router/index.js";
 import {computed} from "vue";
 
-const showNotification = computed(() => hasPendingInvitations.value)
+const showNotificationInvite = computed(() => {
+  console.log('sidebar', hasPendingInvitations.value);
+      return hasPendingInvitations.value;
+})
+
+const showNotificationFriend = computed(() => {
+  console.log('sidebar', hasAcceptedInvitations.value);
+  return hasAcceptedInvitations.value;
+})
+
 </script>
 <template>
   <div class="sidebar">
@@ -42,6 +51,9 @@ const showNotification = computed(() => hasPendingInvitations.value)
     <router-link :to="paths.FRIENDS_ROUTE" class="router-link-custom">
       <div class="sidebar-button">
         <div class="icon-button">
+          <div class="notification" v-if="showNotificationFriend">
+            <img src="@/assets/img/notification-icon.png">
+          </div>
           <img src="@/assets/img/friends.png" alt="Znajomi">
         </div>
         <span class="button-text">Znajomi</span>
@@ -50,7 +62,7 @@ const showNotification = computed(() => hasPendingInvitations.value)
     <router-link :to="paths.INVITATIONS_ROUTE" class="router-link-custom">
       <div class="sidebar-button">
         <div class="icon-button">
-          <div class="notification" v-if="showNotification">
+          <div class="notification" v-if="showNotificationInvite">
             <img src="@/assets/img/notification-icon.png">
           </div>
           <img src="@/assets/img/invitation.png" alt="Zaproszenia do znajomych">

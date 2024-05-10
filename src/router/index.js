@@ -165,22 +165,37 @@ const getCurrentUser = () => {
 }
 
 const hasPendingInvitations = ref(false);
+const hasAcceptedInvitations = ref(false);
 router.beforeEach(async (to, from, next) => {
     const currentUser = await getCurrentUser();
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-
-    const friendRequestStore = useFriendRequestStore();
-    hasPendingInvitations.value = friendRequestStore.isPendingFriendsRequestsForCurrentUser;
-    // console.log(hasPendingInvitations.value)
 
     if ((to.path === paths.HOME_ROUTE || to.path === paths.REGISTER_ROUTE || to.path === paths.LOGIN_ROUTE) && currentUser) {
         next(paths.MAIN_ROUTE);
     } else if (requiresAuth && !currentUser) {
         console.log("Nie masz tu dostępu :D")
         next(paths.HOME_ROUTE);
-    } else {
+    }
+    else {
+        const friendRequestStore = useFriendRequestStore();
+        await friendRequestStore.initFriendRequests(currentUser.uid)
+        hasPendingInvitations.value = friendRequestStore.isPendingFriendsRequestsForCurrentUser;
+        hasAcceptedInvitations.value = friendRequestStore.isAcceptedFriendRequestForCurrentUser;
+        console.log('route pending: ', hasPendingInvitations.value)
+        console.log('route accepted: ', hasAcceptedInvitations.value)
         next();
     }
 });
+
+router.afterEach(async (to, from, next) => {
+    const currentUser = await getCurrentUser();
+
+    if ((to.path === paths.INVITATIONS_ROUTE) && currentUser) {
+        console.log("wszedlem do invitation")
+    } else if ((to.path === paths.FRIENDS_ROUTE) && currentUser) {
+        console.log("wszedlem do FRIENDS")
+    }
+});
+
 export default router;
-export {hasPendingInvitations};
+export {hasPendingInvitations, hasAcceptedInvitations};
