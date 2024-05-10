@@ -2,7 +2,7 @@
 
 import {onMounted, ref} from "vue";
 import {useMovieStore} from "@/stores/MovieStore.js";
-import {fetchMovieDetails} from "@/services/TVDBService.js";
+import {fetchMovieDetails} from "@/services/TMDBService.js";
 
 // ---------------- STORES ---------------------//
 const movieStore = useMovieStore()

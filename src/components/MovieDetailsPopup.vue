@@ -4,6 +4,7 @@ import {computed, ref} from "vue";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import {formatISODate} from "@/js/TimeUtils.js";
 import {useRouter} from "vue-router";
+import {formatGenres} from "@/js/DataUtils.js";
 
 // ------------------------ STORES ------------------------------//
 const movieStore = useMovieStore();
@@ -60,7 +61,7 @@ const addToWatched = async () => {
 };
 
 const formattedReleaseDate = computed(() => formatISODate(props.movie.releaseDate));
-
+const formattedGenres = computed(() => formatGenres(props.movie.genres));
 // ------------ TO MOVIE PAGE ---------//
 const router = useRouter();
 const goToMoviePage = () => {
@@ -68,6 +69,7 @@ const goToMoviePage = () => {
   closePopup()
   router.push({name: 'MovieDetails', params: {id: props.movie.id}});
 }
+
 
 </script>
 <template>
@@ -91,7 +93,7 @@ const goToMoviePage = () => {
               </tr>
               <tr>
                 <th class="tg-0pky tg-size">Gatunki:</th>
-                <th class="tg-0lax tg-size">{{ movie.genres.map((genre) => genre.name).join(", ") }}</th>
+                <th class="tg-0lax tg-size">{{ formattedGenres }}</th>
               </tr>
               </thead>
               <tbody>

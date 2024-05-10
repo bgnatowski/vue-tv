@@ -1,7 +1,7 @@
 <script setup>
 
 import {ref, watch} from "vue";
-import {searchMovie} from "@/services/TVDBService.js";
+import {searchMovie} from "@/services/TMDBService.js";
 import {searchUsersByUsername} from "@/services/UserService.js";
 
 const props = defineProps({

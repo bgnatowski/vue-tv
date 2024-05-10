@@ -3,6 +3,8 @@ import RatingStars from "@/components/RatingStars.vue";
 import AddToMovieListButtons from "@/components/AddToMovieListButtons.vue";
 import {computed} from "vue";
 import {formatISODate} from "@/js/TimeUtils.js";
+import {formatGenres} from "@/js/DataUtils.js";
+import CastComponent from "@/components/CastComponent.vue";
 
 const props = defineProps({
   movie: Object,
@@ -19,7 +21,7 @@ const handleUpShowDetails = (detailData) => {
 }
 
 const formattedReleaseDate = computed(() => formatISODate(props.movie.releaseDate));
-
+const formattedGenres = computed(() => formatGenres(props.movie.genres));
 </script>
 
 <template>
@@ -31,6 +33,7 @@ const formattedReleaseDate = computed(() => formatISODate(props.movie.releaseDat
         </div>
         <div class="movie-details">
           <h1 class="movie-title">{{ movie.title }}</h1>
+          <h2 class="movie-original">Tytuł oryginalny: {{ movie.originalTitle }}</h2>
           <table class="tg">
             <thead>
             <tr>
@@ -39,13 +42,17 @@ const formattedReleaseDate = computed(() => formatISODate(props.movie.releaseDat
             </tr>
             <tr>
               <th class="tg-0pky tg-size">Gatunki:</th>
-              <th class="tg-0lax tg-size">{{ movie.genres.map((genre) => genre.name).join(", ") }}</th>
+              <th class="tg-0lax tg-size">{{ formattedGenres }}</th>
             </tr>
             </thead>
             <tbody>
             <tr>
               <td class="tg-0pky tg-size">Długość:</td>
               <td class="tg-0lax tg-size">{{ movie.duration }} min</td>
+            </tr>
+            <tr>
+              <td class="tg-0pky tg-size">Budżet:</td>
+              <td class="tg-0lax tg-size">{{ movie.budget }} $</td>
             </tr>
             <tr>
               <td class="tg-0pky tg-size">Ilość ocen:</td>
@@ -63,6 +70,7 @@ const formattedReleaseDate = computed(() => formatISODate(props.movie.releaseDat
         </div>
       </div>
       <div class="lower-bar">
+        <CastComponent :cast="movie.cast"></CastComponent>
         <h2>Opis</h2>
         <div class="movie-description">
           <p>{{ movie.description }}</p>

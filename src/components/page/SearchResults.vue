@@ -2,7 +2,7 @@
 import MovieItem from "@/components/page/SearchResultMovieItem.vue";
 import UserItem from "@/components/page/SearchResultUserItem.vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
-import {computed, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 
 // ---------------------- PROPS AND EMITS ----------------- //
 const props = defineProps({

@@ -1,11 +1,12 @@
 <script setup>
 
 import {computed, onMounted, ref} from "vue";
-import {fetchMovieDetails} from "@/services/TVDBService.js";
+import {fetchMovieDetails} from "@/services/TMDBService.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import {useUserStore} from "@/stores/UserStore.js";
 import RatingStars from "@/components/RatingStars.vue";
 import AddToMovieListButtons from "@/components/AddToMovieListButtons.vue";
+import {formatGenres} from "@/js/DataUtils.js";
 
 // ------------------ PROPS AND EMITS -----------------------//
 const props = defineProps({
@@ -29,6 +30,7 @@ const movie = ref({});
 const isLoaded = ref(false);
 const isPrivate = ref();
 const userRating = ref(0)
+const formattedGenres = ref([])
 
 // ----------------------------- ZALADOWANIE DANYCH ----------------//
 onMounted(async () => {
@@ -36,6 +38,7 @@ onMounted(async () => {
     movie.value = await fetchMovieDetails(props.movieId);
     emit("emit-duration", movie.value.duration)
     userRating.value = props.userRating;
+    formattedGenres.value = formatGenres(movie.value.genres)
     isLoaded.value = true;
   } else {
     console.log('BLAD')
@@ -56,7 +59,7 @@ onMounted(async () => {
             <h2> {{ movie.title }} </h2>
             <div class="movie-metadata">
               <p class="metadata-title">Premiera: <span>{{ movie.releaseDate.substring(0, 4) }}</span></p>
-              <p class="metadata-title">Gatunki: <span>{{ movie.genres.map((genre) => genre.name).join(", ") }}</span>
+              <p class="metadata-title">Gatunki: <span>{{ formattedGenres }}</span>
               </p>
               <p class="metadata-title">Długość: <span>{{ movie.duration }} min</span></p>
               <p class="metadata-title" v-if="watched">Ocena: <span>{{ userRating }}/10</span></p>

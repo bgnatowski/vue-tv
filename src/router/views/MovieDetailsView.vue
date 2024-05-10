@@ -1,6 +1,6 @@
 <script setup>
 import {onBeforeMount, onMounted, ref, computed, watch} from "vue";
-import {fetchMovieDetails} from "@/services/TVDBService.js";
+import {fetchAllMovieDetails, fetchMovieDetails} from "@/services/TMDBService.js";
 import RatingStars from "@/components/RatingStars.vue";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import {useUserStore} from "@/stores/UserStore.js";
@@ -24,7 +24,7 @@ watch(() => route.params.id, async (newMovieId) => {
 });
 
 async function loadMovieData(movieId) {
-  movieDetails.value = await fetchMovieDetails(movieId);
+  movieDetails.value = await fetchAllMovieDetails(movieId);
   if(movieDetails.value == null){
     await router.push({name: 'NotFound'});
     return;

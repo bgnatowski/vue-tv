@@ -1,12 +1,13 @@
 <script setup>
-import {onBeforeMount, reactive, ref} from "vue";
-import {fetchMovieDetails} from "@/services/TVDBService.js";
+import {computed, onBeforeMount, reactive, ref} from "vue";
+import {fetchMovieDetails} from "@/services/TMDBService.js";
 import RatingStars from "@/components/RatingStars.vue";
 import {useUserStore} from "@/stores/UserStore.js";
 import {formatFirestoreTimestamp} from "@/js/TimeUtils";
 import {usePostStore} from "@/stores/PostStore.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import {fetchUserByUid} from "@/services/UserService.js";
+import {formatGenres} from "@/js/DataUtils.js";
 
 // -------------- STORE----------------------------//
 const userStore = useUserStore();
@@ -73,7 +74,7 @@ const showDetails = async () => {
 const handleDeletePost = () => {
   postStore.deleteUserPost(props.post.movie.id);
 }
-
+const formattedGenres = computed(() => formatGenres(props.post.movie.genres));
 </script>
 
 <template>
@@ -111,7 +112,7 @@ const handleDeletePost = () => {
             <thead>
             <tr>
               <th class="tg-0pky tg-size">Gatunki:</th>
-              <th class="tg-0lax tg-size">{{ post.movie.genres.map((genre) => genre.name).join(", ") }}</th>
+              <th class="tg-0lax tg-size">{{ formattedGenres }}</th>
             </tr>
             </thead>
             <tbody>

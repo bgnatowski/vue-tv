@@ -1,8 +1,9 @@
 <script setup>
-import {computed, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import {useMovieStore} from "@/stores/MovieStore.js";
-import {fetchMovieDetails} from "@/services/TVDBService.js";
+import {fetchMovieDetails} from "@/services/TMDBService.js";
 import {useRouter} from "vue-router";
+import {formatGenres, formatSearchGenres} from "@/js/DataUtils.js";
 
 // ----------- STORES ------------------//
 const movieStore = useMovieStore();
@@ -10,6 +11,10 @@ const movieStore = useMovieStore();
 // ---------- PROPS AND EMITS ---------- //
 const props = defineProps({movie: Object,});
 const emits = defineEmits(['show-details']);
+
+onMounted(() => {
+  // console.log(props.movie)
+})
 
 // ----------- DROPDOWN --------------//
 const isShowDropdown = ref(false);
@@ -74,6 +79,9 @@ const formattedReleaseDate = computed(() => {
   }
   return props.movie.releaseDate.substring(0, 4); // Show only the year
 });
+
+const formattedGenres = computed(() => formatSearchGenres(props.movie.genres));
+
 </script>
 
 <template>
@@ -82,7 +90,7 @@ const formattedReleaseDate = computed(() => {
     <div class="movie-info">
       <h3>{{ movie.title }}</h3>
       <span>Premiera: {{ formattedReleaseDate }}</span>
-      <span>Gatunki: {{ movie.genres.join(', ') }}</span>
+      <span>Gatunki: {{ formattedGenres }}</span>
       <span class="on-list" v-if="isOnWatched">Na liście: obejrzane</span>
       <span class="on-list" v-else-if="isOnToWatch">Na liście: do obejrzenia</span>
     </div>

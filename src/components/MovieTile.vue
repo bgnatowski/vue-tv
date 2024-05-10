@@ -1,10 +1,11 @@
 <script setup>
 
 import {computed, onBeforeMount, onMounted, ref, watch, watchEffect} from "vue";
-import {fetchMovieDetails} from "@/services/TVDBService.js";
+import {fetchMovieDetails} from "@/services/TMDBService.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import RatingStars from "@/components/RatingStars.vue";
 import {usePostStore} from "@/stores/PostStore.js";
+import {formatGenres} from "@/js/DataUtils.js";
 
 // ------------------ PROPS AND EMITS -----------------------//
 const props = defineProps({
@@ -120,6 +121,7 @@ watch(() => movieStore.getCurrentUserMovieById(props.movieId), (newMovie) => {
   userRating.value = newMovie.userRating;
 }, { deep: true, immediate: true });
 
+const formattedGenres = computed(() => formatGenres(movie.value.genres));
 
 </script>
 
@@ -135,7 +137,7 @@ watch(() => movieStore.getCurrentUserMovieById(props.movieId), (newMovie) => {
             <h2> {{ movie.title }} </h2>
             <div class="movie-metadata">
               <p class="metadata-title">Premiera: <span>{{ movie.releaseDate.substring(0, 4) }}</span></p>
-              <p class="metadata-title">Gatunki: <span>{{ movie.genres.map((genre) => genre.name).join(", ") }}</span>
+              <p class="metadata-title">Gatunki: <span>{{ formattedGenres }}</span>
               </p>
               <p class="metadata-title">Długość: <span>{{ movie.duration }} min</span></p>
               <p class="metadata-title" v-if="watched">Twoja ocena: <span>{{ userRating }}/10</span></p>

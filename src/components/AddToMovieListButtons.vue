@@ -120,7 +120,7 @@ const isOnToWatch = computed(() => movieStore.isOnToWatch(props.movieDetails.id)
 .plus-sign{
   display: block;
   position: absolute;
-  transform: translateX(-200%) translateY(30%);
+  transform: translateX(-200%) translateY(5%);
   font-size: .8em;
 }
 
