@@ -48,6 +48,7 @@ async function fetchMovieDetails(id){
         }
     } catch {
         console.log('Błąd w czasie pobierania danych')
+        return null;
     }
     return movie;
 }

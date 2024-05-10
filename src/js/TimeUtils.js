@@ -19,8 +19,33 @@ function minutesToText(minutes) {
     return text.join(' ');
 }
 
+function formatFirestoreTimestamp(timestamp) {
+    if(!timestamp){
+        return ""
+    }
+
+    const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
+
+    return new Intl.DateTimeFormat('pl-PL', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit', // Ustawia godzinę na dwie cyfry
+        minute: '2-digit' // Ustawia minutę na dwie cyfry
+    }).format(date);
+}
+
 function formatISODate(isoDateString) {
+    if (!isoDateString) {
+        throw new Error("Brak podanej daty.");
+    }
+
     const date = new Date(isoDateString);
+
+    if (isNaN(date.getTime())) {
+        throw new Error("Nieprawidłowy format daty.");
+    }
+
     return new Intl.DateTimeFormat('pl-PL', {
         year: 'numeric',
         month: 'long',
@@ -30,5 +55,6 @@ function formatISODate(isoDateString) {
 
 export {
     formatISODate,
-    minutesToText
+    minutesToText,
+    formatFirestoreTimestamp
 }

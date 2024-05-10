@@ -138,7 +138,16 @@ const router = createRouter({
                 requiresAuth: true,
             },
             props: true
-        }
+        },
+        {
+            path: paths.MOVIE,
+            component: () => import('./views/MovieDetailsView.vue'),
+            name: 'MovieDetails',
+            meta: {
+                requiresAuth: true,
+            },
+            props: true
+        },
     ],
 });
 
@@ -162,6 +171,7 @@ router.beforeEach(async (to, from, next) => {
 
     const friendRequestStore = useFriendRequestStore();
     hasPendingInvitations.value = friendRequestStore.isPendingFriendsRequestsForCurrentUser;
+    // console.log(hasPendingInvitations.value)
 
     if ((to.path === paths.HOME_ROUTE || to.path === paths.REGISTER_ROUTE || to.path === paths.LOGIN_ROUTE) && currentUser) {
         next(paths.MAIN_ROUTE);

@@ -27,8 +27,8 @@ onBeforeMount(() =>{
 
 
 <template>
-  <div class="rating-container" :class="vertical ? 'column' : ''">
-    <Rating :stars="10" v-model="stars" :readonly="readOnly" :cancel="!readOnly" :class="vertical ? 'column' : ''">
+  <div class="rating-container" :class="vertical ? 'flex-column' : ''">
+    <Rating :stars="10" v-model="stars" :readonly="readOnly" :cancel="!readOnly" :class="vertical ? 'flex-column' : ''">
       <template #cancelicon>
         <img class="cancel-icon star-icon" src="@/assets/rating/cancel.png" alt="cancel"/>
       </template>
@@ -39,7 +39,8 @@ onBeforeMount(() =>{
         <img class="star-icon" src="@/assets/rating/custom-officon.png" alt="star-unfilled"/>
       </template>
     </Rating>
-    <p v-if="readOnly" class="real-value"> {{ stars }} / 10</p>
+    <p v-if="readOnly && !vertical" class="real-value"> {{ stars }} / 10</p>
+
   </div>
 </template>
 
@@ -57,11 +58,15 @@ onBeforeMount(() =>{
   padding-left: 8px;
   padding-right: 8px;
   width: fit-content;
-  margin: 3px 3px 0 0;
+  margin: 3px;
 }
 
-.column {
-  flex-direction: column;
+.flex-column{
+  justify-content: center;
+  align-items: center;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-size: .8em;
 }
 
 .rating-container .real-value {

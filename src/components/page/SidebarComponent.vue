@@ -15,6 +15,14 @@ const showNotification = computed(() => hasPendingInvitations.value)
         <span class="button-text">Strona główna</span>
       </div>
     </router-link>
+    <router-link :to="paths.MY_PROFILE_ROUTE" class="router-link-custom">
+      <div class="sidebar-button">
+        <div class="icon-button">
+          <img src="@/assets/img/person-icon.png" alt="Strona główna">
+        </div>
+        <span class="button-text">Twój profil</span>
+      </div>
+    </router-link>
     <router-link :to="paths.TO_WATCH_ROUTE" class="router-link-custom">
       <div class="sidebar-button">
         <div class="icon-button">
@@ -48,14 +56,6 @@ const showNotification = computed(() => hasPendingInvitations.value)
           <img src="@/assets/img/invitation.png" alt="Zaproszenia do znajomych">
         </div>
         <span class="button-text">Zaproszenia do znajomych</span>
-      </div>
-    </router-link>
-    <router-link :to="paths.SETTINGS_ROUTE" class="router-link-custom">
-      <div class="sidebar-button">
-        <div class="icon-button">
-          <img src="@/assets/img/settings_icon.png" alt="Ustawienia">
-        </div>
-        <span class="button-text">Ustawienia</span>
       </div>
     </router-link>
   </div>

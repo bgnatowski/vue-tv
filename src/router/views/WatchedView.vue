@@ -1,34 +1,57 @@
 <script setup>
 import TitleTile from "@/components/TitleTile.vue";
-import {computed, onMounted, ref, watch, watchEffect} from "vue";
+import {computed, ref} from "vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
 import {minutesToText} from "@/js/TimeUtils";
-import {useUserStore} from "@/stores/UserStore.js";
 import MovieTile from "@/components/MovieTile.vue";
 import {useMovieStore} from "@/stores/MovieStore.js";
+import NotePopup from "@/components/NotePopup.vue";
+import PostPopup from "@/components/PostPopup.vue";
+import {usePostStore} from "@/stores/PostStore.js";
 
-// --------------- STORES ------------------- //
-const userStore = useUserStore();
-const movieStore = useMovieStore();
-
-// --------------------- POPUP -------------- ///
-const showDetails = ref(false);
-const selectedMovie = ref(null);
-const isAnyList = ref(null);
+// ----------------------- ZMIENNE -----------//
 const isWatched = ref(true);
 const isToWatch = ref(false);
 
+// --------------- STORES ------------------- //
+const movieStore = useMovieStore();
+const postStore = usePostStore();
+
+// --------------------- POPUP -------------- ///
+const showDetails = ref(false);
+const showNote = ref(false);
+const showPost = ref(false);
+const selectedMovie = ref(null);
+const selectedNote = ref(null);
+const selectedPost = ref(null);
+
 const handleShowDetails = (showDetailsData) => {
   selectedMovie.value = showDetailsData.movie;
-  console.log(selectedMovie.value)
   showDetails.value = true;
+}
+
+const handleShowNote = async (showNoteData) => {
+  selectedNote.value = showNoteData;
+  showNote.value = true;
+}
+
+const handleShowPost = (showPostData) => {
+  selectedPost.value = showPostData.postData;
+  showPost.value = true;
 }
 
 function handleClose() {
   showDetails.value = false;
+  showNote.value = false;
+  showPost.value = false;
 }
 
-// --------------------- MOVIE TILE -------------- ///
+async function handleReload() {
+  await movieStore.fetchCurrentUserMovies();
+  await postStore.fetchCurrentUserPosts();
+}
+
+// --------------------- MOVIE TILE LADOWANIE DANYCH -------------- ///
 const moviesWatchedIds = computed(() => {
   return movieStore.getCurrentUserWatchedIds;
 });
@@ -52,11 +75,24 @@ const addToTotalDuration = (duration) => {
 
     <MovieDetailsPopup v-if="showDetails"
                        :movie="selectedMovie"
-                       :on-any-list="isAnyList"
                        :on-to-watch="isToWatch"
                        :on-watched="isWatched"
                        @close="handleClose">
     </MovieDetailsPopup>
+
+    <NotePopup v-if="showNote"
+               :movie-data="selectedNote"
+               @close="handleClose"
+               @edited="handleReload"
+    >
+    </NotePopup>
+
+    <PostPopup v-if="showPost"
+               :post-data="selectedPost"
+               @close="handleClose"
+               @edited="handleReload"
+    >
+    </PostPopup>
 
     <MovieTile
         v-if="moviesWatchedIds.length"
@@ -65,6 +101,8 @@ const addToTotalDuration = (duration) => {
         :key="movieId"
         :movie-id="movieId"
         @show-details="handleShowDetails"
+        @show-note="handleShowNote"
+        @show-post="handleShowPost"
         @emit-duration="addToTotalDuration"
     />
     <div v-else class="user-content">
@@ -74,7 +112,4 @@ const addToTotalDuration = (duration) => {
 </template>
 
 <style scoped>
-.user-content {
-  text-align: center;
-}
 </style>

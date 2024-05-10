@@ -1,32 +1,44 @@
 <script setup>
 import TitleTile from "@/components/TitleTile.vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
-import {computed, ref} from "vue";
+import {computed, onBeforeMount, ref} from "vue";
 import {minutesToText} from "@/js/TimeUtils.js";
-import {useUserStore} from "@/stores/UserStore.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import MovieTile from "@/components/MovieTile.vue";
+import NotePopup from "@/components/NotePopup.vue";
+
+// ------------------ ZMIENNE ----------------//
+const isWatched = ref(false);
+const isToWatch = ref(true);
 
 // --------------- STORES ------------------- //
-const userStore = useUserStore();
 const movieStore = useMovieStore();
 
 // --------------------- POPUP -------------- ///
 const showDetails = ref(false);
+const showNote = ref(false);
 const selectedMovie = ref(null);
-const isWatched = ref(false);
-const isToWatch = ref(true);
+const selectedNote = ref(null);
 
 const handleShowDetails = (showDetailsData) => {
   selectedMovie.value = showDetailsData.movie;
   showDetails.value = true;
 }
 
-function handleClose() {
-  showDetails.value = false;
+const handleShowNote = (showNoteData) => {
+  selectedNote.value = showNoteData;
+  showNote.value = true;
 }
 
-// --------------------- MOVIE TILE -------------- ///
+function handleClose() {
+  showDetails.value = false;
+  showNote.value = false;
+}
+
+async function handleReload() {
+  await movieStore.fetchCurrentUserMovies();
+}
+// --------------------- MOVIE TILE LADOWANIE DANYCH -------------- ///
 const moviesToWatchIds = computed(() => {
   return movieStore.getCurrentUserToWatchIds;
 });
@@ -54,6 +66,13 @@ const addToTotalDuration = (duration) => {
                        @close="handleClose">
     </MovieDetailsPopup>
 
+    <NotePopup v-if="showNote"
+               :movie-data="selectedNote"
+               @close="handleClose"
+               @edited="handleReload"
+    >
+    </NotePopup>
+
     <MovieTile
         v-if="moviesToWatchIds.length"
         v-for="(movieId) in moviesToWatchIds"
@@ -61,6 +80,7 @@ const addToTotalDuration = (duration) => {
         :movie-id="movieId"
         @show-details="handleShowDetails"
         @emit-duration="addToTotalDuration"
+        @show-note="handleShowNote"
     />
     <div v-else class="user-content">
       <h2>--- Brak filmów na liście. Wyszukaj i dodaj! ---</h2>
@@ -70,8 +90,5 @@ const addToTotalDuration = (duration) => {
 
 <style scoped>
 
-.user-content {
-  text-align: center;
-}
 
 </style>

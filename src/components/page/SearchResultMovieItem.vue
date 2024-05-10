@@ -1,41 +1,42 @@
 <script setup>
 import {computed, ref} from 'vue';
-import {useUserStore} from "@/stores/UserStore.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import {fetchMovieDetails} from "@/services/TVDBService.js";
+import {useRouter} from "vue-router";
 
 // ----------- STORES ------------------//
-const userStore = useUserStore();
 const movieStore = useMovieStore();
 
 // ---------- PROPS AND EMITS ---------- //
 const props = defineProps({movie: Object,});
-const emit = defineEmits(['show-details']);
+const emits = defineEmits(['show-details']);
 
 // ----------- DROPDOWN --------------//
 const isShowDropdown = ref(false);
-const showDropdown = () => {
-  isShowDropdown.value = true;
-};
-const hideDropdown = () => {
-  isShowDropdown.value = false;
-};
+const showDropdown = () => isShowDropdown.value = true;
+const hideDropdown = () => isShowDropdown.value = false;
 
 // ------------- POPUP -------------//
 const showDetails = async () => {
   const movieDetails = await fetchMovieDetails(props.movie.id)
-  emit('show-details', {
+  emits('show-details', {
     movie: movieDetails,
     onWatched: isOnWatched.value,
     onToWatch: isOnToWatch.value
   });
 }
 
+// ------------ TO MOVIE PAGE ---------//
+const router = useRouter();
+const goToMoviePage = () => {
+  hideDropdown()
+  router.push({name: 'MovieDetails', params: {id: props.movie.id}});
+}
+
 // -------------- TO LISTS ---------- //
 const addToWatch = async () => {
   let m = props.movie;
   await movieStore.createCurrentUserMovie({
-    uId: userStore.uid,
     mId: m.id,
     isWatched: false
   });
@@ -45,7 +46,6 @@ const addToWatch = async () => {
 const addToWatched = async () => {
   let m = props.movie;
   await movieStore.createCurrentUserMovie({
-    uId: userStore.uid,
     mId: m.id,
     isWatched: true
   });
@@ -86,13 +86,14 @@ const formattedReleaseDate = computed(() => {
       <span class="on-list" v-if="isOnWatched">Na liście: obejrzane</span>
       <span class="on-list" v-else-if="isOnToWatch">Na liście: do obejrzenia</span>
     </div>
+    <div class="icon-button" @click="showDropdown">
+      <img src="@/assets/img/dots-icon.png" alt="Movie Options"/>
+    </div>
     <div class="dropdown">
-      <div class="icon-button" @click="showDropdown">
-        <img src="@/assets/img/dots-icon.png" alt="Movie Options"/>
-      </div>
       <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
         <ul class="dropdown-list">
-          <li @click="showDetails" class="dropdown-option">Zobacz więcej</li>
+          <li @click="showDetails" class="dropdown-option">Szybki podgląd</li>
+          <li @click="goToMoviePage" class="dropdown-option">Zobacz strone filmu</li>
           <li @click="addToWatch" v-if="!(isOnToWatch || isOnWatched)" class="dropdown-option">Dodaj do obejrzenia</li>
           <li @click="addToWatched" v-if="!(isOnToWatch || isOnWatched) && canBeOnWatched" class="dropdown-option">Dodaj do obejrzanych</li>
         </ul>
@@ -154,15 +155,15 @@ const formattedReleaseDate = computed(() => {
 }
 
 .dropdown {
-  position: sticky;
+  position: absolute;
   z-index: 9;
   transition: .5s ease all;
 }
 
 .dropdown-content {
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 15px;
+  top: -15px;
   white-space: nowrap;
   z-index: 999999;
   background-color: white;

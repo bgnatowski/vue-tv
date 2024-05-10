@@ -17,7 +17,6 @@ const searchedUsers = ref([]);
 watch(searchQuery, async () => {
   searchedMovies.value = await searchMovie(searchQuery.value)
   searchedUsers.value = await searchUsersByUsername(searchQuery.value);
-
   emits('searched-results', { movies: searchedMovies.value, users: searchedUsers.value });
 });
 
@@ -29,7 +28,7 @@ async function reloadSearched() {
 <template>
   <div class="search">
     <form @submit.prevent class="search-form">
-      <input :placeholder="placeholderTxt" v-model="searchQuery" @click="reloadSearched">
+      <input type="search" :placeholder="placeholderTxt" v-model="searchQuery" @click="reloadSearched">
     </form>
   </div>
 </template>
@@ -41,6 +40,10 @@ async function reloadSearched() {
   justify-content: space-between;
   width: 20%;
   transition: .4s ease all;
+}
+
+input[type=search]::-webkit-search-cancel-button {
+  cursor: pointer;
 }
 
 @media screen and (max-width: 600px){

@@ -1,10 +1,10 @@
 <script setup>
 
-import {computed, onMounted, ref, watch} from "vue";
+import {computed, onBeforeMount, onMounted, ref, watch, watchEffect} from "vue";
 import {fetchMovieDetails} from "@/services/TVDBService.js";
 import {useMovieStore} from "@/stores/MovieStore.js";
-import {useUserStore} from "@/stores/UserStore.js";
 import RatingStars from "@/components/RatingStars.vue";
+import {usePostStore} from "@/stores/PostStore.js";
 
 // ------------------ PROPS AND EMITS -----------------------//
 const props = defineProps({
@@ -13,23 +13,24 @@ const props = defineProps({
 })
 const emit = defineEmits([
   'show-details',
+  'show-note',
+  'show-post',
   'emit-duration',
 ]);
 
 // ------------------- INSTANCJE STORES -------------------//
 const movieStore = useMovieStore();
-const userStore = useUserStore();
 
 // --------------------- ZMIENNE -------------------------//
 const movie = ref({});
 const isLoaded = ref(false);
 const isPrivate = ref();
 const userRating = ref(0)
+const movieNote = ref('')
 
 // ------------------- DELETE FROM LIST -------------------//
 const deleteMovie = () => {
   movieStore.removeCurrentUserMovie(
-      userStore.uid,
       props.movieId,
   );
   emit("emit-duration", -movie.value.duration)
@@ -38,7 +39,6 @@ const deleteMovie = () => {
 // ------------------- MOVE TO WATCHED ----------------------//
 const moveToWatched = () => {
   movieStore.modifyCurrentUserMovie(
-      userStore.uid,
       props.movieId,
       {isWatched: true}
   );
@@ -46,34 +46,29 @@ const moveToWatched = () => {
 };
 
 // ------------------- RATING UPDATE ----------------------//
-const updateRating = (newRating) => {
-  movieStore.modifyCurrentUserMovie(
-      userStore.uid,
+const updateRating = async () => {
+  await movieStore.modifyCurrentUserMovie(
       props.movieId,
-      {userRating: newRating}
+      {userRating: userRating.value}
   );
-  userRating.value = newRating;
+  //todo on update rating -> check if there is already post -> update user rating in post otherwise do nothing
 };
 
 // ------------------- CHANGE VISIBLE/PUBLIKACJA -----------//
 const publicMovie = () => {
   movieStore.modifyCurrentUserMovie(
-      userStore.uid,
       props.movieId,
       {isPrivate: false}
   );
   isPrivate.value = false;
 }
-
 const unpublicMovie = () => {
   movieStore.modifyCurrentUserMovie(
-      userStore.uid,
       props.movieId,
       {isPrivate: true}
   );
   isPrivate.value = true;
 }
-
 // ---------------------- IS ON LIST? --------- //
 const isOnWatched = computed(() => movieStore.isOnWatched(movie.value.id))
 const isOnToWatch = computed(() => movieStore.isOnToWatch(movie.value.id))
@@ -87,27 +82,50 @@ const showDetails = () => {
   });
 }
 
+const showNote = () => {
+  emit('show-note', {
+    id: movie.value.id,
+    title: movie.value.title,
+    note: movieNote.value
+  });
+}
+
+const showPost = () => {
+  emit('show-post', {
+    postData: {
+      id: movie.value.id,
+      title: movie.value.title,
+      duration: movie.value.duration,
+      posterPath: movie.value.posterPath,
+      genres: movie.value.genres,
+      userRating: userRating.value
+    },
+  });
+}
+
 // ----------------------------- ZALADOWANIE DANYCH ----------------//
-onMounted(async () => {
-  if (props.movieId != undefined) {
+onBeforeMount(async () => {
+  if (props.movieId !== undefined) {
     movie.value = await fetchMovieDetails(props.movieId);
     emit("emit-duration", movie.value.duration)
-
-    let userMovie = movieStore.getCurrentUserMovieById(props.movieId);
-    isPrivate.value = userMovie.isPrivate
-    userRating.value = userMovie.userRating
-
     isLoaded.value = true;
   } else {
     console.log('BLAD')
   }
 });
 
+watch(() => movieStore.getCurrentUserMovieById(props.movieId), (newMovie) => {
+  isPrivate.value = newMovie.isPrivate
+  movieNote.value = newMovie.note;
+  userRating.value = newMovie.userRating;
+}, { deep: true, immediate: true });
+
+
 </script>
 
 <template>
   <section class="post">
-    <div class="movie-card" v-if="isLoaded">
+    <div class="popup-card" v-if="isLoaded">
       <div class="movie-poster">
         <img :src="movie.posterPath" alt="Movie poster"/>
       </div>
@@ -121,7 +139,7 @@ onMounted(async () => {
               </p>
               <p class="metadata-title">Długość: <span>{{ movie.duration }} min</span></p>
               <p class="metadata-title" v-if="watched">Twoja ocena: <span>{{ userRating }}/10</span></p>
-              <RatingStars @rating-value="updateRating" :rating="userRating" v-if="watched"></RatingStars>
+              <RatingStars @rating-value="e => userRating=e" @click="updateRating" :rating="userRating" v-if="watched"></RatingStars>
             </div>
           </div>
           <div class="movie-action-buttons" v-if="!watched">
@@ -139,23 +157,27 @@ onMounted(async () => {
         </div>
         <div class="buttons">
           <div class="card-action-buttons" :class="watched ? 'cab-min-width' : ''">
-            <!--            todo: recommend -->
-            <div class="card-action-icon" v-if="!isPrivate && watched" aria-label="Recommend">
+            <div @click="showPost" class="card-action-icon" v-if="!isPrivate && watched" aria-label="Recommend">
               <img src="@/assets/img/recommend-icon.png" alt="Recommend icon"/>
+              <span class="button-span" v-if="!isPrivate && watched">Recenzja</span>
             </div>
-            <!--            todo: note -->
-            <div class="card-action-icon" aria-label="Note">
+            <div @click="showNote" class="card-action-icon" aria-label="Note">
               <img src="@/assets/img/edit-icon.png" alt="Note icon"/>
+              <span class="button-span">Notatka</span>
             </div>
             <div @click="showDetails" class="card-action-icon" aria-label="Info">
               <img src="@/assets/img/info-icon.png" alt="Info icon"/>
+              <span class="button-span">Więcej informacji</span>
             </div>
             <div class="card-action-icon" aria-label="Hide">
               <img src="@/assets/img/hide-icon.png" v-if="isPrivate" alt="Hide icon" @click="publicMovie"/>
               <img src="@/assets/img/show-icon.png" v-else alt="Show icon" @click="unpublicMovie"/>
+              <p class="button-span" v-if="isPrivate">Ukryty</p>
+              <span class="button-span" v-else>Publiczny</span>
             </div>
             <div @click="deleteMovie" class="card-action-icon" aria-label="Delete">
               <img src="@/assets/img/delete-icon.png" alt="Delete icon"/>
+              <span class="button-span">Usuń</span>
             </div>
           </div>
 
@@ -169,11 +191,13 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+@import url(@/assets/movie-buttons.css);
+
 .post {
   min-height: fit-content;
 }
 
-.movie-card {
+.popup-card {
   display: flex;
   align-content: center;
   justify-content: center;
@@ -202,7 +226,6 @@ onMounted(async () => {
   flex-grow: 1;
   padding: 0 1em;
   width: 100%;
-  /*height: fit-content;*/
 }
 
 .movie-text h2 {
@@ -242,48 +265,6 @@ onMounted(async () => {
   flex-direction: column;
   width: 60%;
   justify-content: space-between;
-}
-
-.buttons {
-  display: flex;
-  flex-direction: column;
-  width: 40%;
-  min-width: fit-content;
-}
-
-.card-action-buttons {
-  display: flex;
-  align-content: flex-end;
-  justify-content: flex-end;
-}
-
-.cab-min-width {
-  min-width: 250px;
-}
-
-.card-action-icon {
-  height: 50px;
-  width: 50px;
-  border-radius: 50%;
-  padding: 10px;
-  transition: .3s ease all;
-  cursor: pointer;
-}
-
-.card-action-icon:hover {
-  background-color: var(--lighter-main);
-  border: none;
-  box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
-}
-
-.card-action-icon:active {
-  background-color: var(--clicked-button);
-}
-
-.card-action-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
 }
 
 .movie-action-buttons {
@@ -388,26 +369,6 @@ input:checked + .slider:before {
   .movie-center {
     width: 100%;
   }
-
-  .buttons {
-    height: fit-content;
-    width: auto;
-  }
-
-  .card-action-buttons {
-    min-height: 185px;
-    flex-direction: column-reverse;
-    justify-content: flex-end;
-    align-self: flex-end;
-    min-width: unset
-  }
-
-  .card-action-icon {
-    height: 35px;
-    width: 35px;
-    border-radius: 50%;
-    padding: 8px;
-  }
 }
 
 
@@ -416,15 +377,6 @@ input:checked + .slider:before {
     width: 100px;
     height: auto;
     object-fit: cover;
-  }
-
-  .card-action-buttons {
-    padding: 0;
-  }
-
-  .card-action-icon {
-    height: 35px;
-    width: 35px;
   }
 
   .movie-details {
@@ -453,6 +405,11 @@ input:checked + .slider:before {
     width: 50px;
     height: auto;
     object-fit: cover;
+  }
+
+  .movie-details {
+    padding-bottom: 1em;
+    margin-bottom: 10px;
   }
 
   .movie-text h2 {

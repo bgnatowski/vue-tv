@@ -1,6 +1,5 @@
 <script setup>
-import {computed, onBeforeMount, onMounted, reactive, ref} from 'vue';
-import routerPaths from "@/router/routerPaths.js";
+import {computed, reactive, ref} from 'vue';
 import {useRouter} from "vue-router";
 import ActionPopup from "@/components/auth/ActionPopup.vue";
 import changeImageIcon from '@/assets/img/change-image-icon.png';
@@ -28,15 +27,14 @@ const isGoogleAuth = computed(() => authStore.isGoogleUser())
 <template>
   <section class="feed-container">
     <div class="post">
-      <div @click="showChangeAvatarPopup=true" class="profile-picture">
+      <div @click="showChangeAvatarPopup.value=true" class="profile-picture">
         <img :src="user.photoUrl" alt="profile avatar" class="user-profile-pic">
         <img :src="changeImageIcon" alt="change icon" class="change-image-icon">
       </div>
       <p class="user-name">{{ user.username }}</p>
       <div class="settings-actions">
-        <button v-if="!isGoogleAuth" @click="showChangePasswordPopup=true" class="action-button">Zmień hasło</button>
+        <button v-if="!isGoogleAuth" @click="showChangePasswordPopup.value=true" class="action-button">Zmień hasło</button>
         <button @click="showDeleteAccountPopup=true" class="action-button">Usuń konto</button>
-        <button class="action-button" @click="router.push(routerPaths.LOGOUT_ROUTE)">Wyloguj</button>
       </div>
       <ActionPopup :is-google-user="isGoogleAuth" action-type="changePassword" v-if="showChangePasswordPopup"
                    @close="showChangePasswordPopup=false"></ActionPopup>
@@ -81,7 +79,7 @@ const isGoogleAuth = computed(() => authStore.isGoogleUser())
   border-radius: 50%;
   transition: filter 0.3s;
   box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
-  border: 2px solid var(--lighter-main)
+  border: 4px solid var(--lighter-main)
 }
 
 .change-image-icon {

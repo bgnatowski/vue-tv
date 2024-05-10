@@ -1,10 +1,12 @@
 <script setup>
 
 import paths from "@/router/routerPaths.js";
-import {ref, watch} from "vue";
+import {computed, reactive, ref, watch} from "vue";
 import {useRouter} from "vue-router";
 import SearchBar from "@/components/page/SearchBar.vue";
 import SearchResults from "@/components/page/SearchResults.vue";
+import {useUserStore} from "@/stores/UserStore.js";
+import routerPaths from "@/router/routerPaths.js";
 // ------------------ PROPS AND EMITS ----------------//
 
 const props = defineProps({
@@ -41,10 +43,6 @@ function onMenuButtonClick() {
   sideBarIconRotate.value = !sideBarIconRotate.value
 }
 
-function toggleRotate() {
-  profileIconRotate.value = !profileIconRotate.value
-}
-
 function onSearchIconClick() {
   searchIconRotate.value = !searchIconRotate.value
   hideBranding.value = !hideBranding.value;
@@ -65,6 +63,22 @@ const handleHideResults = () => {
   searchedResults.value = { movies: [], users: [] }
 }
 
+const userStore = useUserStore()
+// ------------------  COMPUTED --------------//
+const user = reactive({
+  username: computed(() => userStore.getUsername),
+  photoUrl: computed(() => userStore.getPhotoUrl),
+});
+
+// ----------- DROPDOWN --------------//
+const isShowDropdown = ref(false);
+const showDropdown = () => {
+  isShowDropdown.value = true;
+};
+const hideDropdown = () => {
+  isShowDropdown.value = false;
+};
+
 </script>
 
 <template>
@@ -78,9 +92,17 @@ const handleHideResults = () => {
         <li v-if="mobile" class="icon-button" @click="onSearchIconClick" :class="{'rotate360': searchIconRotate}">
           <img src="@/assets/img/search-icon.png" alt="search-icon">
         </li>
-        <li @click="router.push(paths.MY_PROFILE_ROUTE)" class="icon-button"
+        <li class="icon-button user-profile-button"
             :class="{'rotate360': profileIconRotate}">
-          <img @click="toggleRotate" src="@/assets/img/user.png" alt="User profile icon"/>
+          <img @click="showDropdown" :src="user.photoUrl" alt="User profile icon"/>
+          <div class="dropdown">
+            <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
+              <ul class="dropdown-list">
+                <li @click="router.push(routerPaths.SETTINGS_ROUTE)" class="dropdown-option">Ustawienia</li>
+                <li @click="router.push(routerPaths.LOGOUT_ROUTE)" class="dropdown-option">Wyloguj</li>
+              </ul>
+            </div>
+          </div>
         </li>
         <li class="icon-button" :class="{'rotate180': sideBarIconRotate}">
           <img @click="onMenuButtonClick" src="@/assets/img/menu-icon.png" alt="Menu icon">
@@ -92,13 +114,28 @@ const handleHideResults = () => {
 </template>
 
 <style scoped>
+@import url(@/assets/dropdown.css);
+.dropdown {
+  position: sticky;
+  top: unset;
+  right: unset;
+  left: 0;
+  transition: .5s ease all;
+}
+
+.dropdown-content {
+  transition: .5s ease all;
+  position: absolute;
+  right: 0;
+}
+
 header {
+  position: sticky;
   background: rgb(255, 255, 255, 0.25);
   top: 0;
   left: 0;
   z-index: 99;
   width: 100vw;
-  position: sticky;
   border: none;
   box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
 }
@@ -140,6 +177,15 @@ header {
   height: 100%;
   object-fit: contain;
   margin: 0;
+}
+
+.user-profile-button {
+  padding: .2em;
+}
+
+.user-profile-button img{
+  border-radius: 50%;
+  border: 2px solid var(--lighter-main);
 }
 
 .navigation .icon-button:hover {

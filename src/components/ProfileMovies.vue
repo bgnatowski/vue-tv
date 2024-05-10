@@ -50,35 +50,74 @@ const showDetails = (m) => {
 
 </script>
 <template>
-  <div class="post" v-dragscroll.x v-if="props.moviesIds.length">
+  <div class="post" v-if="props.moviesIds.length">
     <div v-if="isFetching">
-      <h1> ŁADOWANIE ...</h1>
+      <h1>ŁADOWANIE...</h1>
     </div>
-    <div
-        class="movie-poster"
-        v-for="movie in movies"
-        :key="movie"
-        v-else
-    >
-      <img @click="showDetails(movie)" :src="movie.posterPath" alt="Movie poster"/>
+    <div class="movie-scroll-wrapper" v-else>
+      <div class="movie-container" v-dragscroll.x>
+        <div class="movie-poster" v-for="movie in movies" :key="movie.id">
+          <img @click="showDetails(movie)" :src="movie.posterPath" alt="Movie poster"/>
+        </div>
+      </div>
+      <div class="fade-effect"></div>
     </div>
-
   </div>
   <div class="post" v-else>
-    <h1>BRAK FILMOW NA LIŚCIE</h1>
+    <h1>BRAK FILMÓW NA LIŚCIE</h1>
   </div>
 </template>
 
 <style scoped>
 .post {
   flex-direction: row;
-  overflow-y: clip;
-  overflow-x: hidden;
-  scrollbar-width: thin;
   width: 100%;
-  max-width: 400px;
   align-self: center;
 }
+
+.movie-scroll-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.movie-container {
+  display: flex;
+  align-items: flex-end;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  width: 100%;
+}
+
+.fade-effect {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 50px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+  pointer-events: none;
+}
+
+.movie-poster {
+  width: 130px;
+  height: 200px;
+  flex-shrink: 0;
+  padding: 0.2em;
+  cursor: pointer;
+}
+
+.movie-poster img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 1.5em;
+}
+
 
 @media screen and (max-width: 1000px) {
   .post {
@@ -102,30 +141,6 @@ const showDetails = (m) => {
   .post {
     max-width: inherit;
   }
-}
-
-.post::-webkit-scrollbar {
-  height: 8px;
-}
-
-.post::-webkit-scrollbar-thumb {
-  background-color: darkgray;
-  border-radius: 4px;
-}
-
-.movie-poster {
-  width: 130px;
-  height: 200px;
-  flex-shrink: 0;
-  padding: 0.2em;
-  cursor: pointer;
-}
-
-.movie-poster img {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  border-radius: 1.5em;
 }
 </style>
 

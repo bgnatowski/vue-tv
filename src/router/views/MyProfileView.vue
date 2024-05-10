@@ -8,9 +8,11 @@ import {useUserStore} from "@/stores/UserStore.js";
 import paths from "@/router/routerPaths.js";
 import {useRouter} from "vue-router";
 import {useMovieStore} from "@/stores/MovieStore.js";
+import {usePostStore} from "@/stores/PostStore.js";
 
 // ----------------- STORES -------------------//
 const movieStore = useMovieStore()
+const postStore = usePostStore()
 const userStore = useUserStore();
 const router = useRouter()
 
@@ -35,9 +37,10 @@ function handleClose() {
   showDetails.value = false;
 }
 
-// ---------------- MOVIES -------------------------//
+// ---------------- COMPUTED -------------------------//
 const toWatchMoviesIds = computed(() => movieStore.getCurrentUserToWatchIds)
 const watchedMoviesIds = computed(() => movieStore.getCurrentUserWatchedIds)
+const posts = computed(() => postStore.getUserPosts)
 
 </script>
 
@@ -74,7 +77,18 @@ const watchedMoviesIds = computed(() => movieStore.getCurrentUserWatchedIds)
     <section class="posts-column">
       <TitleTile>Twoje recenzje</TitleTile>
       <div class="posts" v-dragscroll>
-        <PostTile profile @show-details="handleShowDetails"></PostTile>
+        <PostTile
+            v-if="posts.length"
+            v-for="post in posts"
+            :key="post"
+            :post="post"
+            profile
+            @show-details="handleShowDetails"
+        >
+        </PostTile>
+        <div class="user-content" v-else>
+          <h2>---BRAK RECENZJI---</h2>
+        </div>
       </div>
     </section>
   </section>
@@ -132,7 +146,7 @@ const watchedMoviesIds = computed(() => movieStore.getCurrentUserWatchedIds)
   height: 100%;
   object-fit: contain;
   border-radius: 50%;
-  border: 2px solid var(--lighter-main);
+  border: 4px solid var(--lighter-main);
   box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
 }
 

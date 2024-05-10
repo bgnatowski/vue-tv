@@ -1,7 +1,7 @@
 <script setup>
 import TitleTile from "@/components/TitleTile.vue";
 import InvitationTile from "@/components/InvitationTile.vue";
-import {computed, onMounted} from "vue";
+import {computed, onBeforeMount} from "vue";
 import {useFriendRequestStore} from "@/stores/FriendRequestStore.js";
 import {useUserStore} from "@/stores/UserStore.js";
 
@@ -14,6 +14,7 @@ const friendsRequests = computed(() => {
   return friendRequestStore.getPendingFriendsRequests.filter(r => r.receiverId === userStore.uid);
 });
 
+
 </script>
 
 <template>
@@ -24,8 +25,8 @@ const friendsRequests = computed(() => {
           v-for="friendRequest in friendsRequests"
           :key="friendRequest" :friend-request="friendRequest"/>
     </div>
-    <main v-if="!friendsRequests" class="user-content">
-      <h1>---BRAK---</h1>
+    <main v-if="!friendsRequests.length" class="user-content">
+      <h1>---BRAK ZAPROSZEŃ---</h1>
     </main>
   </section>
 </template>
@@ -36,9 +37,6 @@ const friendsRequests = computed(() => {
   flex-wrap: wrap;
   justify-content: flex-start;
   gap: 5%;
-}
-.user-content {
-  margin: auto;
 }
 
 @media screen and (max-width: 460px) {
