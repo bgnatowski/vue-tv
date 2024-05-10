@@ -27,13 +27,13 @@ const isGoogleAuth = computed(() => authStore.isGoogleUser())
 <template>
   <section class="feed-container">
     <div class="post">
-      <div @click="showChangeAvatarPopup.value=true" class="profile-picture">
+      <div @click="showChangeAvatarPopup=true" class="profile-picture">
         <img :src="user.photoUrl" alt="profile avatar" class="user-profile-pic">
         <img :src="changeImageIcon" alt="change icon" class="change-image-icon">
       </div>
       <p class="user-name">{{ user.username }}</p>
       <div class="settings-actions">
-        <button v-if="!isGoogleAuth" @click="showChangePasswordPopup.value=true" class="action-button">Zmień hasło</button>
+        <button v-if="!isGoogleAuth" @click="showChangePasswordPopup=true" class="action-button">Zmień hasło</button>
         <button @click="showDeleteAccountPopup=true" class="action-button">Usuń konto</button>
       </div>
       <ActionPopup :is-google-user="isGoogleAuth" action-type="changePassword" v-if="showChangePasswordPopup"
