@@ -36,7 +36,7 @@ Aplikacja została zbudowana w oparciu o Vue 3, wykorzystując Composition API d
  * Ustawianie prywatności filmów na swoich listach
  * Reaktywny nawigacyjny side-bar
 
-## Project Setup
+## Uruchomienie lokalne (wymaga uzupelniania .env)
 
 ```sh
 npm install
@@ -47,3 +47,9 @@ npm install
 ```sh
 npm run dev
 ```
+
+## Aplikacja dostepna również na:
+
+https://bgnatowski.github.io/vue-tv/
+
+(ale odswieżanie konkretnych stron tu nie działa) 
