@@ -64,7 +64,7 @@ aplikacji wykorzystano Pinia, a do nawigacji między widokami Vue Router. Aplika
 
 The Movie Database (TMDb) API - dostęp do bogatej bazy danych filmów, seriali telewizyjnych, aktorów oraz ich filmografii. API udostępnia informacje takie jak tytuły, opisy, oceny, daty premiery, obsady filmów, zdjęcia oraz wiele innych szczegółów.
 
-## Uruchomienie lokalne
+## Uruchomienie lokalne (wymagany .env z credentialami)
 
 ```sh
 npm install
