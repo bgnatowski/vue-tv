@@ -144,6 +144,7 @@ const hideDropdown = () => {
   right: 0;
   z-index: 99;
   padding-top: 100px;
+  border-radius: 1.2em 1.2em 0 1.2em;
 }
 
 header {

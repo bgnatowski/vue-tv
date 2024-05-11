@@ -115,6 +115,7 @@ const goToProfile = () => {
 .dropdown-content {
   position: absolute;
   right: 15px;
+  top: -8px;
   white-space: nowrap;
   z-index: 999999;
   background-color: white;

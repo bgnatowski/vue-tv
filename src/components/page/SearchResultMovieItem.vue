@@ -171,7 +171,7 @@ const formattedGenres = computed(() => formatSearchGenres(props.movie.genres));
 .dropdown-content {
   position: absolute;
   right: 15px;
-  top: -15px;
+  top: -30px;
   white-space: nowrap;
   z-index: 999999;
   background-color: white;
