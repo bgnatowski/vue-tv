@@ -175,14 +175,16 @@ router.beforeEach(async (to, from, next) => {
     } else if (requiresAuth && !currentUser) {
         console.log("Nie masz tu dostępu :D")
         next(paths.HOME_ROUTE);
-    }
-    else {
+    }else if (requiresAuth && currentUser){
         const friendRequestStore = useFriendRequestStore();
         await friendRequestStore.initFriendRequests(currentUser.uid)
         hasPendingInvitations.value = friendRequestStore.isPendingFriendsRequestsForCurrentUser;
         hasAcceptedInvitations.value = friendRequestStore.isAcceptedFriendRequestForCurrentUser;
         console.log('route pending: ', hasPendingInvitations.value)
         console.log('route accepted: ', hasAcceptedInvitations.value)
+        next();
+    }
+    else {
         next();
     }
 });
