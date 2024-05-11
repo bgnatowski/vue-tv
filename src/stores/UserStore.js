@@ -27,7 +27,6 @@ export const useUserStore = defineStore('userStore', {
             this.assignData(userData)
         },
         async fetchCurrentUser(){
-            console.log('id: ', this.uid)
             const userData = await getUserData(this.uid);
             this.assignData(userData)
         },

@@ -2,19 +2,17 @@
 import MovieItem from "@/components/page/SearchResultMovieItem.vue";
 import UserItem from "@/components/page/SearchResultUserItem.vue";
 import MovieDetailsPopup from "@/components/MovieDetailsPopup.vue";
-import {computed, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 
 // ---------------------- PROPS AND EMITS ----------------- //
 const props = defineProps({
-  results: Object
+  results: Object,
+  showResults: Boolean
 });
 const emits = defineEmits(['hide-results']);
 
 const handleMouseOut = () => {
-  emits('hide-results');
-  showFilter.value = false;
-  isMovies.value = true;
-  isUsers.value = true;
+  emits('hide-results')
 };
 
 // --------------------- POPUP -------------- ///
@@ -22,9 +20,14 @@ const showDetails = ref(false);
 const showFilter = ref(false);
 const isMovies = ref(true);
 const isUsers = ref(true);
+const isHided = computed(() => props.showResults)
 const selectedMovie = ref(null);
 const isWatched = ref(null);
 const isToWatch = ref(null);
+const rememberChecked = ref(false);
+const rememberCheckedSlider = ref(false);
+
+onMounted(() => console.log('hided?' , isHided.value))
 
 const handleShowDetails = (showDetailsData) => {
   isWatched.value = showDetailsData.onWatched
@@ -43,31 +46,37 @@ const isResult = computed(() => {
 
 const handleShowFilters = () => {
   showFilter.value = !showFilter.value
+  rememberChecked.value = !rememberChecked.value;
   isMovies.value = true;
   isUsers.value = false;
+  if(!showFilter.value){
+    isMovies.value = true;
+    isUsers.value = true;
+  }
 }
 
 const hideOneResults = () => {
   isMovies.value = !isMovies.value;
   isUsers.value = !isUsers.value;
+  rememberCheckedSlider.value = isUsers.value;
 }
 
 </script>
 
 <template>
-  <ul class="result" :class="isResult ? 'shadow' : ''" @mouseleave="handleMouseOut">
-    <div class="flex-column">
-      <div class="flex-row search-slider" v-if="results.movies.length || results.users.length">
+  <ul class="result" :class="isResult ? 'shadow' : ''" @mouseleave="handleMouseOut" v-if="isHided">
+    <div class="flex-column" v-if="(results.movies.length || results.users.length)">
+      <div class="flex-row search-slider">
         <span class="filter-span">Potrzebujesz filtru? Kliknij -></span>
         <label class="custom-checkbox">
-          <input type="checkbox" @click="handleShowFilters">
+          <input type="checkbox" :checked="rememberChecked" @change="handleShowFilters">
           <span class="checkmark"></span>
         </label>
       </div>
       <div class="flex-row search-slider" v-if="showFilter">
         <span>filmy</span>
         <label class="switch">
-          <input type="checkbox" @change="hideOneResults">
+          <input type="checkbox" @change="hideOneResults" :checked="rememberCheckedSlider">
           <span class="slider round"></span>
         </label>
         <span>uzytkownicy</span>

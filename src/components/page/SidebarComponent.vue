@@ -4,12 +4,10 @@ import {hasAcceptedInvitations, hasPendingInvitations} from "@/router/index.js";
 import {computed} from "vue";
 
 const showNotificationInvite = computed(() => {
-  console.log('sidebar', hasPendingInvitations.value);
       return hasPendingInvitations.value;
 })
 
 const showNotificationFriend = computed(() => {
-  console.log('sidebar', hasAcceptedInvitations.value);
   return hasAcceptedInvitations.value;
 })
 

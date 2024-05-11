@@ -59,8 +59,12 @@ const handleSearchedResults = (results) => {
   }
 };
 
+const showResults = ref(false)
+const handleShowResults = () => {
+  showResults.value = true;
+}
 const handleHideResults = () => {
-  searchedResults.value = { movies: [], users: [] }
+  showResults.value = false;
 }
 
 const userStore = useUserStore()
@@ -87,7 +91,7 @@ const hideDropdown = () => {
       <div class="branding" v-if="!mobile || !hideBranding">
         <h1 @click="router.push(paths.HOME_ROUTE)" class="bruno-ace-regular">VueTV</h1>
       </div>
-      <SearchBar v-if="!mobile || hideBranding" placeholder-txt="Szukaj filmu/użytkownika" @searched-results="handleSearchedResults"/>
+      <SearchBar v-if="!mobile || hideBranding" placeholder-txt="Szukaj filmu/użytkownika" @searched-results="handleSearchedResults" @click="handleShowResults"/>
       <ul class="navigation">
         <li v-if="mobile" class="icon-button" @click="onSearchIconClick" :class="{'rotate360': searchIconRotate}">
           <img src="@/assets/img/search-icon.png" alt="search-icon">
@@ -101,7 +105,7 @@ const hideDropdown = () => {
         </li>
       </ul>
     </nav>
-    <SearchResults :results="searchedResults" @hide-results="handleHideResults"></SearchResults>
+    <SearchResults :results="searchedResults" :show-results="showResults" @hide-results="handleHideResults"></SearchResults>
   </header>
   <transition name="slide-down">
     <div class="dropdown" v-if="isShowDropdown">

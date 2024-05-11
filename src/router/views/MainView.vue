@@ -32,10 +32,10 @@ const friendsPosts = ref([]);
 onBeforeMount(async () => {
   await userStore.fetchCurrentUser()
   let friendsIds = userStore.friendsIds
-  console.log('znajomi:', friendsIds)
+  // console.log('znajomi:', friendsIds)
   friendsPosts.value = await fetchFriendsPostsByAFriend(friendsIds)
   isLoaded.value=true
-  console.log('znalezione posty znajomych:',friendsPosts.value)
+  // console.log('znalezione posty znajomych:',friendsPosts.value)
 })
 
 

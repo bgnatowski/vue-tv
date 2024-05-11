@@ -180,8 +180,6 @@ router.beforeEach(async (to, from, next) => {
         await friendRequestStore.initFriendRequests(currentUser.uid)
         hasPendingInvitations.value = friendRequestStore.isPendingFriendsRequestsForCurrentUser;
         hasAcceptedInvitations.value = friendRequestStore.isAcceptedFriendRequestForCurrentUser;
-        console.log('route pending: ', hasPendingInvitations.value)
-        console.log('route accepted: ', hasAcceptedInvitations.value)
         next();
     }
     else {
