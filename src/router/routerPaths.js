@@ -1,21 +1,21 @@
 const paths =
 {
-    HOME_ROUTE: '/vue-tv/',
-    REGISTER_ROUTE: '/vue-tv/register',
-    LOGIN_ROUTE: '/vue-tv/login',
-    LOGOUT_ROUTE: '/vue-tv/logout',
-    DELETE_ROUTE: '/vue-tv/delete',
-    MAIN_ROUTE: '/vue-tv/main',
-    MY_PROFILE_ROUTE: '/vue-tv/user/me',
-    SETTINGS_ROUTE: '/vue-tv/user/me/settings',
-    TO_WATCH_ROUTE: '/vue-tv/user/me/to-watch',
-    WATCHED_ROUTE: '/vue-tv/user/me/watched',
-    FRIENDS_ROUTE: '/vue-tv/user/me/friends',
-    INVITATIONS_ROUTE: '/vue-tv/user/me/invitations',
-    USER_PROFILE_ROUTE: '/vue-tv/user/:id',
-    USER_WATCHED_ROUTE: '/vue-tv/user/:id/watched',
-    USER_TO_WATCH_ROUTE: '/vue-tv/user/:id/to-watch',
-    MOVIE: '/vue-tv/movie/:id', // na przyszlosc zamiast popupa movie
+    HOME_ROUTE: '/',
+    REGISTER_ROUTE: '/register',
+    LOGIN_ROUTE: '/login',
+    LOGOUT_ROUTE: '/logout',
+    DELETE_ROUTE: '/delete',
+    MAIN_ROUTE: '/main',
+    MY_PROFILE_ROUTE: '/user/me',
+    SETTINGS_ROUTE: '/user/me/settings',
+    TO_WATCH_ROUTE: '/user/me/to-watch',
+    WATCHED_ROUTE: '/user/me/watched',
+    FRIENDS_ROUTE: '/user/me/friends',
+    INVITATIONS_ROUTE: '/user/me/invitations',
+    USER_PROFILE_ROUTE: '/user/:id',
+    USER_WATCHED_ROUTE: '/user/:id/watched',
+    USER_TO_WATCH_ROUTE: '/user/:id/to-watch',
+    MOVIE: '/movie/:id', // na przyszlosc zamiast popupa movie
 }
 
 export default paths
