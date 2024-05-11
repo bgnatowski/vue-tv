@@ -73,7 +73,7 @@ const user = reactive({
 // ----------- DROPDOWN --------------//
 const isShowDropdown = ref(false);
 const showDropdown = () => {
-  isShowDropdown.value = true;
+  isShowDropdown.value = !isShowDropdown.value;
 };
 const hideDropdown = () => {
   isShowDropdown.value = false;
@@ -95,14 +95,6 @@ const hideDropdown = () => {
         <li class="icon-button user-profile-button"
             :class="{'rotate360': profileIconRotate}">
           <img @click="showDropdown" :src="user.photoUrl" alt="User profile icon"/>
-          <div class="dropdown">
-            <div v-if="isShowDropdown" class="dropdown-content" @mouseleave="hideDropdown">
-              <ul class="dropdown-list">
-                <li @click="router.push(routerPaths.SETTINGS_ROUTE)" class="dropdown-option">Ustawienia</li>
-                <li @click="router.push(routerPaths.LOGOUT_ROUTE)" class="dropdown-option">Wyloguj</li>
-              </ul>
-            </div>
-          </div>
         </li>
         <li class="icon-button" :class="{'rotate180': sideBarIconRotate}">
           <img @click="onMenuButtonClick" src="@/assets/img/menu-icon.png" alt="Menu icon">
@@ -111,22 +103,47 @@ const hideDropdown = () => {
     </nav>
     <SearchResults :results="searchedResults" @hide-results="handleHideResults"></SearchResults>
   </header>
+  <transition name="slide-down">
+    <div class="dropdown" v-if="isShowDropdown">
+      <div class="dropdown-content" @mouseleave="hideDropdown">
+        <ul class="dropdown-list">
+          <li @click="router.push(routerPaths.MY_PROFILE_ROUTE)" class="dropdown-option">Twój profil</li>
+          <li @click="router.push(routerPaths.SETTINGS_ROUTE)" class="dropdown-option">Ustawienia</li>
+          <li @click="router.push(routerPaths.LOGOUT_ROUTE)" class="dropdown-option">Wyloguj</li>
+        </ul>
+      </div>
+    </div>
+  </transition>
+
 </template>
 
 <style scoped>
 @import url(@/assets/dropdown.css);
-.dropdown {
-  position: sticky;
-  top: unset;
-  right: unset;
-  left: 0;
-  transition: .5s ease all;
+.slide-down-enter-active, .slide-down-leave-active {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.slide-down-enter, .slide-down-leave-to {
+  transform: translateY(-150px);
+}
+.slide-down-enter-to, .slide-down-leave {
+  transform: translateY(100%);
 }
 
-.dropdown-content {
-  transition: .5s ease all;
+
+.dropdown {
   position: absolute;
+  top: 0;
   right: 0;
+  z-index: 99;
+}
+.dropdown-content {
+  position: absolute;
+  background-color: white;
+  box-shadow: 0px 4px 13px 3px rgba(0, 0, 0, 0.25);
+  top: 0;
+  right: 0;
+  z-index: 99;
+  padding-top: 100px;
 }
 
 header {
@@ -134,7 +151,7 @@ header {
   background: rgb(255, 255, 255, 0.25);
   top: 0;
   left: 0;
-  z-index: 99;
+  z-index: 9999;
   width: 100vw;
   border: none;
   box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
@@ -148,6 +165,7 @@ header {
   justify-content: space-between;
   width: 100vw;
   padding: 0.4em;
+  z-index: 999999;
 }
 
 .navigation {
@@ -183,9 +201,12 @@ header {
   padding: .1em;
 }
 
+
 .user-profile-button img{
   border-radius: 50%;
   border: 2px solid var(--lighter-main);
+  cursor: pointer;
+  display: block; /* Dla lepszej kontroli layoutu */
 }
 
 .navigation .icon-button:hover {
@@ -217,12 +238,19 @@ header {
     width: 100px;
     height: 100px;
   }
+
+  .dropdown-content {
+    padding-top: 160px;
+  }
 }
 
 
 @media screen and (max-width: 1000px) {
   .search input {
     display: none;
+  }
+  .dropdown-content {
+    padding-top: 80px;
   }
 }
 
@@ -242,6 +270,9 @@ header {
     width: 100%;
     justify-content: flex-start;
     cursor: pointer;
+  }
+  .dropdown-content {
+
   }
 }
 

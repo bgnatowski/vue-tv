@@ -64,11 +64,11 @@ watch(
 }
 
 .sidebar-leave {
-  transform: translateX(0); /* Start position for leave animation (fully on-screen) */
+  transform: translateX(0);
 }
 
 .sidebar-leave-to {
-  transform: translateX(-100%); /* End position for leave animation (off-screen) */
+  transform: translateX(-100%);
 }
 
 @media (max-width: 1000px) {
