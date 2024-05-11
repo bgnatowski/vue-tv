@@ -1,5 +1,9 @@
 ## VueTV - aplikacja zaliczeniowa
 
+### Aplikacja jest dostępna pod adresem:
+
+https://bai-vue-tv.web.app/
+
 ## Interfejs
 
 [Projekt Interfejsu (figma)](https://www.figma.com/file/ToCZtfqYqHsnE4Ot6ljAUn/VueTV?type=design&node-id=0%3A1&mode=design&t=svhmutbHMhWSaJMN-1) / [Prototyp](https://www.figma.com/proto/ToCZtfqYqHsnE4Ot6ljAUn/VueTV?type=design&node-id=2-2&t=Pf1pyUOi2yhRJpBO-0&scaling=min-zoom&page-id=0%3A1&starting-point-node-id=2%3A2)
@@ -77,12 +81,3 @@ npm run dev
 ```
 
 ### Zalecane jest korzystanie z Microsoft Edge, na innych przeglądarkach czasem występują bugi w UI
-
-## Aplikacja jest dostępna również na:
-
-https://bgnatowski.github.io/vue-tv/
-
-(W tej instancji istnieją problemy z odświeżaniem konkretnych stron,
-z racji uzycia routingu, kiedy github pages zapewnia resource'y tylko pod jednym adresem, tj, kiedy będąc już w routingu
-pod innym adresem, np. vue-tv/user/me i nastąpi odswieżenie github wyrzuci 404, bo resource znajdują się tylko na
-/vue-tv/)
