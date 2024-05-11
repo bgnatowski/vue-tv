@@ -87,7 +87,7 @@ const hideDropdown = () => {
       <div class="branding" v-if="!mobile || !hideBranding">
         <h1 @click="router.push(paths.HOME_ROUTE)" class="bruno-ace-regular">VueTV</h1>
       </div>
-      <SearchBar v-if="!mobile || hideBranding" placeholder-txt="Szukaj" @searched-results="handleSearchedResults"/>
+      <SearchBar v-if="!mobile || hideBranding" placeholder-txt="Szukaj filmu/użytkownika" @searched-results="handleSearchedResults"/>
       <ul class="navigation">
         <li v-if="mobile" class="icon-button" @click="onSearchIconClick" :class="{'rotate360': searchIconRotate}">
           <img src="@/assets/img/search-icon.png" alt="search-icon">
@@ -179,8 +179,8 @@ header {
   margin: 0;
 }
 
-.user-profile-button {
-  padding: .2em;
+.icon-button.user-profile-button {
+  padding: .1em;
 }
 
 .user-profile-button img{

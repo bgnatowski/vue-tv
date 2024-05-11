@@ -15,6 +15,7 @@ const createUser = async (userData = {}) => {
     await setDoc(userRef, {
         uid: userData.uid,
         username: userData.username,
+        usernameLower: userData.username.toLowerCase(),
         email: userData.email,
         photoUrl: userData.photoUrl,
         friendsIds: [],
@@ -55,16 +56,16 @@ const fetchUserByUid = async (uid) => {
 };
 
 const searchUsersByUsername = async (usernamePattern) => {
-    if(!usernamePattern.length){
+    if (!usernamePattern.length) {
         return [];
     }
     const usersRef = collection(db, 'users');
 
     const q = query(
         usersRef,
-        orderBy('username'),
-        startAt(usernamePattern),
-        endAt(usernamePattern + '\uf8ff')
+        orderBy('usernameLower'),
+        startAt(usernamePattern.toLowerCase()),
+        endAt(usernamePattern.toLowerCase() + '\uf8ff')
     );
 
     const querySnapshot = await getDocs(q);
