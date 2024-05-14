@@ -92,7 +92,7 @@ async function updateProfilePhotoURL() {
   try {
     if (file.value) {
       const timestamp = Date.now();
-      const storagePath = `profilePictures/${userStore.uuid}/${timestamp}-${file.value.name}`;
+      const storagePath = `profilePictures/${userStore.getUid}/${timestamp}-${file.value.name}`;
       const fileRef = storageRef(storage, storagePath);
       const metadata = {
         contentType: file.value.type
