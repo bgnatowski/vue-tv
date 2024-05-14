@@ -181,7 +181,7 @@ p {
   font-size: calc((.2em + .5vmin) + (.2em + .5vmax));
 }
 
-@media (max-width: 798px) {
+@media (max-width: 798px) or (max-height: 600px) {
   .panel-container {
     display: flex;
     flex-direction: column;
