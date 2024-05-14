@@ -213,7 +213,7 @@ const pushToUserToWatch = () => {
   justify-self: center;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1200px) {
   .feed-container {
     flex-direction: column;
     justify-content: center;

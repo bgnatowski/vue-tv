@@ -23,11 +23,10 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  white-space: nowrap;
+  /*white-space: nowrap;*/
   height: 100%;
 }
 .title-tile h1{
-
   text-align: center;
   font-size: 1.5em;
 }
@@ -45,8 +44,6 @@
     font-size: 1.1em;
   }
 }
-
-
 
 @media (max-width: 700px) {
   .title-tile {
