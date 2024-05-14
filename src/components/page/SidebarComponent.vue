@@ -4,7 +4,7 @@ import {hasAcceptedInvitations, hasPendingInvitations} from "@/router/index.js";
 import {computed} from "vue";
 
 const showNotificationInvite = computed(() => {
-      return hasPendingInvitations.value;
+  return hasPendingInvitations.value;
 })
 
 const showNotificationFriend = computed(() => {
@@ -15,63 +15,79 @@ const showNotificationFriend = computed(() => {
 <template>
   <div class="sidebar">
     <router-link :to="paths.MAIN_ROUTE" class="router-link-custom">
-      <div class="sidebar-button">
-        <div class="icon-button">
-          <img src="../../assets/img/main.png" alt="Strona główna">
+      <template v-slot="{ isActive }">
+        <div :class="['sidebar-button', { active: isActive }]">
+          <div class="icon-button">
+            <img src="../../assets/img/main.png" alt="Strona główna">
+          </div>
+          <span class="button-text">Strona główna</span>
         </div>
-        <span class="button-text">Strona główna</span>
-      </div>
+      </template>
     </router-link>
     <router-link :to="paths.MY_PROFILE_ROUTE" class="router-link-custom">
-      <div class="sidebar-button">
-        <div class="icon-button">
-          <img src="@/assets/img/person-icon.png" alt="Strona główna">
+      <template v-slot="{ isActive }">
+        <div :class="['sidebar-button', { active: isActive }]">
+          <div class="icon-button">
+            <img src="@/assets/img/person-icon.png" alt="Strona główna">
+          </div>
+          <span class="button-text">Twój profil</span>
         </div>
-        <span class="button-text">Twój profil</span>
-      </div>
+      </template>
     </router-link>
     <router-link :to="paths.TO_WATCH_ROUTE" class="router-link-custom">
-      <div class="sidebar-button">
-        <div class="icon-button">
-          <img src="@/assets/img/watching-a-movie.png" alt="Filmy do obejrzenia">
+      <template v-slot="{ isActive }">
+        <div :class="['sidebar-button', { active: isActive }]">
+          <div class="icon-button">
+            <img src="@/assets/img/watching-a-movie.png" alt="Filmy do obejrzenia">
+          </div>
+          <span class="button-text">Filmy do obejrzenia</span>
         </div>
-        <span class="button-text">Filmy do obejrzenia</span>
-      </div>
+      </template>
     </router-link>
     <router-link :to="paths.WATCHED_ROUTE" class="router-link-custom">
-      <div class="sidebar-button">
-        <div class="icon-button">
-          <img src="@/assets/img/video.png" alt="Filmy obejrzane">
+      <template v-slot="{ isActive }">
+        <div :class="['sidebar-button', { active: isActive }]">
+          <div class="icon-button">
+            <img src="@/assets/img/video.png" alt="Filmy obejrzane">
+          </div>
+          <span class="button-text">Filmy obejrzane</span>
         </div>
-        <span class="button-text">Filmy obejrzane</span>
-      </div>
+      </template>
     </router-link>
     <router-link :to="paths.FRIENDS_ROUTE" class="router-link-custom">
-      <div class="sidebar-button">
-        <div class="icon-button">
-          <div class="notification" v-if="showNotificationFriend">
-            <img src="@/assets/img/notification-icon.png">
+      <template v-slot="{ isActive }">
+        <div :class="['sidebar-button', { active: isActive }]">
+          <div class="icon-button">
+            <div class="notification" v-if="showNotificationFriend">
+              <img src="@/assets/img/notification-icon.png">
+            </div>
+            <img src="@/assets/img/friends.png" alt="Znajomi">
           </div>
-          <img src="@/assets/img/friends.png" alt="Znajomi">
+          <span class="button-text">Znajomi</span>
         </div>
-        <span class="button-text">Znajomi</span>
-      </div>
+      </template>
     </router-link>
     <router-link :to="paths.INVITATIONS_ROUTE" class="router-link-custom">
-      <div class="sidebar-button">
-        <div class="icon-button">
-          <div class="notification" v-if="showNotificationInvite">
-            <img src="@/assets/img/notification-icon.png">
+      <template v-slot="{ isActive }">
+        <div :class="['sidebar-button', { active: isActive }]">
+          <div class="icon-button">
+            <div class="notification" v-if="showNotificationInvite">
+              <img src="@/assets/img/notification-icon.png">
+            </div>
+            <img src="@/assets/img/invitation.png" alt="Zaproszenia do znajomych">
           </div>
-          <img src="@/assets/img/invitation.png" alt="Zaproszenia do znajomych">
+          <span class="button-text">Zaproszenia do znajomych</span>
         </div>
-        <span class="button-text">Zaproszenia do znajomych</span>
-      </div>
+      </template>
     </router-link>
   </div>
 </template>
 
 <style scoped>
+.sidebar-button.active {
+  text-decoration: underline var(--main-color);
+}
+
 .sidebar {
   position: relative;
   display: flex;
@@ -148,29 +164,32 @@ const showNotificationFriend = computed(() => {
   z-index: 999;
   transform: translateY(-50%) translateX(60%);
 }
-.notification img{
+
+.notification img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
 
-@media screen and (max-width: 1200px){
+@media screen and (max-width: 1200px) {
   .icon-button {
     margin: 0;
   }
+
   .button-text {
     transition: .5s ease all;
     display: none;
   }
 }
 
-@media screen and (max-width: 600px){
+@media screen and (max-width: 600px) {
   .icon-button {
     margin: 0;
     height: 28px;
     width: 28px;
   }
+
   .button-text {
     transition: .5s ease all;
     display: none;
@@ -198,7 +217,7 @@ const showNotificationFriend = computed(() => {
 
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 500px) {
   .icon-button {
     height: 25px;
     width: 25px;
@@ -214,7 +233,7 @@ const showNotificationFriend = computed(() => {
   }
 }
 
-@media screen and (max-width: 460px){
+@media screen and (max-width: 460px) {
   .icon-button {
     height: 24px;
     width: 24px;
@@ -225,7 +244,7 @@ const showNotificationFriend = computed(() => {
   }
 }
 
-@media screen and (max-width: 400px){
+@media screen and (max-width: 400px) {
   .icon-button {
     height: 23px;
     width: 23px;
@@ -237,7 +256,7 @@ const showNotificationFriend = computed(() => {
   }
 }
 
-@media screen and (max-width: 320px){
+@media screen and (max-width: 320px) {
   .icon-button {
     height: 20px;
     width: 20px;
@@ -253,7 +272,7 @@ const showNotificationFriend = computed(() => {
   }
 }
 
-@media screen and (max-width: 280px){
+@media screen and (max-width: 280px) {
   .icon-button {
     height: 18px;
     width: 18px;
