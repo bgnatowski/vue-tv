@@ -103,9 +103,9 @@ const posts = computed(() => postStore.getUserPosts)
   transition: .5s ease all;
   background-color: var(--lighter-main-transparent)
 }
-
 .feed-container {
   flex-direction: row;
+  width: 100%;
 }
 
 .movies-column {
@@ -156,7 +156,7 @@ const posts = computed(() => postStore.getUserPosts)
   justify-self: center;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1200px) {
   .feed-container {
     flex-direction: column;
     justify-content: center;
@@ -165,10 +165,7 @@ const posts = computed(() => postStore.getUserPosts)
   .posts-column,
   .movies-column {
     align-self: center;
-    width: 100%
+    width: 100%;
   }
 }
-
-
-
 </style>

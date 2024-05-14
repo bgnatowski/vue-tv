@@ -1,6 +1,6 @@
 <script setup>
 
-import {onMounted, ref} from "vue";
+import {onMounted, onUnmounted, ref, watch} from "vue";
 import {useMovieStore} from "@/stores/MovieStore.js";
 import {fetchMovieDetails} from "@/services/TMDBService.js";
 
@@ -18,6 +18,18 @@ const emits = defineEmits(['show-details'])
 // -------------------LADOWANIE DANYCH----------------------//
 const isFetching = ref(true);
 const movies = ref([])
+const maxWidth = ref("");
+
+
+const calculateMaxWidth = () => {
+  const postElement = document.querySelector(".post");
+  if (postElement) {
+    const postWidth = postElement.clientWidth;
+    const calculatedWidth = postWidth - (120);
+    maxWidth.value = `${calculatedWidth}px`;
+  }
+  console.log(maxWidth.value)
+};
 
 onMounted(async () => {
   if (props.moviesIds.length) {
@@ -27,7 +39,15 @@ onMounted(async () => {
     }
     isFetching.value = false;
   }
+  calculateMaxWidth();
+  window.addEventListener("resize", calculateMaxWidth);
 })
+
+onUnmounted(() => {
+  window.removeEventListener("resize", calculateMaxWidth);
+});
+
+watch(() => props.moviesIds, calculateMaxWidth);
 
 // ---------------------------POKAZANIE POPUPU ----------------//
 const showDetails = (m) => {
@@ -54,7 +74,7 @@ const showDetails = (m) => {
     <div v-if="isFetching">
       <h1>ŁADOWANIE...</h1>
     </div>
-    <div class="movie-scroll-wrapper" v-else>
+    <div class="movie-scroll-wrapper" :style="{ maxWidth: maxWidth }" v-else>
       <div class="movie-container" v-dragscroll.x>
         <div class="movie-poster" v-for="movie in movies" :key="movie.id">
           <img @click="showDetails(movie)" :src="movie.posterPath" alt="Movie poster"/>
@@ -71,26 +91,26 @@ const showDetails = (m) => {
 <style scoped>
 .post {
   flex-direction: row;
-  width: 100%;
+  width: 90%;
   align-self: center;
+  text-align: center;
 }
 
 .movie-scroll-wrapper {
   position: relative;
   width: 100%;
-  max-width: 100%;
   overflow: hidden;
 }
 
 .movie-container {
   display: flex;
-  align-items: flex-end;
   overflow-x: scroll;
   overflow-y: hidden;
   scrollbar-width: thin;
   -webkit-overflow-scrolling: touch;
   position: relative;
   width: 100%;
+  justify-content: flex-start;
 }
 
 .fade-effect {
@@ -117,31 +137,4 @@ const showDetails = (m) => {
   object-fit: cover;
   border-radius: 1.5em;
 }
-
-
-@media screen and (max-width: 1000px) {
-  .post {
-    max-width: 300px;
-  }
-}
-
-@media screen and (max-width: 850px) {
-  .post {
-    max-width: 250px;
-  }
-}
-
-@media screen and (max-width: 800px) {
-  .post {
-    max-width: 400px;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .post {
-    max-width: inherit;
-  }
-}
 </style>
-
-  
