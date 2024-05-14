@@ -43,7 +43,9 @@ const goToProfile = () => {
 
 <template>
   <div class="user-item">
-    <img :src="user.photoUrl" alt="User Photo" class="user-photo">
+    <div class="user-photo">
+      <img :src="user.photoUrl" alt="User Photo">
+    </div>
     <div class="user-info" v-if="isMe">
       <h3>{{ user.username }}</h3>
       <h2>Twoj profil</h2>
@@ -81,6 +83,14 @@ const goToProfile = () => {
   border: none;
   box-shadow: 0 4px 13px 3px rgba(0, 0, 0, 0.25);
   background-color: var(--lighter-main-transparent);
+}
+
+.user-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  border: 2px solid var(--lighter-main)
 }
 
 .user-photo {
