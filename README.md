@@ -92,9 +92,7 @@ npm run dev
 
 https://bai-vue-tv.web.app/
 
-uruchomienie lokalne wymaga .env z credentialami api
-
-## Interfejs
+## Interface
 
 [Interface project (figma)](https://www.figma.com/file/ToCZtfqYqHsnE4Ot6ljAUn/VueTV?type=design&node-id=0%3A1&mode=design&t=svhmutbHMhWSaJMN-1)
 
