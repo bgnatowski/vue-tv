@@ -104,7 +104,7 @@ VueTV is an application designed to manage and track favorite movies individuall
 
 The application was built using Vue 3, leveraging the Composition API for code organization. Pinia is used for state management, and Vue Router for view navigation. The application is also fully optimized for mobile view.
 
-## Widoki
+## Views
 
 * Registration view
 * Login view
