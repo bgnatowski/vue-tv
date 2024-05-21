@@ -1,4 +1,6 @@
-## VueTV - aplikacja zaliczeniowa
+## VueTV - aplikacja zaliczeniowa 
+
+(english below)
 
 ### Aplikacja jest dostępna pod adresem:
 
@@ -83,3 +85,84 @@ npm run dev
 ```
 
 ### Zalecane jest korzystanie z Microsoft Edge, na innych przeglądarkach czasem występują bugi w UI
+
+## VueTV App (ENG)
+
+### Hosting:
+
+https://bai-vue-tv.web.app/
+
+uruchomienie lokalne wymaga .env z credentialami api
+
+## Interfejs
+
+[Interface project (figma)](https://www.figma.com/file/ToCZtfqYqHsnE4Ot6ljAUn/VueTV?type=design&node-id=0%3A1&mode=design&t=svhmutbHMhWSaJMN-1)
+
+## App description
+
+VueTV is an application designed to manage and track favorite movies individually and with friends. User can browse, add movies to "watched" and "to watch" lists, track viewing time, see movies details, search friends, view profiles, add to friends and a lot more.
+
+## Tech description
+
+The application was built using Vue 3, leveraging the Composition API for code organization. Pinia is used for state management, and Vue Router for view navigation. The application is also fully optimized for mobile view.
+
+## Widoki
+
+* Registration view
+* Login view
+* Main view: user dashboard with friends' reviews preview
+* Watched movies list view
+* To watch movies list view
+* Friends list view
+* Friend requests list view
+* Movie and friend search view
+* Profile view
+* Settings view with password change/delete pop-up
+* Add review and note pop-up view
+* Movie details view, both as a pop-up and a separate page
+
+## Features
+
+* Registration
+* Login (including with Google)
+* User settings (change password, delete profile, logout)
+* Add profile picture
+* Add/remove movies from "watched" and "to watch" lists
+* Rate watched movies on a scale of 1-10
+* Display viewing time information
+* Search for movies
+* Search for friends
+* Add and remove friends
+* View own and other users' profiles
+* Set movie privacy on lists
+* Reactive sidebar navigation
+* Add, edit, and delete reviews and notes
+* Notifications for friend requests
+* List of reviews written by friends
+
+## Additional libraries
+
+* firebase - Provides tools and services for quickly building mobile and web applications, offering features like real-time databases and authentication.
+* normalize.css - Ensures consistency of HTML styles across different browsers, improving compatibility and appearance, also known as a CSS reset.
+* pinia - A state management library for Vue.js, allowing efficient and reactive data storage for the application.
+* primevue - A UI library for Vue.js, used for its Rating component to implement a star rating system.
+* vue-dragscroll - Enables scrolling of elements by dragging, enhancing user interaction.
+
+## TheMovieDB API
+
+The Movie Database (TMDb) API - provides access to a rich database of movies, TV shows, actors, and their filmographies. The API offers information such as titles, descriptions, ratings, release dates, cast details, images, and many other specifics.
+
+## Local deploy (required .env with credentials)
+
+```sh
+npm install
+```
+
+### Compile and Hot-Reload for Development
+
+```sh
+npm run dev
+```
+
+### It is recommended to use Microsoft Edge, as other browsers may occasionally have UI bugs.
+
